@@ -41,10 +41,10 @@ public interface CharacterState {
 
     /**
      * Gestiona el comportamiento al recibir un ataque en cualquier estado
-     * @param character El personaje que recibe el ataque
+     *
      * @param damage La cantidad de daño recibido
      */
-    void handleReceiveAttack(BaseCharacter character, Double damage);
+    void handleReceiveAttack(Double damage);
 
     /**
      * Obtiene el nombre del estado

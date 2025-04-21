@@ -6,7 +6,7 @@ import characterSystem.characters.states.StatesList;
 
 import java.awt.image.BufferedImage;
 
-public class BaseCharacter {
+public abstract class BaseCharacter {
 
     // Contador de personajes (usado para asignar un ID único a cada personaje)
     public static Integer contadorPersonajes = 0;
@@ -16,9 +16,13 @@ public class BaseCharacter {
     private String name;
 
     // Atributos de estado y estadísticas
-    private Integer healtPoints;
-    private Double baseAtack;
+    private Integer healthPoints;
+    private Double baseAttack;
     private Double baseDefense;
+    private Double baseCounterAttackChance;
+    private Double baseCounterAttackDamage;
+
+    // Estados del personaje
     private StatesList states;
     private CharacterState currentState; // Estado actual del personaje
 
@@ -49,10 +53,13 @@ public class BaseCharacter {
     private Boolean esControlado;  // Indica si es controlado por IA
 
     /* Constructor (Solo uno, los hijos se encargan de los Defaults) */
-    public BaseCharacter(String name, Double baseAtack, Double baseDefense /*, Arma arma, Escudo escudo*/) {
+    public BaseCharacter(String name, Double baseAttack, Double baseDefense /*, Arma arma, Escudo escudo*/) {
         this.name = name;
-        this.baseAtack = baseAtack;
+        this.baseAttack = baseAttack;
         this.baseDefense = baseDefense;
+        this.baseCounterAttackChance = DefaultAttributes.COUNTERATTACK_PROBABILITY; // Valor por defecto para el ataque de contraataque
+        this.baseCounterAttackDamage = DefaultAttributes.COUNTERATTACK_DAMAGE; // Valor por defecto para el multiplicador de contraataque
+
         this.states = new StatesList(this); // Inicializa el estado del personaje
         this.currentState = states.getIdleState(); // Estado inicial
 
@@ -61,7 +68,7 @@ public class BaseCharacter {
         // this.escudo = escudo;
 
         this.retreatChance = DefaultAttributes.RETREAT_PROBABILITY;
-        this.healtPoints = DefaultAttributes.HEALTH;
+        this.healthPoints = DefaultAttributes.HEALTH;
 
 //        this.items = new ArrayList<Item>();
 //        this.efectos = new ArrayList<Item>();
@@ -77,7 +84,11 @@ public class BaseCharacter {
 
 
     public boolean isAlive() {
-        return this.healtPoints > 0;
+        return this.healthPoints > 0;
+    }
+
+    public void reduceHealth(Integer healthPoints) {
+        this.healthPoints = healthPoints;
     }
 
     public String getName() {
@@ -88,7 +99,7 @@ public class BaseCharacter {
         return retreatChance;
     }
 
-    public Boolean getRetreatSuccess() {
+    public Boolean isRetreatSuccessful() {
         return retreatSuccess;
     }
 
@@ -97,10 +108,10 @@ public class BaseCharacter {
     }
 
     public void setIdleState() {
-        setState(states.getIdleState());
+        setCurrentState(states.getIdleState());
     }
 
-    private void setState(CharacterState state) {
+    public void setCurrentState(CharacterState state) {
         if (state == null) {
             throw new IllegalArgumentException("El estado no puede ser nulo");
         }
@@ -108,6 +119,36 @@ public class BaseCharacter {
     }
 
     public void setDeadState() {
-        setState(states.getDeadState());
+        setCurrentState(states.getDeadState());
     }
+
+    public CharacterState getCurrentState() {
+        return currentState;
+    }
+
+    public Double getBaseCounterAttackChance() {
+        return baseCounterAttackChance;
+    }
+
+    public void setBaseCounterAttackChance(Double baseCounterAttackChance) {
+        this.baseCounterAttackChance = baseCounterAttackChance;
+    }
+
+    public Double getBaseCounterAttackDamage() {
+        return baseCounterAttackDamage;
+    }
+
+    public Double getBaseAttack() {
+        return baseAttack;
+    }
+
+    public Double getBaseDefense() {
+        return baseDefense;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public abstract String getSpecialAbility();
 }

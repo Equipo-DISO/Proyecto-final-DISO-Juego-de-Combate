@@ -14,19 +14,29 @@ public class AttackingState extends BaseState {
     @Override
     public void handleAttack(BaseCharacter opponent) {
 
-        throw new UnsupportedOperationException("Work in progress");
-
-       // if (character.isAlive() && opponent.isAlive()) {
+        if (character.isAlive() && opponent.isAlive()) {
             // TODO: Replace with call to DamageCalculator
-//            opponent.receiveAttack(damage); // TODO: Replace with call to DamageCalculator
-//            System.out.println(character.getName() + " ataca a " + opponent.getName() +
-//                    " causando " + (int)damage + " puntos de daño.");
-       // }
-        // No cambia de estado, ya está en estado normal
+            Double damage = calcularDanio();
+            opponent.getCurrentState().handleReceiveAttack(damage); // TODO: Replace with call to DamageCalculator
+            System.out.println(character.getName() + " ataca a " + opponent.getName() +
+                    " causando " + damage.intValue() + " puntos de daño.");
+        }
+
+        throw new UnsupportedOperationException("Work in progress");
     }
 
     @Override
     public String getName() {
         return "Attacking";
+    }
+
+    protected Double calcularDanio() {
+        // Obtenemos el daño base del arma
+        // TODO: Implement Weapon Class, then --> Double danioTotal = this.armaPersonaje.getDanio() * (1 + (this.ataque / 100));
+//        if (this.armaPersonaje.getPrecision() < Math.random() * 100) {
+//            danioTotal = 0.0; // No se ha acertado el golpe
+//        }
+//        return danioTotal;
+        return character.getBaseAttack(); // TODO: Replace with call to DamageCalculator / Placeholder
     }
 }

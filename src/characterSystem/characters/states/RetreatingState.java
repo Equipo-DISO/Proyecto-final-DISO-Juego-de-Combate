@@ -1,6 +1,6 @@
 package characterSystem.characters.states;
 
-import characterSystem.characters.Arquero;
+import characterSystem.characters.Archer;
 import characterSystem.characters.BaseCharacter;
 import characterSystem.characters.DefaultAttributes;
 
@@ -16,7 +16,7 @@ public class RetreatingState extends BaseState {
         Double probabilidadRetirada = DefaultAttributes.COUNTERATTACK_PROBABILITY;
 
         // Si el ataque es un arquero, se reduce la probabilidad de retirada
-        if (opponent instanceof Arquero archer) {
+        if (opponent instanceof Archer archer) {
             probabilidadRetirada = Math.max(probabilidadRetirada - archer.getAccuracy(), 0);
             System.out.println("El oponente es un arquero muy preciso y redujo tu probabilidad de retirada en "
                     + archer.getAccuracy() + "%");

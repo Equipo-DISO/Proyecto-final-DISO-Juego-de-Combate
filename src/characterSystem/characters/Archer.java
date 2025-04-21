@@ -1,5 +1,5 @@
 /**
- * Clase Arquero:
+ * Clase Archer:
  * - Implementa la mecánica de puntería de un personaje de tipo arquero.
  *
  * Nota:
@@ -26,7 +26,7 @@ import javax.imageio.ImageIO;
 
 
 
-public class Arquero extends BaseCharacter {
+public class Archer extends BaseCharacter {
 
     public static final Double INITIAL_ACCURACY = 10.0;
     public static final Double ACCURACY_INCREMENT = 2.0;
@@ -35,14 +35,14 @@ public class Arquero extends BaseCharacter {
 
     private Double accuracy;
 
-    public Arquero(/*Arma arco, Escudo escudo*/) {
-        this("Arquero " + contadorPersonajes/*, arco, escudo*/);
+    public Archer(/*Arma arco, Escudo escudo*/) {
+        this("Archer " + contadorPersonajes/*, arco, escudo*/);
 
     }
 
-    public Arquero(String nombre/*, Arma arco, Escudo escudo*/) {
-        super(nombre, DefaultAttributes.ATTACK, Arquero.INITIAL_DEF_MODIFIER/*,  arco, escudo*/);
-        this.accuracy = Arquero.INITIAL_ACCURACY;
+    public Archer(String nombre/*, Arma arco, Escudo escudo*/) {
+        super(nombre, DefaultAttributes.ATTACK, Archer.INITIAL_DEF_MODIFIER/*,  arco, escudo*/);
+        this.accuracy = Archer.INITIAL_ACCURACY;
     }
 
     public BufferedImage seleccionarImagen() {
@@ -75,7 +75,7 @@ public class Arquero extends BaseCharacter {
         this.accuracy = accuracy;
     }
 
-    
+
     public String getSpecialAbility() {
         return "Puntería: " + accuracy;
     }

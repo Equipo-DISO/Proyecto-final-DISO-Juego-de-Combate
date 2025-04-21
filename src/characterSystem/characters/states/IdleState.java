@@ -35,7 +35,7 @@ public class IdleState extends BaseState {
     }
 
     @Override
-    public void handleReceiveAttack(BaseCharacter character, Double damage) {
+    public void handleReceiveAttack(Double damage) {
         throw new UnsupportedOperationException("Cambia de estado antes de realizar cualquier acción");
     }
 
