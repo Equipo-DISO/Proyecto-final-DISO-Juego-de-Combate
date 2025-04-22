@@ -1,4 +1,4 @@
-package characterSystem.characters;
+package com.utad.proyectoFinal.characterSystem.characters;
 
 public final class DefaultAttributes {
     // Vital attributes

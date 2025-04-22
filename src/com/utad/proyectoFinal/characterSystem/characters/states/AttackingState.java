@@ -1,6 +1,6 @@
-package characterSystem.characters.states;
+package com.utad.proyectoFinal.characterSystem.characters.states;
 
-import characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 
 /**
  * Representa el estado neutral de un personaje

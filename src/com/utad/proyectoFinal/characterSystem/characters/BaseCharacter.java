@@ -1,8 +1,8 @@
-package characterSystem.characters;
+package com.utad.proyectoFinal.characterSystem.characters;
 
 
-import characterSystem.characters.states.CharacterState;
-import characterSystem.characters.states.StatesList;
+import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
+import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
 
 import java.awt.image.BufferedImage;
 

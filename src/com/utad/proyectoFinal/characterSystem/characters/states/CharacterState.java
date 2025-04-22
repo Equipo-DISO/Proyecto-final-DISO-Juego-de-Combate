@@ -1,6 +1,6 @@
-package characterSystem.characters.states;
+package com.utad.proyectoFinal.characterSystem.characters.states;
 
-import characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 
 /**
  * Interfaz que define las transiciones de estado para las acciones de un personaje

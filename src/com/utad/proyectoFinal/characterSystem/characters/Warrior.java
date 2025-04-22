@@ -18,7 +18,7 @@
  * - Una característica especial que le permite contraatacar con mayor probabilidad, llamada 'Ira Espartana'
  *   - Este atributo se inicializa a 0 y aumenta en 5% cada vez que el guerrero recibe un ataque. (Máximo 30%)
  */
-package characterSystem.characters;
+package com.utad.proyectoFinal.characterSystem.characters;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

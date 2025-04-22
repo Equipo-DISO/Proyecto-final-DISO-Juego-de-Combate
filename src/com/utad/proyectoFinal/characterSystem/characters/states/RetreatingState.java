@@ -1,8 +1,8 @@
-package characterSystem.characters.states;
+package com.utad.proyectoFinal.characterSystem.characters.states;
 
-import characterSystem.characters.Archer;
-import characterSystem.characters.BaseCharacter;
-import characterSystem.characters.DefaultAttributes;
+import com.utad.proyectoFinal.characterSystem.characters.Archer;
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 
 public class RetreatingState extends BaseState {
 

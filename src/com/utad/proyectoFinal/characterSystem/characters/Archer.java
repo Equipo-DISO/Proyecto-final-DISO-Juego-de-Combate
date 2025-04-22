@@ -16,7 +16,7 @@
  * - Sin bonus de ataque inicial (ataque +0.0%)
  * - Con una puntería inicial de 10, que puede aumentar hasta 20.
  */
-package characterSystem.characters;
+package com.utad.proyectoFinal.characterSystem.characters;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

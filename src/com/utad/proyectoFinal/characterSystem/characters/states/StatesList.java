@@ -1,6 +1,6 @@
-package characterSystem.characters.states;
+package com.utad.proyectoFinal.characterSystem.characters.states;
 
-import characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 
 public class StatesList {
     private final CharacterState[] states;

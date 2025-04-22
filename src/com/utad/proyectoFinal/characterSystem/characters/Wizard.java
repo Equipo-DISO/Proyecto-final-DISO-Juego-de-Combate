@@ -15,7 +15,7 @@
  * - Un bastón mágico que le permite lanzar hechizos mágicos y tiene una pequeña probabilidad (2%) de hacer un ataque crítico (+50%)
  *   - La probabilidad de ataque crítico aumenta en +2 hasta un 10%.
  */
-package characterSystem.characters;
+package com.utad.proyectoFinal.characterSystem.characters;
 
 
 import javax.imageio.ImageIO;
