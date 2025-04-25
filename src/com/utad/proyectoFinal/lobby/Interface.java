@@ -3,13 +3,13 @@ package com.utad.proyectoFinal.lobby;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.ImageProducer;
 import java.util.ArrayList;
 
 public class Interface extends JFrame {
     private JLabel nombreLabel;
     private JLabel imagenJugador;
-    private ImageIcon iconoJugador = new ImageIcon("Files/img/Verde.png");
+    private ImageIcon iconoJugador;
+    private Image imagenEscalada;
     private JPanel listaBotsPanel;
     private ArrayList<JLabel> bots = new ArrayList<>();
 
@@ -24,16 +24,10 @@ public class Interface extends JFrame {
         panelSuperior.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         // Imagen del jugador
-        Image imagenEscalada = iconoJugador.getImage().getScaledInstance(82, 90, Image.SCALE_SMOOTH);
-        iconoJugador = new ImageIcon(imagenEscalada);
-        
         imagenJugador = new JLabel(iconoJugador, SwingConstants.CENTER);
         imagenJugador.setPreferredSize(new Dimension(100, 100));
-
-        /*imagenJugador = new JLabel("👤", SwingConstants.CENTER);
-        imagenJugador.setPreferredSize(new Dimension(100, 100));
-        imagenJugador.setFont(new Font("SansSerif", Font.PLAIN, 40));*/
         panelSuperior.add(imagenJugador, BorderLayout.WEST);
+        UpdateIcon("Files/img/Verde.png");
 
         // Nombre del jugador (editable al hacer clic)
         nombreLabel = new JLabel("Juanito coscunero", SwingConstants.LEFT);
@@ -54,17 +48,12 @@ public class Interface extends JFrame {
         String[] colores = {"ROJO", "AZUL", "ROSA", "NEGRO", "AMARILLO", "VERDE", "Naranja", "BLANCO"};
         String[] valoresColores = {"Rojo", "Azul", "Rosa", "Negro", "Amarillo", "Verde", "Naranja", "Blanco"};
 
+        // Crear los botones
         for (int i = 0; i < colores.length; i++) {
             JButton colorBtn = new JButton(colores[i]);
             String path = "Files/img/"+valoresColores[i]+".png";
             colorBtn.addActionListener(e ->{
-                iconoJugador = new ImageIcon(path);
-
-                Image imagen = iconoJugador.getImage().getScaledInstance(82, 90, Image.SCALE_SMOOTH);
-                iconoJugador = new ImageIcon(imagen);
-                
-                imagenJugador = new JLabel(iconoJugador, SwingConstants.CENTER);
-                imagenJugador.setPreferredSize(new Dimension(100, 100));
+                UpdateIcon(path);
             });   
             colorPanel.add(colorBtn);
         }
@@ -111,5 +100,15 @@ public class Interface extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Interface::new);
     }
+
+    // METHODS
+    private void UpdateIcon(String path){
+        iconoJugador = new ImageIcon(path);
+        imagenEscalada = iconoJugador.getImage().getScaledInstance(82, 90, Image.SCALE_SMOOTH);
+        iconoJugador = new ImageIcon(imagenEscalada);
+        imagenJugador.setIcon(iconoJugador);
+    }
+
+    
 }
 
