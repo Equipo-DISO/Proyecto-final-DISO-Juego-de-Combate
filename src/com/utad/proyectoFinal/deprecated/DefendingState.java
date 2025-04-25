@@ -1,7 +1,9 @@
-package com.utad.proyectoFinal.characterSystem.characters.states;
+package com.utad.proyectoFinal.deprecated;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.BaseState;
 
+@Deprecated
 public class DefendingState extends BaseState {
 
     DefendingState(BaseCharacter character) {

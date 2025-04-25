@@ -17,12 +17,6 @@ public abstract class BaseState implements CharacterState {
     }
 
     @Override
-    public void handleDefense(BaseCharacter opponent) {
-        // Implementación por defecto (puede ser vacía o lanzar una excepción)
-        throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
-    }
-
-    @Override
     public void handleRetreat(BaseCharacter opponent) {
         // Implementación por defecto (puede ser vacía o lanzar una excepción)
         throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
@@ -46,10 +40,7 @@ public abstract class BaseState implements CharacterState {
     public void handleReceiveAttack(Double damage) {
         double finalDamage = damage;
 
-        if (character.getCurrentState() instanceof DefendingState) {
-            finalDamage = damage; // TODO: Shield Implementation -> * (1 - character.getShield.getDefense()/100.0);
-            System.out.println(character.getName() + " se ha defendido y ha reducido el daño recibido");
-        }
+        finalDamage = damage; // TODO: Helmet Implementation -> * (1 - character.getHelmet.getDefense()/100.0);
 
         if (character.getCurrentState() instanceof RetreatingState && character.isRetreatSuccessful()) {
             finalDamage = 0.0;
@@ -60,7 +51,17 @@ public abstract class BaseState implements CharacterState {
         character.reduceHealth(actualDamage); // TODO: Should be managed by 'Calculator' class
 
         System.out.println(character.getName() + " ha recibido un ataque de " + (int)finalDamage +
-                " puntos pero gracias a su defensa ha recibido " + actualDamage + " de daño");
+                " puntos pero gracias a su defensa su ha recibido " + actualDamage + " de daño");
+
+        // V2 Cuando la clase casco este implementable //TODO: Helmet Implementation
+        /*
+        if (this.cascoPersonaje != null) {
+            this.cascoPersonaje.reduceDurability();
+            if (this.cascoPersonaje.getDurability() <= 0) {
+                System.out.println("El casco de " + this.nombrePersonaje + " se ha roto");
+                this.cascoPersonaje = null; // El personaje ya no tiene casco
+            }
+         */
 
         if (!character.isAlive()) {
             System.out.println(character.getName() + " ha sido derrotado en combate");

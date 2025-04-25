@@ -13,7 +13,6 @@ public class StatesList {
         states = new CharacterState[] {
                 new IdleState(character),
                 new AttackingState(character),
-                new DefendingState(character),
                 new RetreatingState(character),
                 new DeadState(character)
         };

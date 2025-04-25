@@ -3,6 +3,7 @@ package com.utad.proyectoFinal.characterSystem.characters;
 
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
+import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
 
 import java.awt.image.BufferedImage;
 
@@ -15,12 +16,15 @@ public abstract class BaseCharacter {
     private Integer id;
     private String name;
 
+
     // Atributos de estado y estadísticas
     private Integer healthPoints;
     private Double baseAttack;
     private Double baseDefense;
     private Double baseCounterAttackChance;
     private Double baseCounterAttackDamage;
+    private Integer manaPoints;
+    private Integer maxManaPoints;
 
     // Estados del personaje
     private StatesList states;
@@ -32,7 +36,7 @@ public abstract class BaseCharacter {
 
 
     // Equipamiento del personaje
-    // TODO: Implement -> private Arma arma;
+    private BaseWeapon weapon;  // Arma equipada
     // TODO: Implement -> private Escudo escudo;
 
     // Inventario y efectos
@@ -59,6 +63,8 @@ public abstract class BaseCharacter {
         this.baseDefense = baseDefense;
         this.baseCounterAttackChance = DefaultAttributes.COUNTERATTACK_PROBABILITY; // Valor por defecto para el ataque de contraataque
         this.baseCounterAttackDamage = DefaultAttributes.COUNTERATTACK_DAMAGE; // Valor por defecto para el multiplicador de contraataque
+        this.manaPoints = DefaultAttributes.MANA_POINTS; // Valor por defecto para los puntos de maná
+        this.maxManaPoints = DefaultAttributes.MAX_MANA_POINTS; // Valor por defecto
 
         this.states = new StatesList(this); // Inicializa el estado del personaje
         this.currentState = states.getIdleState(); // Estado inicial
@@ -151,4 +157,25 @@ public abstract class BaseCharacter {
     }
 
     public abstract String getSpecialAbility();
+
+    public BaseWeapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(BaseWeapon weapon) {
+        this.weapon = weapon;
+    }
+
+    public Integer getManaPoints() {
+        return manaPoints;
+    }
+
+    public void setManaPoints(Integer manaPoints) {
+        this.manaPoints = manaPoints;
+    }
+
+    public void decreaseManaPoints(int amount) {
+        this.manaPoints = Math.max(0, manaPoints - amount);
+    }
+
 }
