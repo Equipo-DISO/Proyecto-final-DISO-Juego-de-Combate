@@ -1,6 +1,8 @@
 package com.utad.proyectoFinal.lobby;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -10,15 +12,14 @@ public class Interface extends JFrame {
     private SimplifiedImage playerSimplifiedImage = new SimplifiedImage(Path.PLAYER.getPath(Path.ColorEnum.GREEN), 92, 110);
     private JLabel playerImage = playerSimplifiedImage.generateJLabel(Path.PLAYER.getDefWidth(), Path.PLAYER.getDefHeight());
     private JPanel listaBotsPanel;
-    private ArrayList<JLabel> bots = new ArrayList<>();
+    private ArrayList<JPanel> bots = new ArrayList<>();
     
     public Interface() {
+
         setTitle("Juego de Combate");
-        
-        // TODO: Cambiar el icono de la ventana
         setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
         
-        setSize(1000, 600);
+        setSize(1000, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -79,57 +80,76 @@ public class Interface extends JFrame {
         listaBotsPanel.setLayout(new BoxLayout(listaBotsPanel, BoxLayout.Y_AXIS));
         JScrollPane scrollPane = new JScrollPane(listaBotsPanel);
         add(scrollPane, BorderLayout.CENTER);
-
-        // Panel de botones (+ y -)
-        JPanel panelBotones = new JPanel();
-        panelBotones.setPreferredSize(new Dimension(110, 60));
-        JLabel addButton = new JLabel(
-            new SimplifiedImage("Files/img/AddButton.png", 100, 50)
-                .generateImageIcon(80, 40));
-
-        JLabel removeButton = new JLabel(
-            new SimplifiedImage("Files/img/RemoveButton.png", 100, 50)
-                .generateImageIcon(80, 40));
-
-        addButton.setPreferredSize(new Dimension(100, 50));
-        removeButton.setPreferredSize(new Dimension(100, 50));
-
-        addButton.addMouseListener(new MouseAdapter() {
+        
+        JLabel addBot = new JLabel("➕ Añadir Bot", SwingConstants.LEFT);
+        addBot.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        addBot.setAlignmentX(Component.LEFT_ALIGNMENT);
+        addBot.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                JLabel nuevoBot = new JLabel("🤖 Bot " + (bots.size() + 1));
-                nuevoBot.setFont(new Font("SansSerif", Font.PLAIN, 16));
-                bots.add(nuevoBot);
-                listaBotsPanel.add(nuevoBot);
+                JPanel nuevoBotPanel = new JPanel(new BorderLayout());
+                nuevoBotPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                nuevoBotPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, 30));
+                
+                JLabel botImg = new SimplifiedImage("Files/img/BotFace.png", 30, 30).generateJLabel(20, 18);
+
+                JLabel botName = new JLabel("Bot " + (bots.size() + 1));
+                botName.setFont(new Font("SansSerif", Font.PLAIN, 14));
+                botName.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+
+                JLabel removeButton = new JLabel("❌", SwingConstants.CENTER);
+                removeButton.setPreferredSize(new Dimension(30, 30));
+                removeButton.addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) {
+                        listaBotsPanel.remove(nuevoBotPanel);
+                        bots.remove(nuevoBotPanel);
+                        listaBotsPanel.revalidate();
+                        listaBotsPanel.repaint();
+                    }
+                });
+
+                botName.addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) {
+                        String nuevoNombre = JOptionPane.showInputDialog("Introduce un nuevo nombre:");
+                        if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
+                            botName.setText(nuevoNombre);
+                        }
+                    }
+
+                    public void mouseEntered(MouseEvent e) {
+                        botName.setFont(botName.getFont().deriveFont(Font.ITALIC));
+                        nuevoBotPanel.add(removeButton, BorderLayout.EAST);
+                    }
+                });
+
+                nuevoBotPanel.addMouseListener(new MouseAdapter() {
+                    public void mouseExited(MouseEvent e) {
+                        botName.setFont(botName.getFont().deriveFont(Font.PLAIN));
+                        nuevoBotPanel.remove(removeButton);
+                    }
+                });
+
+                listaBotsPanel.addMouseListener(new MouseAdapter() {
+                    public void mouseExited(MouseEvent e) {
+                        botName.setFont(botName.getFont().deriveFont(Font.PLAIN));
+                        nuevoBotPanel.remove(removeButton);
+                    }
+                });
+
+                nuevoBotPanel.add(botImg, BorderLayout.WEST);
+                nuevoBotPanel.add(botName, BorderLayout.CENTER);
+                bots.add(nuevoBotPanel);
+
+                listaBotsPanel.add(nuevoBotPanel, 0);
                 listaBotsPanel.revalidate();
                 listaBotsPanel.repaint();
             }
-            public void mouseEntered(MouseEvent e) {
-                addButton.setIcon(new SimplifiedImage("Files/img/AddButton.png", 100, 50).generateImageIcon(92, 46));
-            }
-            public void mouseExited(MouseEvent e) {
-                addButton.setIcon(new SimplifiedImage("Files/img/AddButton.png", 100, 50).generateImageIcon(80, 40));
-            }
         });
 
-        removeButton.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (!bots.isEmpty()) {
-                    JLabel bot = bots.remove(bots.size() - 1);
-                    listaBotsPanel.remove(bot);
-                    listaBotsPanel.revalidate();
-                    listaBotsPanel.repaint();
-                }
-            }
-            public void mouseEntered(MouseEvent e) {
-                removeButton.setIcon(new SimplifiedImage("Files/img/RemoveButton.png", 100, 50).generateImageIcon(92, 46));
-            }
-            public void mouseExited(MouseEvent e) {
-                removeButton.setIcon(new SimplifiedImage("Files/img/RemoveButton.png", 100, 50).generateImageIcon(80, 40));
-            }
-        });
-
-        panelBotones.add(addButton);
-        panelBotones.add(removeButton);
+        listaBotsPanel.add(addBot);
+        
+        // Panel de botones (+ y -)
+        JPanel panelBotones = new JPanel();
+        panelBotones.setPreferredSize(new Dimension(110, 60));
         add(panelBotones, BorderLayout.SOUTH);
 
         setVisible(true);
