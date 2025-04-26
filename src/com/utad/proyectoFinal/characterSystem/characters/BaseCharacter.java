@@ -123,8 +123,42 @@ public abstract class BaseCharacter {
         this.retreatSuccess = retreatSuccess;
     }
 
+    // Metodo auxiliar para cambiar el estado
+    public void transitionTo(CharacterState newState) {
+        this.currentState = newState;
+    }
+
+    // “setXState” por delegación
     public void setIdleState() {
-        setCurrentState(states.getIdleState());
+        transitionTo(states.getIdleState());
+    }
+
+    public void setAttackingState() {
+        transitionTo(states.getAttackingState());
+    }
+
+    public void setHealState() {
+        transitionTo(states.getHealState());
+    }
+
+    public void setGainManaState() {
+        transitionTo(states.getGainManaState());
+    }
+
+    public void setRetreatingState() {
+        transitionTo(states.getRetreatingState());
+    }
+
+    public void setTiredState() {
+        transitionTo(states.getTiredState());
+    }
+
+    public void setMovingOnMapState() {
+        transitionTo(states.getMovingOnMapState());
+    }
+
+    public void setDeadState() {
+        transitionTo(states.getDeadState());
     }
 
     public void setCurrentState(CharacterState state) {
@@ -134,36 +168,13 @@ public abstract class BaseCharacter {
         this.currentState = state;
     }
 
-    public void setDeadState() {
-        setCurrentState(states.getDeadState());
-    }
-
-    public void setTiredState() {
-        setCurrentState(states.getTiredState());
-    }
-
-    public void setHealState() {
-        setCurrentState(states.getHealState());
-    }
-
-    public void setGainManaState() {
-        setCurrentState(states.getGainManaState());
-    }
-
-    public void setMovingOnMapState() {
-        setCurrentState(states.getMovingOnMapState());
-    }
-
-    public void setRetreatingState() {
-        setCurrentState(states.getRetreatingState());
-    }
-
-    public void setAttackingState() {
-        setCurrentState(states.getAttackingState());
-    }
-
     public CharacterState getCurrentState() {
         return currentState;
+    }
+
+    // Getter para reutilizar la lista desde los estados
+    public StatesList getStates() {
+        return states;
     }
 
     public Double getBaseCounterAttackChance() {
@@ -230,5 +241,9 @@ public abstract class BaseCharacter {
 
     public void gainHealth(Integer healthPoints) {
         this.healthPoints = Math.min(healthPoints, DefaultAttributes.HEALTH);
+    }
+
+    public boolean isLowEnergy() {
+        return manaPoints < DefaultAttributes.LOW_MANA_THRESHOLD;
     }
 }

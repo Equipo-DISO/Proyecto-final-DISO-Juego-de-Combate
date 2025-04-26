@@ -35,10 +35,10 @@ public class GainManaState extends BaseState {
         int currentMana = character.getManaPoints();
         int newMana = Math.min(currentMana + MANA_GAIN_AMOUNT, DefaultAttributes.MAX_MANA_POINTS);
         character.setManaPoints(newMana);
-        
+
         System.out.printf("%s ha recuperado %d puntos de energía.%n",
                 character.getName(), newMana - currentMana);
-        
+
         // Actualizar estado
         updateState();
     }
@@ -46,7 +46,7 @@ public class GainManaState extends BaseState {
     @Override
     public void updateState() {
         // Volver a Idle después de ganar maná
-        character.setIdleState();
+        character.transitionTo(character.getStates().getIdleState());
     }
 
     @Override

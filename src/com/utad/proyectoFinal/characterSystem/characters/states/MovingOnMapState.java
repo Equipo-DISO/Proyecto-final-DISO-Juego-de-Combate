@@ -7,8 +7,7 @@ import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
  */
 public class MovingOnMapState extends BaseState {
 
-    // Coste de maná para moverse
-    private static final int MOVE_MANA_COST = 3;
+    // Ya no hay coste de maná para moverse
 
     MovingOnMapState(BaseCharacter character) {
         super(character);
@@ -28,31 +27,15 @@ public class MovingOnMapState extends BaseState {
 
     @Override
     public void handleMove(Object tile) {
-        // Comprobar si tiene suficiente maná para moverse
-        if (character.getManaPoints() < MOVE_MANA_COST) {
-            System.out.printf("%s intenta moverse pero no tiene suficiente maná (%d requerido).%n",
-                    character.getName(), MOVE_MANA_COST);
-            // Si no tiene suficiente maná, pasar a estado cansado
-            if (TiredState.shouldBeTired(character)) {
-                character.setCurrentState(new TiredState(character));
-            } else {
-                character.setIdleState();
-            }
-            return;
-        }
-
-        // Consumir maná
-        character.decreaseManaPoints(MOVE_MANA_COST);
-        
         // Lógica de movimiento (a implementar cuando se tenga la clase Tile)
         System.out.printf("%s se ha movido a una nueva posición.%n", character.getName());
-        
+
         // Si hay un enemigo en la casilla, atacar
         boolean enemyInTile = false; // TODO: Implementar cuando se tenga la clase Tile
         if (enemyInTile) {
             System.out.printf("%s ha encontrado un enemigo en la casilla.%n", character.getName());
             // Cambiar al estado de ataque
-            character.setCurrentState(new AttackingState(character));
+            character.transitionTo(character.getStates().getAttackingState());
         } else {
             // Actualizar estado
             updateState();
@@ -62,7 +45,7 @@ public class MovingOnMapState extends BaseState {
     @Override
     public void updateState() {
         // Volver a Idle después de moverse
-        character.setIdleState();
+        character.transitionTo(character.getStates().getIdleState());
     }
 
     @Override

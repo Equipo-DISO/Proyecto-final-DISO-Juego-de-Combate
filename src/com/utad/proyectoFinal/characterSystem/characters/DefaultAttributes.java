@@ -18,8 +18,12 @@ public final class DefaultAttributes {
     // Inventory limits
     public static final Integer INITIAL_ITEMS = 0;
     public static final Integer MAX_ITEMS = 5;
+
+    // Mana attributes
     public static final Integer MANA_POINTS = 50;
     public static final Integer MAX_MANA_POINTS = 50;
+    // Umbral de maná por debajo del cual el personaje está cansado
+    public static final Integer LOW_MANA_THRESHOLD = 10;
 
     // Private constructor to prevent instantiation
     private DefaultAttributes() {}

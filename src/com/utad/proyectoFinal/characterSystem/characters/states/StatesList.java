@@ -3,66 +3,58 @@ package com.utad.proyectoFinal.characterSystem.characters.states;
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 
 public class StatesList {
-    private final CharacterState[] states;
+    // Campos privados
+    private final IdleState idleState;
+    private final AttackingState attackingState;
+    private final HealState healState;
+    private final GainManaState gainManaState;
+    private final RetreatingState retreatingState;
+    private final TiredState tiredState;
+    private final MovingOnMapState movingOnMapState;
+    private final DeadState deadState;
 
+    // Constructor (suponiendo que ya recibes BaseCharacter character)
     public StatesList(BaseCharacter character) {
-        if (character == null) {
-            throw new IllegalArgumentException("El personaje no puede ser nulo");
-        }
-
-        states = new CharacterState[] {
-                new IdleState(character),
-                new AttackingState(character),
-                new RetreatingState(character),
-                new DeadState(character),
-                new TiredState(character),
-                new HealState(character),
-                new GainManaState(character),
-                new MovingOnMapState(character)
-        };
+        idleState = new IdleState(character);
+        attackingState = new AttackingState(character);   // <-- se inyectará la UI más adelante
+        healState = new HealState(character);
+        gainManaState = new GainManaState(character);
+        retreatingState = new RetreatingState(character);
+        tiredState = new TiredState(character);
+        movingOnMapState = new MovingOnMapState(character);
+        deadState = new DeadState(character);
     }
 
-    public CharacterState getIdleState() {
-        return states[0];
+    // Getters públicos (uno por estado)
+    public IdleState getIdleState() {
+        return idleState;
     }
 
-    public CharacterState getAttackingState() {
-        return states[1];
+    public AttackingState getAttackingState() {
+        return attackingState;
     }
 
-    public CharacterState getRetreatingState() {
-        return states[2];
+    public HealState getHealState() {
+        return healState;
     }
 
-    public CharacterState getDeadState() {
-        return states[3];
+    public GainManaState getGainManaState() {
+        return gainManaState;
     }
 
-    public CharacterState getTiredState() {
-        return states[4];
+    public RetreatingState getRetreatingState() {
+        return retreatingState;
     }
 
-    public CharacterState getHealState() {
-        return states[5];
+    public TiredState getTiredState() {
+        return tiredState;
     }
 
-    public CharacterState getGainManaState() {
-        return states[6];
+    public MovingOnMapState getMovingOnMapState() {
+        return movingOnMapState;
     }
 
-    public CharacterState getMovingOnMapState() {
-        return states[7];
-    }
-
-    public CharacterState getStateByName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("El nombre del estado no puede ser nulo");
-        }
-        for (CharacterState state : states) {
-            if (state.getName().equalsIgnoreCase(name)) {
-                return state;
-            }
-        }
-        throw new IllegalArgumentException("Estado no encontrado: " + name);
+    public DeadState getDeadState() {
+        return deadState;
     }
 }

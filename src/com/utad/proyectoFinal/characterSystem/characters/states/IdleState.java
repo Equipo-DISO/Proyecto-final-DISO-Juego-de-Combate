@@ -12,12 +12,11 @@ public class IdleState extends BaseState {
     @Override
     public void handleAttack(BaseCharacter opponent) {
         // Comprobar si el personaje tiene suficiente maná para atacar
-        if (TiredState.shouldBeTired(character)) {
+        if (checkAndTransitionToTiredIfNeeded()) {
             System.out.printf("%s tiene poca energía y no puede atacar.%n", character.getName());
-            character.setTiredState();
         } else {
             // Cambiar al estado de ataque
-            character.setAttackingState();
+            character.transitionTo(character.getStates().getAttackingState());
             character.getCurrentState().handleAttack(opponent);
         }
     }
@@ -26,14 +25,14 @@ public class IdleState extends BaseState {
     @Override
     public void handleRetreat(BaseCharacter opponent) {
         // Cambiar al estado de retirada
-        character.setRetreatingState();
+        character.transitionTo(character.getStates().getRetreatingState());
         character.getCurrentState().handleRetreat(opponent);
     }
 
     @Override
     public void handleMove(Object tile) {
         // Cambiar al estado de movimiento en el mapa
-        character.setMovingOnMapState();
+        character.transitionTo(character.getStates().getMovingOnMapState());
         character.getCurrentState().handleMove(tile);
     }
 
@@ -42,7 +41,7 @@ public class IdleState extends BaseState {
      */
     public void handleHeal() {
         // Cambiar al estado de curación
-        character.setHealState();
+        character.transitionTo(character.getStates().getHealState());
         ((HealState) character.getCurrentState()).heal();
     }
 
@@ -51,16 +50,14 @@ public class IdleState extends BaseState {
      */
     public void handleGainMana() {
         // Cambiar al estado de ganancia de maná
-        character.setGainManaState();
+        character.transitionTo(character.getStates().getGainManaState());
         ((GainManaState) character.getCurrentState()).gainMana();
     }
 
     @Override
     public void updateState() {
         // Comprobar si el personaje tiene poca energía
-        if (TiredState.shouldBeTired(character)) {
-            character.setTiredState();
-        }
+        checkAndTransitionToTiredIfNeeded();
     }
 
     @Override

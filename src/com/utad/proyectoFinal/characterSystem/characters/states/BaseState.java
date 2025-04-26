@@ -11,6 +11,18 @@ public abstract class BaseState implements CharacterState {
         this.character = character;
     }
 
+    /**
+     * Método auxiliar para comprobar si el personaje está cansado y cambiar al estado correspondiente
+     * @return true si el personaje estaba cansado y se cambió de estado, false en caso contrario
+     */
+    protected boolean checkAndTransitionToTiredIfNeeded() {
+        if (TiredState.shouldBeTired(character)) {
+            character.transitionTo(character.getStates().getTiredState());
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void handleAttack(BaseCharacter opponent) {
         // Implementación por defecto (puede ser vacía o lanzar una excepción)
@@ -33,9 +45,9 @@ public abstract class BaseState implements CharacterState {
     @Override
     public void updateState() {
         if (character.isAlive())
-            character.setIdleState();
+            character.transitionTo(character.getStates().getIdleState());
         else
-            character.setDeadState();
+            character.transitionTo(character.getStates().getDeadState());
     }
 
     @Override

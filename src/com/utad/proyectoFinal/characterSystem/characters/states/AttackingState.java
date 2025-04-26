@@ -37,10 +37,8 @@ class AttackingState extends BaseState {
     @Override
     public void updateState() {
         // Comprobar si el personaje tiene poco maná después del ataque
-        if (TiredState.shouldBeTired(character)) {
-            character.setTiredState(); // cambiar a Tired si tiene poco maná
-        } else {
-            character.setIdleState(); // volver a Idle si tiene suficiente maná
+        if (!checkAndTransitionToTiredIfNeeded()) {
+            character.transitionTo(character.getStates().getIdleState()); // volver a Idle si tiene suficiente maná
         }
     }
 

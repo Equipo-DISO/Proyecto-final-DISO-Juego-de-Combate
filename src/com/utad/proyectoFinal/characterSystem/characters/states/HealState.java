@@ -10,7 +10,7 @@ public class HealState extends BaseState {
 
     // Cantidad de salud que se recupera al curarse
     private static final int HEAL_AMOUNT = 20;
-    
+
     // Coste de maná para curarse
     private static final int HEAL_MANA_COST = 5;
 
@@ -39,10 +39,8 @@ public class HealState extends BaseState {
             System.out.printf("%s intenta curarse pero no tiene suficiente maná (%d requerido).%n",
                     character.getName(), HEAL_MANA_COST);
             // Si no tiene suficiente maná, pasar a estado cansado
-            if (TiredState.shouldBeTired(character)) {
-                character.setTiredState();
-            } else {
-                character.setIdleState();
+            if (!checkAndTransitionToTiredIfNeeded()) {
+                character.transitionTo(character.getStates().getIdleState());
             }
             return;
         }
@@ -54,10 +52,10 @@ public class HealState extends BaseState {
 
         // Calcular nueva salud (sin exceder el máximo)
         character.gainHealth(currentHealth + HEAL_AMOUNT);
-        
+
         System.out.printf("%s se ha curado %d puntos de salud.%n",
                 character.getName(), character.getHealthPoints() - currentHealth);
-        
+
         // Actualizar estado
         updateState();
     }
@@ -65,7 +63,7 @@ public class HealState extends BaseState {
     @Override
     public void updateState() {
         // Volver a Idle después de curarse
-        character.setIdleState();
+        character.transitionTo(character.getStates().getIdleState());
     }
 
     @Override

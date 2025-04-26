@@ -33,12 +33,9 @@ public class RetreatingState extends BaseState {
     @Override
     public void updateState() {
         if (character.isRetreatSuccessful()) {
-            // Si la retirada fue exitosa, cambiar al estado de movimiento en el mapa
-            character.setMovingOnMapState();
-            // TODO: Con este set, podemos usar un observador para cerrar la ventana de combate y volver al mapa
+            character.transitionTo(character.getStates().getMovingOnMapState());
         } else {
-            // Si la retirada falló, volver a Idle
-            character.setIdleState();
+            character.transitionTo(character.getStates().getIdleState());
         }
     }
 

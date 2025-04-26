@@ -7,8 +7,7 @@ import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
  */
 public class TiredState extends BaseState {
 
-    // Umbral de maná por debajo del cual el personaje está cansado
-    private static final int MANA_THRESHOLD = 10;
+    // El umbral de maná se ha movido a BaseCharacter.LOW_MANA_THRESHOLD
 
     TiredState(BaseCharacter character) {
         super(character);
@@ -23,15 +22,15 @@ public class TiredState extends BaseState {
     @Override
     public void handleRetreat(BaseCharacter opponent) {
         // Cambiar al estado de retirada
-        character.setCurrentState(new RetreatingState(character));
+        character.transitionTo(character.getStates().getRetreatingState());
         character.getCurrentState().handleRetreat(opponent);
     }
 
     @Override
     public void updateState() {
         // Si el personaje recupera suficiente maná, volver a Idle
-        if (character.getManaPoints() > MANA_THRESHOLD) {
-            character.setIdleState();
+        if (!character.isLowEnergy()) {
+            character.transitionTo(character.getStates().getIdleState());
         }
     }
 
@@ -46,6 +45,6 @@ public class TiredState extends BaseState {
      * @return true si el personaje debería estar cansado, false en caso contrario
      */
     public static boolean shouldBeTired(BaseCharacter character) {
-        return character.getManaPoints() <= MANA_THRESHOLD;
+        return character.isLowEnergy();
     }
 }
