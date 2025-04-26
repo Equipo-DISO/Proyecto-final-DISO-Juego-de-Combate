@@ -3,6 +3,7 @@ package com.utad.proyectoFinal.characterSystem.characters;
 
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
+import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
 
 import java.awt.image.BufferedImage;
@@ -26,6 +27,7 @@ public abstract class BaseCharacter {
     private Integer manaPoints;
     private Integer maxManaPoints;
 
+
     // Estados del personaje
     private StatesList states;
     private CharacterState currentState; // Estado actual del personaje
@@ -37,7 +39,7 @@ public abstract class BaseCharacter {
 
     // Equipamiento del personaje
     private BaseWeapon weapon;  // Arma equipada
-    // TODO: Implement -> private Escudo escudo;
+    private BaseHelmet helmet;  // Casco equipado
 
     // Inventario y efectos
     // TODO: Implement inventory system (find best approach/pattern) State maybe?
@@ -93,7 +95,15 @@ public abstract class BaseCharacter {
         return this.healthPoints > 0;
     }
 
-    public void reduceHealth(Integer healthPoints) {
+    public void reduceHealth(Integer damage) {
+        this.healthPoints = Math.max(0, this.healthPoints - damage);
+    }
+
+    public Integer getHealthPoints() {
+        return this.healthPoints;
+    }
+
+    public void setHealthPoints(Integer healthPoints) {
         this.healthPoints = healthPoints;
     }
 
@@ -126,6 +136,30 @@ public abstract class BaseCharacter {
 
     public void setDeadState() {
         setCurrentState(states.getDeadState());
+    }
+
+    public void setTiredState() {
+        setCurrentState(states.getTiredState());
+    }
+
+    public void setHealState() {
+        setCurrentState(states.getHealState());
+    }
+
+    public void setGainManaState() {
+        setCurrentState(states.getGainManaState());
+    }
+
+    public void setMovingOnMapState() {
+        setCurrentState(states.getMovingOnMapState());
+    }
+
+    public void setRetreatingState() {
+        setCurrentState(states.getRetreatingState());
+    }
+
+    public void setAttackingState() {
+        setCurrentState(states.getAttackingState());
     }
 
     public CharacterState getCurrentState() {
@@ -178,4 +212,23 @@ public abstract class BaseCharacter {
         this.manaPoints = Math.max(0, manaPoints - amount);
     }
 
+    public BaseHelmet getHelmet() {
+        return helmet;
+    }
+
+    public void setHelmet(BaseHelmet helmet) {
+        this.helmet = helmet;
+    }
+
+    public Integer getMaxManaPoints() {
+        return maxManaPoints;
+    }
+
+    public void setMaxManaPoints(Integer maxManaPoints) {
+        this.maxManaPoints = maxManaPoints;
+    }
+
+    public void gainHealth(Integer healthPoints) {
+        this.healthPoints = Math.min(healthPoints, DefaultAttributes.HEALTH);
+    }
 }

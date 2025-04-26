@@ -11,32 +11,62 @@ public class IdleState extends BaseState {
 
     @Override
     public void handleAttack(BaseCharacter opponent) {
-        throw new UnsupportedOperationException("Cambia de estado antes de realizar cualquier acción");
+        // Comprobar si el personaje tiene suficiente maná para atacar
+        if (TiredState.shouldBeTired(character)) {
+            System.out.printf("%s tiene poca energía y no puede atacar.%n", character.getName());
+            character.setTiredState();
+        } else {
+            // Cambiar al estado de ataque
+            character.setAttackingState();
+            character.getCurrentState().handleAttack(opponent);
+        }
     }
 
-    @Override
-    public void handleDefense(BaseCharacter opponent) {
-        throw new UnsupportedOperationException("Cambia de estado antes de realizar cualquier acción");
-    }
 
     @Override
     public void handleRetreat(BaseCharacter opponent) {
-        throw new UnsupportedOperationException("Cambia de estado antes de realizar cualquier acción");
+        // Cambiar al estado de retirada
+        character.setRetreatingState();
+        character.getCurrentState().handleRetreat(opponent);
     }
 
     @Override
-    public void handleMove(Object toBeReplacedByTileClass) {
-        throw new UnsupportedOperationException("Cambia de estado antes de realizar cualquier acción");
+    public void handleMove(Object tile) {
+        // Cambiar al estado de movimiento en el mapa
+        character.setMovingOnMapState();
+        character.getCurrentState().handleMove(tile);
+    }
+
+    /**
+     * Método para manejar la curación
+     */
+    public void handleHeal() {
+        // Cambiar al estado de curación
+        character.setHealState();
+        ((HealState) character.getCurrentState()).heal();
+    }
+
+    /**
+     * Método para manejar la ganancia de maná
+     */
+    public void handleGainMana() {
+        // Cambiar al estado de ganancia de maná
+        character.setGainManaState();
+        ((GainManaState) character.getCurrentState()).gainMana();
     }
 
     @Override
     public void updateState() {
-        throw new UnsupportedOperationException("Cambia de estado antes de realizar cualquier acción");
+        // Comprobar si el personaje tiene poca energía
+        if (TiredState.shouldBeTired(character)) {
+            character.setTiredState();
+        }
     }
 
     @Override
     public void handleReceiveAttack(Double damage) {
-        throw new UnsupportedOperationException("Cambia de estado antes de realizar cualquier acción");
+        // Usar la implementación por defecto de BaseState
+        super.handleReceiveAttack(damage);
     }
 
     @Override

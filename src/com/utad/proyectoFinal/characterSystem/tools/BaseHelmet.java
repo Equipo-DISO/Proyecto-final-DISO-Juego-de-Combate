@@ -36,4 +36,12 @@ public class BaseHelmet {
     public HelmetType getType() {
         return type;
     }
+
+    public void decreaseDurability(){
+        this.durability--;
+    }
+
+    public Integer getDurability() {
+        return this.durability;
+    }
 }

@@ -1,6 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.tools.Calculator;
 
 public abstract class BaseState implements CharacterState {
 
@@ -22,6 +23,7 @@ public abstract class BaseState implements CharacterState {
         throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
     }
 
+
     @Override
     public void handleMove(Object toBeReplacedByTileClass) {
         // Implementación por defecto (puede ser vacía o lanzar una excepción)
@@ -40,28 +42,32 @@ public abstract class BaseState implements CharacterState {
     public void handleReceiveAttack(Double damage) {
         double finalDamage = damage;
 
-        finalDamage = damage; // TODO: Helmet Implementation -> * (1 - character.getHelmet.getDefense()/100.0);
-
+        // Si el personaje está retirándose y la retirada fue exitosa, evita todo el daño
         if (character.getCurrentState() instanceof RetreatingState && character.isRetreatSuccessful()) {
             finalDamage = 0.0;
             System.out.println(character.getName() + " ha evitado el ataque con éxito");
+        } else {
+            // Aplicar reducción por casco usando Calculator
+            finalDamage = Calculator.getInstance().calculateHelmetReduction(character, finalDamage);
+
+            // Aplicar reducción por defensa base del personaje
+            finalDamage = finalDamage - (finalDamage * character.getBaseDefense()/100.0);
         }
 
-        int actualDamage = (int) (finalDamage - (finalDamage * character.getBaseDefense()/100.0));
-        character.reduceHealth(actualDamage); // TODO: Should be managed by 'Calculator' class
+        int actualDamage = (int) finalDamage;
+        character.reduceHealth(actualDamage);
 
-        System.out.println(character.getName() + " ha recibido un ataque de " + (int)finalDamage +
-                " puntos pero gracias a su defensa su ha recibido " + actualDamage + " de daño");
+        System.out.println(character.getName() + " ha recibido un ataque de " + damage.intValue() +
+                " puntos pero gracias a su casco y defensa ha recibido " + actualDamage + " de daño");
 
-        // V2 Cuando la clase casco este implementable //TODO: Helmet Implementation
-        /*
-        if (this.cascoPersonaje != null) {
-            this.cascoPersonaje.reduceDurability();
-            if (this.cascoPersonaje.getDurability() <= 0) {
-                System.out.println("El casco de " + this.nombrePersonaje + " se ha roto");
-                this.cascoPersonaje = null; // El personaje ya no tiene casco
+
+        if (character.getHelmet() != null) {
+            character.getHelmet().decreaseDurability();
+            if (character.getHelmet().getDurability() <= 0) {
+                System.out.println("El casco de " + character.getName() + " se ha roto");
+                character.setHelmet(null);
             }
-         */
+        }
 
         if (!character.isAlive()) {
             System.out.println(character.getName() + " ha sido derrotado en combate");

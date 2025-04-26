@@ -1,11 +1,15 @@
 package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
 
-/**
- * Representa el estado neutral de un personaje
- */
-public class AttackingState extends BaseState {
+import java.util.Scanner;
+
+class AttackingState extends BaseState {
+
+    private AttackStrategy currentStrategy;
 
     AttackingState(BaseCharacter character) {
         super(character);
@@ -13,30 +17,35 @@ public class AttackingState extends BaseState {
 
     @Override
     public void handleAttack(BaseCharacter opponent) {
-
-        if (character.isAlive() && opponent.isAlive()) {
-            // TODO: Replace with call to DamageCalculator
-            Double damage = calcularDanio();
-            opponent.getCurrentState().handleReceiveAttack(damage); // TODO: Replace with call to DamageCalculator
-            System.out.println(character.getName() + " ataca a " + opponent.getName() +
-                    " causando " + damage.intValue() + " puntos de daño.");
+        selectStrategy();
+        if (currentStrategy != null) {
+            currentStrategy.execute(character, opponent);
+            updateState();
         }
+    }
 
-        throw new UnsupportedOperationException("Work in progress");
+    private void selectStrategy() {
+        // Lógica muy simple para testing, TODO: conectar a UI externa
+        System.out.printf("%n%s: elige tipo de ataque (1) Ligero (2) Pesado ▶ ",
+                character.getName());
+        int option = new Scanner(System.in).nextInt();
+        currentStrategy = option == 2
+                ? new HeavyAttackStrategy()
+                : new LightAttackStrategy();
+    }
+
+    @Override
+    public void updateState() {
+        // Comprobar si el personaje tiene poco maná después del ataque
+        if (TiredState.shouldBeTired(character)) {
+            character.setTiredState(); // cambiar a Tired si tiene poco maná
+        } else {
+            character.setIdleState(); // volver a Idle si tiene suficiente maná
+        }
     }
 
     @Override
     public String getName() {
         return "Attacking";
-    }
-
-    protected Double calcularDanio() {
-        // Obtenemos el daño base del arma
-        // TODO: Implement Weapon Class, then --> Double danioTotal = this.armaPersonaje.getDanio() * (1 + (this.ataque / 100));
-//        if (this.armaPersonaje.getPrecision() < Math.random() * 100) {
-//            danioTotal = 0.0; // No se ha acertado el golpe
-//        }
-//        return danioTotal;
-        return character.getBaseAttack(); // TODO: Replace with call to DamageCalculator / Placeholder
     }
 }

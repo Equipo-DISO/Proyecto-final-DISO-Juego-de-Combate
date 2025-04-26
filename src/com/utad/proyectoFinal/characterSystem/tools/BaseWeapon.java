@@ -54,7 +54,6 @@ public class BaseWeapon {
         this.durability--;
     }
 
-
     public void decreaseDurability(int i) {
         this.durability -= i;
     }

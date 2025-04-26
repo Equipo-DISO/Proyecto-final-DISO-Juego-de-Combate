@@ -14,13 +14,6 @@ public interface CharacterState {
     void handleAttack(BaseCharacter opponent);
 
     /**
-     * Ejecuta una acción de defensa y maneja la transición de estado
-     *
-     * @param opponent El oponente
-     */
-    void handleDefense(BaseCharacter opponent);
-
-    /**
      * Ejecuta una acción de retirada y maneja la transición de estado
      *
      * @param opponent El oponente
