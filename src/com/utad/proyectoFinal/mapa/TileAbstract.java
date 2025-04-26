@@ -44,7 +44,7 @@ public abstract class TileAbstract
 
         for (Integer vertix = 0; vertix < 6; vertix++)
         {
-            Double vertixAngle = Math.toRadians((vertix * 60) + 60);
+            Double vertixAngle = Math.toRadians((vertix * 60) + 40);
             
             Integer vertixPosX = (int) (this.posX + TileAbstract.HEXAGON_RADIOUS * Math.cos(vertixAngle));
             Integer vertixPosY = (int) (this.posY + (TileAbstract.HEXAGON_RADIOUS / 2) * Math.sin(vertixAngle));

@@ -9,11 +9,12 @@ public class MapTesting
     {
         // Crear la ventana
         JFrame frame = new JFrame("Hexágono 3D Testing");
-        
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
+        frame.add(new MapGenerator());
         frame.setVisible(true);
 
-        frame.add(new MapGenerator());
+     
     }
 }
