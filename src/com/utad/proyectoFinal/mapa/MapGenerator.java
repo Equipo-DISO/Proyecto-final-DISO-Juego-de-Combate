@@ -1,8 +1,6 @@
 package com.utad.proyectoFinal.mapa;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -22,11 +20,13 @@ public class MapGenerator extends JPanel
 
 
 
-    private void createHexGrid() {
+    private void createHexGrid() 
+    {
+        // numeros magicos, no tocar
         Double hexWidth = TileAbstract.HEXAGON_RADIOUS * 1.86;       
         Double hexHeight = TileAbstract.HEXAGON_RADIOUS * 1.1;       
         
-        Integer gridSize = 4;
+        Integer gridSize = 3;
         Integer centerX = 500;
         Integer centerY = 0;
         
@@ -36,12 +36,13 @@ public class MapGenerator extends JPanel
             
             for (Integer r = r1; r <= r2; r++) 
             {
+                // numeros magicos, no tocar
                 Double x = centerX + (hexWidth * 0.55 * q);
                 Double y = centerY + (hexHeight * (r + q * 0.3));
                 
 
                 Double isoX = x - y;
-                Double isoY = (x + y) * 0.69;
+                Double isoY = (x + y) * 0.75;
                 
                 Integer tileX = (int) Math.round(isoX);
                 Integer tileY = (int) Math.round(isoY);
@@ -63,13 +64,9 @@ public class MapGenerator extends JPanel
 
         this.tile.sort(Comparator.comparingInt(t -> t.posY));
 
-        for (TileAbstract t : this.tile) {
+        for (TileAbstract t : this.tile) 
+        {
             t.drawTile(g2d);
         }
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(800, 800);
     }
 }

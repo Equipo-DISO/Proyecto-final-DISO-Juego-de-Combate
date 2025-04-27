@@ -49,23 +49,17 @@ public class GenericTile extends TileAbstract
             graphics2d.setColor(new Color(117, 84, 66)); 
             graphics2d.fillPolygon(side);
 
-            // Stroke oldStroke = graphics2d.getStroke();
-            // graphics2d.setStroke(new BasicStroke(2.5f));
-            
-            // graphics2d.setColor(new Color(255, 255, 255, 120));
-
-            // graphics2d.drawLine(
-            //     topPoints[v1].x, topPoints[v1].y + depth,
-            //     topPoints[v2].x, topPoints[v2].y + depth
-            // );
-
-            // graphics2d.setStroke(oldStroke);
-        
-
+    
         }
 
-
-        graphics2d.setColor(new Color(130, 204, 66)); 
+        DecoratingHexagon specialGrass = new DecoratingHexagon(super.posX, super.posY + 4, super.tileId, false);
+        specialGrass.setColor(new Color(118, 184, 58));
+        specialGrass.setStrokeWidth(6);
+        specialGrass.setRadious(super.radious - 4);
+        specialGrass.drawTile(graphics2d);
+        
+              
+        graphics2d.setColor(new Color(135, 190, 88)); 
         graphics2d.fillPolygon(super.hexagon);
 
     }

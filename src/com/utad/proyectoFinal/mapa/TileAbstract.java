@@ -14,6 +14,7 @@ public abstract class TileAbstract
 	public static final Integer IMAGE_WIDTH  = (int) (0.8 * TileAbstract.HEXAGON_WIDTH); 
 	public static final Integer IMAGE_HEIGHT = (int) (0.8 * TileAbstract.HEXAGON_HEIGHT); 
 
+    protected Integer radious;
 
 	protected Integer posX;
 	protected Integer posY;
@@ -32,6 +33,7 @@ public abstract class TileAbstract
         this.posY = y;
         this.tileId = id;
         this.hexagon = null;
+        this.radious = TileAbstract.HEXAGON_RADIOUS;
         
         this.ocupiedObject = null;
         this.isHovered = false;
@@ -46,8 +48,8 @@ public abstract class TileAbstract
         {
             Double vertixAngle = Math.toRadians((vertix * 60) + 40);
             
-            Integer vertixPosX = (int) (this.posX + TileAbstract.HEXAGON_RADIOUS * Math.cos(vertixAngle));
-            Integer vertixPosY = (int) (this.posY + (TileAbstract.HEXAGON_RADIOUS / 2) * Math.sin(vertixAngle));
+            Integer vertixPosX = (int) (this.posX + this.radious * Math.cos(vertixAngle));
+            Integer vertixPosY = (int) (this.posY + (this.radious / 2) * Math.sin(vertixAngle));
                     
                         
             this.hexagon.addPoint(vertixPosX, vertixPosY);
