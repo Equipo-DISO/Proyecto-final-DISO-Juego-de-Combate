@@ -16,8 +16,14 @@ public abstract class TileAbstract
 
     protected Integer radious;
 
+    // position in screen
 	protected Integer posX;
 	protected Integer posY;
+
+    // node position
+    protected Integer nodeX;
+    protected Integer nodeY;
+
     protected Polygon hexagon;
     protected Integer tileId;
 	
@@ -27,10 +33,14 @@ public abstract class TileAbstract
 	protected BufferedImage specialImage;
 
 
-    public TileAbstract(Integer x, Integer y, Integer id)
+    public TileAbstract(Integer x, Integer y, Integer id, Integer nodeX, Integer nodeY)
     {
         this.posX = x;
         this.posY = y;
+
+        this.nodeX = nodeX;
+        this.nodeY = nodeY;
+
         this.tileId = id;
         this.hexagon = null;
         this.radious = TileAbstract.HEXAGON_RADIOUS;
@@ -79,7 +89,8 @@ public abstract class TileAbstract
     public abstract void drawTile(Graphics2D graphics2d);
 
     
-
+    public Integer getNodeX() { return this.nodeX; }
+    public Integer getNodeY() { return this.nodeY; }
     public Integer getPosX() { return this.posX; }
     public Integer getPosY() { return this.posY; }
     public Integer getTileId() { return this.tileId; }

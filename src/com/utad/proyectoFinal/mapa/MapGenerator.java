@@ -13,16 +13,18 @@ public class MapGenerator extends JPanel
 
     public static final Integer DEFAULT_GRID_SIZE = 3;
 
+    private TileFactory factory;
     private List<TileAbstract> tiles;
+
     private MapListener listener;
     private static MapGenerator instance;
-    private Integer screenX = 0;
-    private Integer screenY = 0;
+
+    private Integer screenX;
+    private Integer screenY;
     private boolean disableMap;
-
-    private TileFactory factory;
-
     private Integer gridSize;
+
+    private Integer[][] adjacencyMatrix;
 
     private MapGenerator(Integer x, Integer y, Integer size) 
     {
@@ -30,9 +32,12 @@ public class MapGenerator extends JPanel
 
         this.factory = new NormalTileFactory(calculateTotalTiles(), calculateTotalTiles() / 4);
 
-        this.tiles = createHexGrid();
+        this.adjacencyMatrix = new Integer[calculateTotalTiles()][calculateTotalTiles()];
+        initializeAdjacencyMatrix();
+
         this.screenX = x;
         this.screenY = y;
+        this.tiles = createHexGrid();
         this.disableMap = false;
 
 
@@ -40,6 +45,8 @@ public class MapGenerator extends JPanel
         this.addMouseListener(listener);
         this.addMouseMotionListener(listener);
     }
+
+   
 
     public static MapGenerator getInstance(Integer screenX, Integer screenY, Integer size)
     {
@@ -59,16 +66,14 @@ public class MapGenerator extends JPanel
         Double hexWidth = TileAbstract.HEXAGON_RADIOUS * 1.86;       
         Double hexHeight = TileAbstract.HEXAGON_RADIOUS * 1.1;       
         
-        Integer gridSize = MapGenerator.DEFAULT_GRID_SIZE;
         Integer centerX = this.screenX / 2;
         Integer centerY = this.screenY / 2;
 
  
-       
-        for (Integer q = -gridSize; q <= gridSize; q++) 
+        for (Integer q = -this.gridSize; q <= this.gridSize; q++) 
         {
-            Integer r1 = Math.max(-gridSize, -q - gridSize);
-            Integer r2 = Math.min(gridSize, -q + gridSize);
+            Integer r1 = Math.max(-this.gridSize, -q - this.gridSize);
+            Integer r2 = Math.min(this.gridSize, -q + this.gridSize);
             
             for (Integer r = r1; r <= r2; r++) 
             {
@@ -82,9 +87,22 @@ public class MapGenerator extends JPanel
                 
                 Integer tileX = (int) Math.round(isoX);
                 Integer tileY = (int) Math.round(isoY);
+
+                Integer newTileId = generatedMap.size() + 1;
+
                 
-                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, this.tiles.size() + 1);
+                Integer nodeX = (q + this.gridSize);
+                Integer nodeY = (r + this.gridSize);
+                
+                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId, nodeX, nodeY);
                 generatedMap.add(tile);
+
+                if (tile instanceof GenericTile)
+                {
+                    connectNeighbors(generatedMap, nodeX, nodeY, newTileId);
+                }
+               
+               
             }
         }
 
@@ -119,7 +137,7 @@ public class MapGenerator extends JPanel
             super.setEnabled(true);
         }
        
-        //generateDebugLines(g2d);
+        generateDebugLines(g2d);
     }
 
     public void generateDebugLines(Graphics2D g2d)
@@ -132,11 +150,13 @@ public class MapGenerator extends JPanel
         {
             for (Integer j = i+1; j < this.tiles.size(); j++)
             {
-                TileAbstract t1 = this.tiles.get(i);
-                TileAbstract t2 = this.tiles.get(j);
+                if (this.adjacencyMatrix[i][j] == 1) 
+                {
+                    TileAbstract t1 = this.tiles.get(i);
+                    TileAbstract t2 = this.tiles.get(j);
 
-               
-                g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
+                    g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
+                }
             }
         }
 
@@ -175,6 +195,59 @@ public class MapGenerator extends JPanel
     }
 
 
+    /*
+     * 
+     *      MOVIDAS GRAFO
+     * 
+     */
+
+    private void connectNeighbors(List<TileAbstract> tiles, Integer nodeX, Integer nodeY, Integer currentId) 
+    {
+        
+        Integer[][] directions = {
+            {1, 0}, {1, -1}, {0, -1},
+            {-1, 0}, {-1, 1}, {0, 1}
+        };
+        
+        // Buscar vecinos en cada dirección
+        for (Integer[] dir : directions) 
+        {
+            Integer neighborX = nodeX + dir[0];
+            Integer neighborY = nodeY + dir[1];
+        
+            
+            if (Math.abs(neighborX) <= gridSize && Math.abs(neighborY) <= gridSize 
+                && Math.abs(neighborX + neighborY) <= gridSize) 
+            {
+                // Buscar el tile vecino en la lista
+                for (Integer i = 0; i < tiles.size(); i++) 
+                {
+                    TileAbstract neighbor = tiles.get(i);
+                    if (neighbor.getNodeX() == neighborX && neighbor.getNodeY() == neighborY) 
+                    {
+                        if (neighbor instanceof GenericTile) 
+                        {
+                            adjacencyMatrix[currentId][i] = 1;
+                            adjacencyMatrix[i][currentId] = 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void initializeAdjacencyMatrix() 
+    {
+        for (int i = 0; i < adjacencyMatrix.length; i++) 
+        {
+            for (int j = 0; j < adjacencyMatrix[i].length; j++) 
+            {
+                adjacencyMatrix[i][j] = 0;
+            }
+        }
+    }
+
+    public void setFactory(TileFactory f) { this.factory = f; }
     public void disableMap(boolean b) { this.disableMap = b; }
     public void updateRendering() { this.repaint(); }
     public boolean isDisabled()   { return this.disableMap; }
