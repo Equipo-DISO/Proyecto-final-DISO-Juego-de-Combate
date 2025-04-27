@@ -30,12 +30,11 @@ public class MapGenerator extends JPanel
 
         this.factory = new NormalTileFactory(calculateTotalTiles(), calculateTotalTiles() / 4);
 
-        this.tiles = new ArrayList<TileAbstract>();
+        this.tiles = createHexGrid();
         this.screenX = x;
         this.screenY = y;
         this.disableMap = false;
 
-        createHexGrid();
 
         this.listener = new MapListener(this, this.tiles);
         this.addMouseListener(listener);
@@ -52,8 +51,10 @@ public class MapGenerator extends JPanel
         return MapGenerator.instance;
     }
 
-    private void createHexGrid() 
+    public List<TileAbstract> createHexGrid() 
     {
+        List<TileAbstract> generatedMap = new ArrayList<>();
+
         // numeros magicos, no tocar
         Double hexWidth = TileAbstract.HEXAGON_RADIOUS * 1.86;       
         Double hexHeight = TileAbstract.HEXAGON_RADIOUS * 1.1;       
@@ -83,9 +84,11 @@ public class MapGenerator extends JPanel
                 Integer tileY = (int) Math.round(isoY);
                 
                 TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, this.tiles.size() + 1);
-                this.tiles.add(tile);
+                generatedMap.add(tile);
             }
         }
+
+        return generatedMap;
     }
     
 
@@ -171,6 +174,8 @@ public class MapGenerator extends JPanel
     
     }
 
+
+    public void disableMap(boolean b) { this.disableMap = b; }
     public void updateRendering() { this.repaint(); }
     public boolean isDisabled()   { return this.disableMap; }
     public Integer calculateTotalTiles() { return 1 + 3 * this.gridSize * (this.gridSize + 1); }

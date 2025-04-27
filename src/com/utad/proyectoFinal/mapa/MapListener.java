@@ -45,8 +45,8 @@ public class MapListener extends MouseAdapter
             boolean now = t.contains(mx, my);
             if (now != t.getIsHovered()) 
             {
-                System.out.println("hovering " + t.getTileId());
                 t.setHovered(now);
+                //System.out.println("hovering " + t.getTileId() + " " + t.getIsHovered());
             }
         }
 
