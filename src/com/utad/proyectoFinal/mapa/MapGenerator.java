@@ -14,8 +14,6 @@ public class MapGenerator extends JPanel
     public MapGenerator() 
     {
         this.tiles = new ArrayList<TileAbstract>();
-        setLayout(new BorderLayout());
-        
         createHexGrid();
 
         this.listener = new MapListener(this, this.tiles);
@@ -35,7 +33,8 @@ public class MapGenerator extends JPanel
         Integer centerX = 500;
         Integer centerY = 0;
         
-        for (Integer q = -gridSize; q <= gridSize; q++) {
+        for (Integer q = -gridSize; q <= gridSize; q++) 
+        {
             Integer r1 = Math.max(-gridSize, -q - gridSize);
             Integer r2 = Math.min(gridSize, -q + gridSize);
             
