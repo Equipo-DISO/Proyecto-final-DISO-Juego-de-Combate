@@ -63,10 +63,33 @@ public class MapGenerator extends JPanel
         super.setBackground(new Color(90, 182, 180)); // agua
 
         this.tile.sort(Comparator.comparingInt(t -> t.posY));
+      
 
         for (TileAbstract t : this.tile) 
         {
             t.drawTile(g2d);
         }
+
+        //generateDebugLines(g2d);
+    }
+
+    private void generateDebugLines(Graphics2D g2d)
+    {
+
+        g2d.setColor(new Color(120, 0, 0));
+        g2d.setStroke(new BasicStroke(1));
+
+        for (Integer i = 0; i < this.tile.size(); i++)
+        {
+            for (Integer j = i+1; j < this.tile.size(); j++)
+            {
+                TileAbstract t1 = this.tile.get(i);
+                TileAbstract t2 = this.tile.get(j);
+
+               
+                g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
+            }
+        }
+
     }
 }
