@@ -10,10 +10,8 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.3d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.4d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
-
-    public static final Integer DEFAULT_GRID_SIZE = 3;
 
     private TileFactory factory;
     private List<TileAbstract> tiles;
@@ -134,7 +132,7 @@ public class MapGenerator extends JPanel
 
 
 
-    public void drawPendingScreen(Graphics2D g2d)
+    private void drawPendingScreen(Graphics2D g2d)
     {
         Composite oldComp = g2d.getComposite();
         Color oldColor   = g2d.getColor();
@@ -173,7 +171,7 @@ public class MapGenerator extends JPanel
      * 
      */
 
-    public static boolean isInRange(GenericTile initial, GenericTile target)
+    private static boolean isInRange(GenericTile initial, GenericTile target)
     {
         Point centerInitial = new Point(initial.getPosX(), initial.getPosY());
         Point centerTarget  = new Point(target.getPosX() , target.getPosY());
@@ -182,7 +180,7 @@ public class MapGenerator extends JPanel
         return centerInitial.distance(centerTarget) < 127.0d; // magic number, distancia maxima a la que estara un tile contiguo
     }
 
-    public void generateDebugLines(Graphics2D g2d)
+    private void generateDebugLines(Graphics2D g2d)
     {
 
         g2d.setColor(new Color(120, 0, 0));

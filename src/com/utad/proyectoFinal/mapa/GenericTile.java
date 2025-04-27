@@ -45,7 +45,19 @@ public class GenericTile extends TileAbstract
             side.addPoint(topPoints[v1].x, topPoints[v1].y + GenericTile.DEFAULT_FACE_DEPTH);
         
 
-            graphics2d.setColor(new Color(117, 84, 66)); 
+            if (i == 3)
+            {
+                graphics2d.setColor(new Color(100, 67, 49)); 
+            }   
+            else if (i == 1)
+            {
+                graphics2d.setColor(new Color(112, 79, 61)); 
+            }
+            else
+            {
+                graphics2d.setColor(new Color(117, 84, 66)); 
+            }
+            
             graphics2d.fillPolygon(side);
         }
 
