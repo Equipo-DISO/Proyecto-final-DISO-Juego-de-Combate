@@ -1,7 +1,7 @@
 package com.utad.proyectoFinal.mapa;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
+
 
 public abstract class TileAbstract 
 {
@@ -30,7 +30,7 @@ public abstract class TileAbstract
 
 	protected Object  ocupiedObject; 
 	protected boolean isHovered;
-	protected BufferedImage specialImage;
+	protected Image specialImage;
 
 
     public TileAbstract(Integer x, Integer y, Integer id, Integer nodeX, Integer nodeY)
@@ -99,7 +99,7 @@ public abstract class TileAbstract
     
     public void setOcupiedObject(Object ocupiedObject) { this.ocupiedObject = ocupiedObject; }
     public void setHovered(boolean isHovered) { this.isHovered = isHovered; }
-    public void setSpecialImage(BufferedImage specialImage) { this.specialImage = specialImage; }
+    public void setSpecialImage(Image specialImage) { this.specialImage = specialImage; }
 
     @Override
     public String toString() 
