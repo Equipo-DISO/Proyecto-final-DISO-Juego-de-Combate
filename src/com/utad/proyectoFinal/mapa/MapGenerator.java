@@ -124,23 +124,13 @@ public class MapGenerator extends JPanel
         super.setBackground(new Color(90, 182, 180)); // agua
 
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
-<<<<<<< Updated upstream
+        this.tiles.forEach(t -> t.drawTile(g2d));
+        generateDebugLines(g2d);
       
-
-        for (TileAbstract t : this.tiles) 
-        {
-            t.drawTile(g2d);
-        }
 
         //drawFogOfWar(g2d);
 
 
-=======
-        this.tiles.forEach(t -> t.drawTile(g2d));
-        generateDebugLines(g2d);
-    
-       
->>>>>>> Stashed changes
         if (this.disableMap)
         {
             drawPendingScreen(g2d);
@@ -150,35 +140,8 @@ public class MapGenerator extends JPanel
         {
             super.setEnabled(true);
         }
-<<<<<<< Updated upstream
        
         //generateDebugLines(g2d);
-=======
-    }
-
-    public void drawDebugMessage(Graphics2D g2d, Integer x, Integer y, String msg)
-    {
-        Composite oldComp = g2d.getComposite();
-        Color oldColor   = g2d.getColor();
-        Font  oldFont    = g2d.getFont();
-
-
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-        g2d.setColor(Color.WHITE);
-
-        Font font = oldFont.deriveFont(Font.BOLD, 14f);
-        g2d.setFont(font);
-
-        FontMetrics fm = g2d.getFontMetrics();
-        int tx = (x - fm.stringWidth(msg)) / 2;
-        int ty = (y - fm.getHeight()) / 2 + fm.getAscent();
-        g2d.drawString(msg, tx, ty);
-
-    
-        g2d.setComposite(oldComp);
-        g2d.setColor(oldColor);
-        g2d.setFont(oldFont);
->>>>>>> Stashed changes
     }
 
 
@@ -237,10 +200,6 @@ public class MapGenerator extends JPanel
                     TileAbstract t1 = this.tiles.get(i);
                     TileAbstract t2 = this.tiles.get(j);
 
-<<<<<<< Updated upstream
-=======
-                    //drawDebugMessage(g2d, t1.getPosX(), t1.getPosY(), "id " + t1.getTileId() + "\nCid " + t2.getTileId());
->>>>>>> Stashed changes
                     g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
                 }
             }
@@ -267,16 +226,6 @@ public class MapGenerator extends JPanel
             if (axialToIndex.containsKey(neighborKey)) 
             {
                 Integer neighborIndex = axialToIndex.get(neighborKey);
-<<<<<<< Updated upstream
-                if (neighborIndex >= 0 && neighborIndex < adjacencyMatrix.length) 
-                {
-                    TileAbstract neighbor = tiles.get(neighborIndex);
-                
-                    if (neighbor instanceof GenericTile) 
-                    {
-                        adjacencyMatrix[currentId][neighborIndex] = 1;
-                        adjacencyMatrix[neighborIndex][currentId] = 1;
-=======
                 
                 if (neighborIndex > 0 && neighborIndex < adjacencyMatrix.length) 
                 {
@@ -284,10 +233,9 @@ public class MapGenerator extends JPanel
                     
                     if (neighbor instanceof GenericTile) 
                     {
-                        adjacencyMatrix[currentIndex][neighborIndex] = 1;
-                        adjacencyMatrix[neighborIndex][currentIndex] = 1;
-                        System.out.println(currentIndex + " " + neighborIndex);
->>>>>>> Stashed changes
+                        adjacencyMatrix[currentId][neighborIndex] = 1;
+                        adjacencyMatrix[neighborIndex][currentId] = 1;
+                        System.out.println(currentId + " " + neighborIndex);
                     }
                 }
             }

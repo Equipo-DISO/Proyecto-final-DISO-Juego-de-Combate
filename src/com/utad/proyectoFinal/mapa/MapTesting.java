@@ -2,7 +2,7 @@ package com.utad.proyectoFinal.mapa;
 
 import javax.swing.*;
 
-import com.utad.proyectoFinal.ui.SimplifiedImage;
+
 
 
 public class MapTesting 
@@ -16,6 +16,6 @@ public class MapTesting
         frame.setSize(1000, 1000);
         frame.add(MapGenerator.getInstance(900, 0, 3, 2));
         frame.setVisible(true);
-        frame.setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
+        //frame.setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
     }
 }
