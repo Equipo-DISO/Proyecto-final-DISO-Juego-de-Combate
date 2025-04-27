@@ -28,6 +28,11 @@ public class TiredState extends BaseState {
 
     @Override
     public void updateState() {
+        // In testing mode, don't transition automatically
+        if (isTestingMode()) {
+            return;
+        }
+
         // Si el personaje recupera suficiente maná, volver a Idle
         if (!character.isLowEnergy()) {
             character.transitionTo(character.getStates().getIdleState());

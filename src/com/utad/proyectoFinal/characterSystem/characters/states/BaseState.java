@@ -2,10 +2,19 @@ package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.tools.Calculator;
+import test.com.utad.proyectoFinal.characterSystem.TestUtils;
 
 public abstract class BaseState implements CharacterState {
 
     protected BaseCharacter character;
+
+    /**
+     * Checks if we're in testing mode
+     * @return true if in testing mode, false otherwise
+     */
+    protected static boolean isTestingMode() {
+        return TestUtils.isTestingMode();
+    }
 
     BaseState(BaseCharacter character) {
         this.character = character;
@@ -44,6 +53,16 @@ public abstract class BaseState implements CharacterState {
 
     @Override
     public void updateState() {
+        // In testing mode, don't transition automatically
+        if (isTestingMode()) {
+            // Only transition to DeadState if character is dead
+            if (!character.isAlive()) {
+                character.transitionTo(character.getStates().getDeadState());
+            }
+            return;
+        }
+
+        // Normal behavior when not in testing mode
         if (character.isAlive())
             character.transitionTo(character.getStates().getIdleState());
         else

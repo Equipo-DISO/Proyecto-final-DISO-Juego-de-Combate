@@ -45,6 +45,11 @@ public class GainManaState extends BaseState {
 
     @Override
     public void updateState() {
+        // In testing mode, don't transition back to Idle automatically
+        if (isTestingMode()) {
+            return;
+        }
+
         // Volver a Idle después de ganar maná
         character.transitionTo(character.getStates().getIdleState());
     }
