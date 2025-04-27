@@ -11,7 +11,9 @@ public class MapGenerator extends JPanel
     private List<TileAbstract> tiles;
     private MapListener listener;
 
-    public MapGenerator() 
+    private static MapGenerator instance;
+
+    private MapGenerator() 
     {
         this.tiles = new ArrayList<TileAbstract>();
         createHexGrid();
@@ -21,7 +23,15 @@ public class MapGenerator extends JPanel
         this.addMouseMotionListener(listener);
     }
 
+    public static MapGenerator getInstance()
+    {
+        if (MapGenerator.instance == null)
+        {
+            MapGenerator.instance = new MapGenerator();
+        }
 
+        return MapGenerator.instance;
+    }
 
     private void createHexGrid() 
     {
