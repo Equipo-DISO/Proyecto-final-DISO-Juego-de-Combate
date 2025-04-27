@@ -28,7 +28,7 @@ public class MapGenerator extends JPanel
     private Integer gridSize;
 
     private Integer[][] adjacencyMatrix;
-     private Map<String, Integer> axialToIndex;
+
 
     private MapGenerator(Integer x, Integer y, Integer size, Integer spawns) 
     {
@@ -37,7 +37,6 @@ public class MapGenerator extends JPanel
         this.factory = new NormalTileFactory(calculateTotalTiles(), spawns);
 
         this.adjacencyMatrix = new Integer[calculateTotalTiles()][calculateTotalTiles()];
-        this.axialToIndex = new HashMap<>();
         initializeAdjacencyMatrix();
 
         this.screenX = x;
@@ -65,7 +64,6 @@ public class MapGenerator extends JPanel
 
     public List<TileAbstract> createHexGrid() 
     {
-        System.out.println("created");
         List<TileAbstract> generatedMap = new ArrayList<>();
 
         // numeros magicos, no tocar
@@ -94,22 +92,20 @@ public class MapGenerator extends JPanel
                 Integer tileX = (int) Math.round(isoX);
                 Integer tileY = (int) Math.round(isoY);
 
-                Integer newTileId = generatedMap.size() + 1;
+                Integer newTileId = generatedMap.size();
 
-                
-                String axialKey = q + "," + r;
-                axialToIndex.put(axialKey, newTileId + 1);
-                
-                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId, q, r);
+
+                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId);
                 generatedMap.add(tile);
 
-                // if (tile instanceof GenericTile)
-                // {
-                //     connectNeighbors(generatedMap, q, r, newTileId - 1);
-                // }
+                if (tile instanceof GenericTile)
+                {
+                    connectNeighbors(generatedMap, (GenericTile) tile);
+                }
             }
         }
 
+        //MapGenerator.isInRange((GenericTile) generatedMap.get(0), (GenericTile) generatedMap.get(5));
         return generatedMap;
     }
     
@@ -141,7 +137,7 @@ public class MapGenerator extends JPanel
             super.setEnabled(true);
         }
        
-        //generateDebugLines(g2d);
+        generateDebugLines(g2d);
     }
 
 
@@ -185,6 +181,15 @@ public class MapGenerator extends JPanel
      * 
      */
 
+    public static boolean isInRange(GenericTile initial, GenericTile target)
+    {
+        Point centerInitial = new Point(initial.getPosX(), initial.getPosY());
+        Point centerTarget  = new Point(target.getPosX() , target.getPosY());
+
+       
+        return centerInitial.distance(centerTarget) < 127.0d; // magic number
+    }
+
     public void generateDebugLines(Graphics2D g2d)
     {
 
@@ -195,54 +200,39 @@ public class MapGenerator extends JPanel
         {
             for (Integer j = 0; j < this.tiles.size(); j++)
             {
-                if (this.adjacencyMatrix[i][j] == 1) 
-                {
+                
                     TileAbstract t1 = this.tiles.get(i);
                     TileAbstract t2 = this.tiles.get(j);
 
+                if (this.adjacencyMatrix[t1.getTileId()][t2.getTileId()] == 1) 
+                {
                     g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
                 }
             }
         }
     }
 
-    private void connectNeighbors(List<TileAbstract> tiles, Integer nodeX, Integer nodeY, Integer currentId) 
+    private void connectNeighbors(List<TileAbstract> tiles, GenericTile currentTile) 
     {
         
-        Integer[][] directions = {
-            {1, 0}, {1, -1}, {0, -1},
-            {-1, 0}, {-1, 1}, {0, 1}
-        };
-        
-        // Buscar vecinos en cada dirección
-        for (Integer[] dir : directions) 
-        {
-            Integer neighborX = nodeX + dir[0];
-            Integer neighborY = nodeY + dir[1];
-
-            String neighborKey = neighborX + "," + neighborY;
-        
-            
-            if (axialToIndex.containsKey(neighborKey)) 
+       for (TileAbstract tile : tiles)
+       {
+            if (tile instanceof GenericTile)
             {
-                Integer neighborIndex = axialToIndex.get(neighborKey);
-                
-                if (neighborIndex > 0 && neighborIndex < adjacencyMatrix.length) 
+                if (MapGenerator.isInRange(currentTile, (GenericTile) tile))
                 {
-                    TileAbstract neighbor = tiles.get(neighborIndex);
-                    
-                    if (neighbor instanceof GenericTile) 
-                    {
-                        adjacencyMatrix[currentId][neighborIndex] = 1;
-                        adjacencyMatrix[neighborIndex][currentId] = 1;
-                        System.out.println(currentId + " " + neighborIndex);
-                    }
+                    this.adjacencyMatrix[currentTile.getTileId()][tile.getTileId()] = 1;
+                    this.adjacencyMatrix[tile.getTileId()][currentTile.getTileId()] = 1;
                 }
-            }
-        }
+            }           
+       }
+        
+       
     }
 
-     private void initializeAdjacencyMatrix() {
+
+    private void initializeAdjacencyMatrix() 
+    {
         for (int i = 0; i < adjacencyMatrix.length; i++) 
         {
             Arrays.fill(adjacencyMatrix[i], 0);

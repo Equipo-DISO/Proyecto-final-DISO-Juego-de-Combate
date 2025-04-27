@@ -8,9 +8,9 @@ public class GenericTile extends TileAbstract
 
     public static final Integer DEFAULT_FACE_DEPTH = 35;
 
-    public GenericTile(Integer x, Integer y, Integer id, Integer nodeX, Integer nodeY) 
+    public GenericTile(Integer x, Integer y, Integer id) 
     {
-        super(x, y, id, nodeX, nodeY);
+        super(x, y, id);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class GenericTile extends TileAbstract
             graphics2d.fillPolygon(side);
         }
 
-        DecoratingHexagon specialGrass = new DecoratingHexagon(super.posX, super.posY + 4, super.tileId, false, super.nodeX, super.nodeY);
+        DecoratingHexagon specialGrass = new DecoratingHexagon(super.posX, super.posY + 4, super.tileId, false);
         specialGrass.setColor(new Color(118, 184, 58));
         specialGrass.setStrokeWidth(6);
         specialGrass.setRadious(super.radious - 4);
