@@ -75,11 +75,7 @@ public abstract class TileAbstract
 	   }
 	}
 
-    public boolean contains(Integer mouseX, Integer mouseY) 
-    {
-        return this.hexagon.contains(mouseX, mouseY);
-    }
-
+    public abstract boolean contains(Integer mouseX, Integer mouseY);
     public abstract void drawTile(Graphics2D graphics2d);
 
     

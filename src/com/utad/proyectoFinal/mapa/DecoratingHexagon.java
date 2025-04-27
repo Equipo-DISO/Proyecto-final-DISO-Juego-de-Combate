@@ -39,6 +39,12 @@ public class DecoratingHexagon extends TileAbstract
         graphics2d.drawPolygon(super.hexagon);    
     }
 
+    @Override
+    public boolean contains(Integer mouseX, Integer mouseY) 
+    {
+        return false;
+    }
+
     public void setStrokeWidth(Integer w)
     {
         this.strokeWidth = w;

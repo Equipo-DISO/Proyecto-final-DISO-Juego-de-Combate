@@ -70,4 +70,11 @@ public class GenericTile extends TileAbstract
         }
     }
 
+    @Override
+    public boolean contains(Integer mouseX, Integer mouseY) 
+    {
+        return super.hexagon.contains(mouseX, mouseY);
+    }
+
+
 }

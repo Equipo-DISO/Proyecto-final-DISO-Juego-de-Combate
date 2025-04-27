@@ -61,7 +61,8 @@ public class MapGenerator extends JPanel
                 Integer tileX = (int) Math.round(isoX);
                 Integer tileY = (int) Math.round(isoY);
                 
-                this.tiles.add(new GenericTile(tileX, tileY, q + r + gridSize));
+              
+                this.tiles.add(new GenericTile(tileX, tileY, this.tiles.size() + 1));
             }
         }
     }

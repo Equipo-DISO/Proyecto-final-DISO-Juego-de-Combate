@@ -1,6 +1,7 @@
 package com.utad.proyectoFinal.mapa;
 
-import java.awt.Graphics2D;
+import java.awt.*;
+
 
 public class ObstacleTile extends TileAbstract
 {
@@ -13,7 +14,13 @@ public class ObstacleTile extends TileAbstract
     @Override
     public void drawTile(Graphics2D graphics2d) 
     {
-        throw new UnsupportedOperationException("Unimplemented method 'drawTile'");
+        super.createHexagon();
+
     }
 
+    @Override
+    public boolean contains(Integer mouseX, Integer mouseY) 
+    {
+        return false;
+    }
 }
