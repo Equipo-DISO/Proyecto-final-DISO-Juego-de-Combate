@@ -1,4 +1,4 @@
-package com.utad.proyectoFinal.lobby;
+package com.utad.proyectoFinal.ui;
 
 import javax.swing.*;
 import javax.swing.border.Border;

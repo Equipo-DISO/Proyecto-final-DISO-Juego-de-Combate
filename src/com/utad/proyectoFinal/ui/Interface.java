@@ -1,4 +1,4 @@
-package com.utad.proyectoFinal.lobby;
+package com.utad.proyectoFinal.ui;
 
 public interface Interface {
     public void showInterface();
