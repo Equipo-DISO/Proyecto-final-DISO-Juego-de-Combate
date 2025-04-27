@@ -27,11 +27,14 @@ public enum Path {
         BLACK("Black"),
         WHITE("White");
 
-        private ColorEnum(String color){};
+        protected String label;
+        private ColorEnum(String color){
+            this.label = color;
+        };
     }
 
     public String getPath(ColorEnum color) {
-        return "Files/img/" + color + this.identifier + ".png";
+        return "Files/img/" + color.label + this.identifier + ".png";
     }
 
     public Integer getDefWidth() {
