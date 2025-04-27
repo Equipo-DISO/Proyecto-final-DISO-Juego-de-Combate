@@ -15,7 +15,7 @@ public class InterfaceMainExample {
         for (String element : data) {
             if(data.indexOf(element) == 0) System.out.println("Ruta de Imagen del Jugador: " + element + "\n");
             else if(data.indexOf(element) == 1) System.out.println("Nombre del Jugador: " + element + "\nLista de Bots: ");
-            else System.out.println("#" + data.indexOf(element) + ": " + element);
+            else System.out.println("#" + (data.indexOf(element) - 1) + ": " + element);
         }
     }
 }
