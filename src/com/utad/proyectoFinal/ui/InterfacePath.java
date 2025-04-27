@@ -1,17 +1,17 @@
 package com.utad.proyectoFinal.ui;
 
-public enum Path {
+public enum InterfacePath {
     
     COLOR("Color", 100, 50),
     PLAYER("Guy", 82, 100);
     
-    public static final Path.ColorEnum[] colorsList = {Path.ColorEnum.GREEN, Path.ColorEnum.ORANGE, Path.ColorEnum.PINK, Path.ColorEnum.BLACK,
-        Path.ColorEnum.YELLOW, Path.ColorEnum.RED, Path.ColorEnum.BLUE, Path.ColorEnum.WHITE};
+    public static final InterfacePath.ColorEnum[] colorsList = {InterfacePath.ColorEnum.GREEN, InterfacePath.ColorEnum.ORANGE, InterfacePath.ColorEnum.PINK, InterfacePath.ColorEnum.BLACK,
+        InterfacePath.ColorEnum.YELLOW, InterfacePath.ColorEnum.RED, InterfacePath.ColorEnum.BLUE, InterfacePath.ColorEnum.WHITE};
     private String identifier;
     private Integer width;
     private Integer height;
 
-    private Path(String identifier, Integer width, Integer height) {
+    private InterfacePath(String identifier, Integer width, Integer height) {
         this.identifier = identifier;
         this.width = width;
         this.height = height;
