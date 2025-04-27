@@ -27,7 +27,6 @@ public abstract class BaseCharacter {
     private Integer manaPoints;
     private Integer maxManaPoints;
 
-
     // Estados del personaje
     private StatesList states;
     private CharacterState currentState; // Estado actual del personaje
@@ -39,8 +38,8 @@ public abstract class BaseCharacter {
 
     // Equipamiento del personaje
     private BaseWeapon weapon;  // Arma equipada
-    private BaseHelmet helmet;  // Casco equipado
-
+    // TODO: Implement -> private Escudo escudo;
+    private BaseHelmet helmet;
     // Inventario y efectos
     // TODO: Implement inventory system (find best approach/pattern) State maybe?
     //    private List<Item> inventario;  // Pociones, vendas, botiquines, etc.
@@ -95,15 +94,7 @@ public abstract class BaseCharacter {
         return this.healthPoints > 0;
     }
 
-    public void reduceHealth(Integer damage) {
-        this.healthPoints = Math.max(0, this.healthPoints - damage);
-    }
-
-    public Integer getHealthPoints() {
-        return this.healthPoints;
-    }
-
-    public void setHealthPoints(Integer healthPoints) {
+    public void reduceHealth(Integer healthPoints) {
         this.healthPoints = healthPoints;
     }
 
@@ -123,42 +114,8 @@ public abstract class BaseCharacter {
         this.retreatSuccess = retreatSuccess;
     }
 
-    // Metodo auxiliar para cambiar el estado
-    public void transitionTo(CharacterState newState) {
-        this.currentState = newState;
-    }
-
-    // “setXState” por delegación
     public void setIdleState() {
-        transitionTo(states.getIdleState());
-    }
-
-    public void setAttackingState() {
-        transitionTo(states.getAttackingState());
-    }
-
-    public void setHealState() {
-        transitionTo(states.getHealState());
-    }
-
-    public void setGainManaState() {
-        transitionTo(states.getGainManaState());
-    }
-
-    public void setRetreatingState() {
-        transitionTo(states.getRetreatingState());
-    }
-
-    public void setTiredState() {
-        transitionTo(states.getTiredState());
-    }
-
-    public void setMovingOnMapState() {
-        transitionTo(states.getMovingOnMapState());
-    }
-
-    public void setDeadState() {
-        transitionTo(states.getDeadState());
+        setCurrentState(states.getIdleState());
     }
 
     public void setCurrentState(CharacterState state) {
@@ -168,13 +125,12 @@ public abstract class BaseCharacter {
         this.currentState = state;
     }
 
-    public CharacterState getCurrentState() {
-        return currentState;
+    public void setDeadState() {
+        setCurrentState(states.getDeadState());
     }
 
-    // Getter para reutilizar la lista desde los estados
-    public StatesList getStates() {
-        return states;
+    public CharacterState getCurrentState() {
+        return currentState;
     }
 
     public Double getBaseCounterAttackChance() {
@@ -223,27 +179,4 @@ public abstract class BaseCharacter {
         this.manaPoints = Math.max(0, manaPoints - amount);
     }
 
-    public BaseHelmet getHelmet() {
-        return helmet;
-    }
-
-    public void setHelmet(BaseHelmet helmet) {
-        this.helmet = helmet;
-    }
-
-    public Integer getMaxManaPoints() {
-        return maxManaPoints;
-    }
-
-    public void setMaxManaPoints(Integer maxManaPoints) {
-        this.maxManaPoints = maxManaPoints;
-    }
-
-    public void gainHealth(Integer healthPoints) {
-        this.healthPoints = Math.min(healthPoints, DefaultAttributes.HEALTH);
-    }
-
-    public boolean isLowEnergy() {
-        return manaPoints < DefaultAttributes.LOW_MANA_THRESHOLD;
-    }
 }
