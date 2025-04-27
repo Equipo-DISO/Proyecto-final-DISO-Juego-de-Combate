@@ -8,14 +8,23 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
+
+    public static final Integer DEFAULT_GRID_SIZE = 3;
+
     private List<TileAbstract> tiles;
     private MapListener listener;
-
     private static MapGenerator instance;
+    private Integer screenX = 0;
+    private Integer screenY = 0;
+    private boolean disableMap;
 
-    private MapGenerator() 
+    private MapGenerator(Integer x, Integer y) 
     {
         this.tiles = new ArrayList<TileAbstract>();
+        this.screenX = x;
+        this.screenY = y;
+        this.disableMap = false;
+
         createHexGrid();
 
         this.listener = new MapListener(this, this.tiles);
@@ -23,11 +32,11 @@ public class MapGenerator extends JPanel
         this.addMouseMotionListener(listener);
     }
 
-    public static MapGenerator getInstance()
+    public static MapGenerator getInstance(Integer screenX, Integer screenY)
     {
         if (MapGenerator.instance == null)
         {
-            MapGenerator.instance = new MapGenerator();
+            MapGenerator.instance = new MapGenerator(screenX, screenY);
         }
 
         return MapGenerator.instance;
@@ -39,10 +48,12 @@ public class MapGenerator extends JPanel
         Double hexWidth = TileAbstract.HEXAGON_RADIOUS * 1.86;       
         Double hexHeight = TileAbstract.HEXAGON_RADIOUS * 1.1;       
         
-        Integer gridSize = 3;
-        Integer centerX = 500;
-        Integer centerY = 0;
-        
+        Integer gridSize = MapGenerator.DEFAULT_GRID_SIZE;
+        Integer centerX = this.screenX / 2;
+        Integer centerY = this.screenY / 2;
+
+ 
+       
         for (Integer q = -gridSize; q <= gridSize; q++) 
         {
             Integer r1 = Math.max(-gridSize, -q - gridSize);
@@ -85,6 +96,16 @@ public class MapGenerator extends JPanel
             t.drawTile(g2d);
         }
 
+        if (this.disableMap)
+        {
+            setPendingScreen(g2d);
+            super.setEnabled(false);
+        }
+        else
+        {
+            super.setEnabled(true);
+        }
+       
         //generateDebugLines(g2d);
     }
 
@@ -107,4 +128,39 @@ public class MapGenerator extends JPanel
         }
 
     }
+
+    public void setPendingScreen(Graphics2D g2d)
+    {
+        Composite oldComp = g2d.getComposite();
+        Color oldColor   = g2d.getColor();
+        Font  oldFont    = g2d.getFont();
+
+        // 1) Velo gris semitransparente
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+        g2d.setColor(Color.DARK_GRAY);
+        g2d.fillRect(0, 0, super.getWidth(), super.getHeight());
+
+        // 2) Texto centrado
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+        g2d.setColor(Color.WHITE);
+
+        Font font = oldFont.deriveFont(Font.BOLD, 48f);
+        g2d.setFont(font);
+
+       
+        String text = "ON GOING FIGHT";
+        FontMetrics fm = g2d.getFontMetrics();
+        int tx = (super.getWidth() - fm.stringWidth(text)) / 2;
+        int ty = (super.getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+        g2d.drawString(text, tx, ty);
+
+    
+        g2d.setComposite(oldComp);
+        g2d.setColor(oldColor);
+        g2d.setFont(oldFont);
+    
+    }
+
+    public void updateRendering() { this.repaint(); }
+    public boolean isDisabled()   { return this.disableMap; }
 }

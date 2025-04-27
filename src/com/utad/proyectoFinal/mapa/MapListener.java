@@ -3,22 +3,24 @@ package com.utad.proyectoFinal.mapa;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.List;
-import javax.swing.JPanel;
+
 
 public class MapListener extends MouseAdapter
 {
     private List<TileAbstract> tiles;
-    private JPanel screen;
+    private MapGenerator map;
 
-    public MapListener(JPanel s, List<TileAbstract> tiles) 
+    public MapListener(MapGenerator m, List<TileAbstract> tiles) 
     {
         this.tiles = tiles;
-        this.screen = s;
+        this.map = m;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) 
     {
+        if (this.map.isDisabled()) { return; }
+
         Point p = e.getPoint();
         for (TileAbstract t : tiles) 
         {
@@ -33,7 +35,8 @@ public class MapListener extends MouseAdapter
     @Override
     public void mouseMoved(MouseEvent e) 
     {
-       
+        if (this.map.isDisabled()) { return; }
+
         Integer mx = e.getX();
         Integer my = e.getY();
 
@@ -46,7 +49,7 @@ public class MapListener extends MouseAdapter
                 t.setHovered(now);
             }
         }
-        
-        screen.repaint();
+
+        this.map.updateRendering();
     }
 }

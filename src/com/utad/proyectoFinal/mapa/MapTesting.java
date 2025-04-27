@@ -11,8 +11,8 @@ public class MapTesting
         JFrame frame = new JFrame("Hexágono 3D Testing");
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1080, 1080);
-        frame.add(MapGenerator.getInstance());
+        frame.setSize(1000, 1000);
+        frame.add(MapGenerator.getInstance(900, 0));
         frame.setVisible(true);
 
     }
