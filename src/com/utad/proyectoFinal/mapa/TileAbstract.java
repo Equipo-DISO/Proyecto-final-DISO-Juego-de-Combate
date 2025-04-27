@@ -6,11 +6,11 @@ import java.awt.image.BufferedImage;
 public abstract class TileAbstract 
 {
 
-    public static final Integer HEXAGON_RADIOUS = 80;
+    public static final Integer HEXAGON_RADIOUS = 70;
 	public static final Integer HEXAGON_WIDTH = (int) (Math.sqrt(3) * TileAbstract.HEXAGON_RADIOUS);
 	public static final Integer HEXAGON_HEIGHT = 2 * TileAbstract.HEXAGON_RADIOUS;
-	public static final Double  MAX_DISTANCE_LEGAL_MOVE = 80.0d;
-	
+
+    
 	public static final Integer IMAGE_WIDTH  = (int) (0.8 * TileAbstract.HEXAGON_WIDTH); 
 	public static final Integer IMAGE_HEIGHT = (int) (0.8 * TileAbstract.HEXAGON_HEIGHT); 
 
