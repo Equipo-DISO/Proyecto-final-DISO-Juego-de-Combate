@@ -28,7 +28,7 @@ public class MapGenerator extends JPanel
     private Integer gridSize;
 
     private Integer[][] adjacencyMatrix;
-     private Map<String, Integer> axialToIndex;
+    private Map<String, Integer> axialToIndex;
 
     private MapGenerator(Integer x, Integer y, Integer size) 
     {
@@ -65,7 +65,6 @@ public class MapGenerator extends JPanel
 
     public List<TileAbstract> createHexGrid() 
     {
-        System.out.println("created");
         List<TileAbstract> generatedMap = new ArrayList<>();
 
         // numeros magicos, no tocar
@@ -94,19 +93,18 @@ public class MapGenerator extends JPanel
                 Integer tileX = (int) Math.round(isoX);
                 Integer tileY = (int) Math.round(isoY);
 
-                Integer newTileId = generatedMap.size() + 1;
 
-                
+                Integer newTileId = generatedMap.size();
                 String axialKey = q + "," + r;
                 axialToIndex.put(axialKey, newTileId);
                 
-                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId, q, r);
+                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId + 1, q, r);
                 generatedMap.add(tile);
 
-                // if (tile instanceof GenericTile)
-                // {
-                //     connectNeighbors(generatedMap, q, r, newTileId - 1);
-                // }
+                if (tile instanceof GenericTile)
+                {
+                    connectNeighbors(generatedMap, q, r, newTileId);
+                }
             }
         }
 
@@ -124,13 +122,9 @@ public class MapGenerator extends JPanel
         super.setBackground(new Color(90, 182, 180)); // agua
 
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
-      
-
-        for (TileAbstract t : this.tiles) 
-        {
-            t.drawTile(g2d);
-        }
-
+        this.tiles.forEach(t -> t.drawTile(g2d));
+        generateDebugLines(g2d);
+    
         //drawFogOfWar(g2d);
 
 
@@ -144,7 +138,31 @@ public class MapGenerator extends JPanel
             super.setEnabled(true);
         }
        
-        //generateDebugLines(g2d);
+        
+    }
+
+    public void drawDebugMessage(Graphics2D g2d, Integer x, Integer y, String msg)
+    {
+        Composite oldComp = g2d.getComposite();
+        Color oldColor   = g2d.getColor();
+        Font  oldFont    = g2d.getFont();
+
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+        g2d.setColor(Color.WHITE);
+
+        Font font = oldFont.deriveFont(Font.BOLD, 14f);
+        g2d.setFont(font);
+
+        FontMetrics fm = g2d.getFontMetrics();
+        int tx = (x - fm.stringWidth(msg)) / 2;
+        int ty = (y - fm.getHeight()) / 2 + fm.getAscent();
+        g2d.drawString(msg, tx, ty);
+
+    
+        g2d.setComposite(oldComp);
+        g2d.setColor(oldColor);
+        g2d.setFont(oldFont);
     }
 
     public void drawFogOfWar(Graphics2D g2d)
@@ -210,7 +228,7 @@ public class MapGenerator extends JPanel
      * 
      */
 
-    public void generateDebugLines(Graphics2D g2d)
+    private void generateDebugLines(Graphics2D g2d)
     {
 
         g2d.setColor(new Color(120, 0, 0));
@@ -225,47 +243,48 @@ public class MapGenerator extends JPanel
                     TileAbstract t1 = this.tiles.get(i);
                     TileAbstract t2 = this.tiles.get(j);
 
+                    drawDebugMessage(g2d, t1.getPosX(), t1.getPosY(), "id " + t1.getTileId());
                     g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
                 }
             }
         }
     }
 
-    private void connectNeighbors(List<TileAbstract> tiles, Integer nodeX, Integer nodeY, Integer currentId) 
+    private void connectNeighbors(List<TileAbstract> tiles, Integer q, Integer r, Integer currentIndex) 
     {
-        
-        Integer[][] directions = {
+        int[][] directions = {
             {1, 0}, {1, -1}, {0, -1},
             {-1, 0}, {-1, 1}, {0, 1}
         };
         
-        // Buscar vecinos en cada dirección
-        for (Integer[] dir : directions) 
+        for (int[] dir : directions) 
         {
-            Integer neighborX = nodeX + dir[0];
-            Integer neighborY = nodeY + dir[1];
-
-            String neighborKey = neighborX + "," + neighborY;
-        
+            Integer neighborQ = q + dir[0];
+            Integer neighborR = r + dir[1];
+            String neighborKey = neighborQ + "," + neighborR;
             
             if (axialToIndex.containsKey(neighborKey)) 
             {
                 Integer neighborIndex = axialToIndex.get(neighborKey);
+                
+               
                 if (neighborIndex >= 0 && neighborIndex < adjacencyMatrix.length) 
                 {
                     TileAbstract neighbor = tiles.get(neighborIndex);
-                
+                    
+                    
                     if (neighbor instanceof GenericTile) 
                     {
-                        adjacencyMatrix[currentId][neighborIndex] = 1;
-                        adjacencyMatrix[neighborIndex][currentId] = 1;
+                        adjacencyMatrix[currentIndex][neighborIndex] = 1;
+                        adjacencyMatrix[neighborIndex][currentIndex] = 1;
                     }
                 }
             }
         }
     }
 
-     private void initializeAdjacencyMatrix() {
+    private void initializeAdjacencyMatrix() 
+    {
         for (int i = 0; i < adjacencyMatrix.length; i++) 
         {
             Arrays.fill(adjacencyMatrix[i], 0);
