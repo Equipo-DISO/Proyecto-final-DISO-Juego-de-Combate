@@ -8,14 +8,19 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    private List<GenericTile> tile;
+    private List<TileAbstract> tiles;
+    private MapListener listener;
 
     public MapGenerator() 
     {
-        this.tile = new ArrayList<GenericTile>();
+        this.tiles = new ArrayList<TileAbstract>();
         setLayout(new BorderLayout());
         
         createHexGrid();
+
+        this.listener = new MapListener(this, this.tiles);
+        this.addMouseListener(listener);
+        this.addMouseMotionListener(listener);
     }
 
 
@@ -47,7 +52,7 @@ public class MapGenerator extends JPanel
                 Integer tileX = (int) Math.round(isoX);
                 Integer tileY = (int) Math.round(isoY);
                 
-                this.tile.add(new GenericTile(tileX, tileY, q + r + gridSize));
+                this.tiles.add(new GenericTile(tileX, tileY, q + r + gridSize));
             }
         }
     }
@@ -62,10 +67,10 @@ public class MapGenerator extends JPanel
         Graphics2D g2d = (Graphics2D) g;
         super.setBackground(new Color(90, 182, 180)); // agua
 
-        this.tile.sort(Comparator.comparingInt(t -> t.posY));
+        this.tiles.sort(Comparator.comparingInt(t -> t.posY));
       
 
-        for (TileAbstract t : this.tile) 
+        for (TileAbstract t : this.tiles) 
         {
             t.drawTile(g2d);
         }
@@ -73,18 +78,18 @@ public class MapGenerator extends JPanel
         //generateDebugLines(g2d);
     }
 
-    private void generateDebugLines(Graphics2D g2d)
+    public void generateDebugLines(Graphics2D g2d)
     {
 
         g2d.setColor(new Color(120, 0, 0));
         g2d.setStroke(new BasicStroke(1));
 
-        for (Integer i = 0; i < this.tile.size(); i++)
+        for (Integer i = 0; i < this.tiles.size(); i++)
         {
-            for (Integer j = i+1; j < this.tile.size(); j++)
+            for (Integer j = i+1; j < this.tiles.size(); j++)
             {
-                TileAbstract t1 = this.tile.get(i);
-                TileAbstract t2 = this.tile.get(j);
+                TileAbstract t1 = this.tiles.get(i);
+                TileAbstract t2 = this.tiles.get(j);
 
                
                 g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());

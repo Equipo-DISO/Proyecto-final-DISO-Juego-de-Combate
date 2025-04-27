@@ -62,6 +62,12 @@ public class GenericTile extends TileAbstract
         graphics2d.setColor(new Color(135, 190, 88)); 
         graphics2d.fillPolygon(super.hexagon);
 
+        if (super.getIsHovered())
+        {
+            graphics2d.setColor(new Color(120, 0, 0)); 
+            graphics2d.setStroke(new BasicStroke(3)); 
+            graphics2d.drawPolygon(super.hexagon);   
+        }
     }
 
 }

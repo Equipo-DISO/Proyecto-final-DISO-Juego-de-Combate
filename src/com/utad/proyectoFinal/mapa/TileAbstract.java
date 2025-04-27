@@ -75,6 +75,10 @@ public abstract class TileAbstract
 	   }
 	}
 
+    public boolean contains(Integer mouseX, Integer mouseY) 
+    {
+        return this.hexagon.contains(mouseX, mouseY);
+    }
 
     public abstract void drawTile(Graphics2D graphics2d);
 
@@ -83,6 +87,7 @@ public abstract class TileAbstract
     public Integer getPosX() { return this.posX; }
     public Integer getPosY() { return this.posY; }
     public Integer getTileId() { return this.tileId; }
+    public boolean getIsHovered() { return this.isHovered; }
 
     
     public void setOcupiedObject(Object ocupiedObject) { this.ocupiedObject = ocupiedObject; }
