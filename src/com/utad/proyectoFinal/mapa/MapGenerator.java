@@ -3,8 +3,11 @@ package com.utad.proyectoFinal.mapa;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class MapGenerator extends JPanel 
 {
@@ -25,6 +28,7 @@ public class MapGenerator extends JPanel
     private Integer gridSize;
 
     private Integer[][] adjacencyMatrix;
+     private Map<String, Integer> axialToIndex;
 
     private MapGenerator(Integer x, Integer y, Integer size) 
     {
@@ -33,6 +37,7 @@ public class MapGenerator extends JPanel
         this.factory = new NormalTileFactory(calculateTotalTiles(), calculateTotalTiles() / 4);
 
         this.adjacencyMatrix = new Integer[calculateTotalTiles()][calculateTotalTiles()];
+        this.axialToIndex = new HashMap<>();
         initializeAdjacencyMatrix();
 
         this.screenX = x;
@@ -60,6 +65,7 @@ public class MapGenerator extends JPanel
 
     public List<TileAbstract> createHexGrid() 
     {
+        System.out.println("created");
         List<TileAbstract> generatedMap = new ArrayList<>();
 
         // numeros magicos, no tocar
@@ -91,15 +97,15 @@ public class MapGenerator extends JPanel
                 Integer newTileId = generatedMap.size() + 1;
 
                 
-                Integer nodeX = (q + this.gridSize);
-                Integer nodeY = (r + this.gridSize);
+                String axialKey = q + "," + r;
+                axialToIndex.put(axialKey, newTileId);
                 
-                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId, nodeX, nodeY);
+                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId, q, r);
                 generatedMap.add(tile);
 
                 if (tile instanceof GenericTile)
                 {
-                    connectNeighbors(generatedMap, nodeX, nodeY, newTileId);
+                    connectNeighbors(generatedMap, q, r, newTileId - 1);
                 }
                
                
@@ -140,27 +146,6 @@ public class MapGenerator extends JPanel
         generateDebugLines(g2d);
     }
 
-    public void generateDebugLines(Graphics2D g2d)
-    {
-
-        g2d.setColor(new Color(120, 0, 0));
-        g2d.setStroke(new BasicStroke(1));
-
-        for (Integer i = 0; i < this.tiles.size(); i++)
-        {
-            for (Integer j = i+1; j < this.tiles.size(); j++)
-            {
-                if (this.adjacencyMatrix[i][j] == 1) 
-                {
-                    TileAbstract t1 = this.tiles.get(i);
-                    TileAbstract t2 = this.tiles.get(j);
-
-                    g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
-                }
-            }
-        }
-
-    }
 
     public void setPendingScreen(Graphics2D g2d)
     {
@@ -201,6 +186,27 @@ public class MapGenerator extends JPanel
      * 
      */
 
+    public void generateDebugLines(Graphics2D g2d)
+    {
+
+        g2d.setColor(new Color(120, 0, 0));
+        g2d.setStroke(new BasicStroke(1));
+
+        for (Integer i = 0; i < this.tiles.size(); i++)
+        {
+            for (Integer j = i+1; j < this.tiles.size(); j++)
+            {
+                if (this.adjacencyMatrix[i][j] == 1) 
+                {
+                    TileAbstract t1 = this.tiles.get(i);
+                    TileAbstract t2 = this.tiles.get(j);
+
+                    g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
+                }
+            }
+        }
+    }
+
     private void connectNeighbors(List<TileAbstract> tiles, Integer nodeX, Integer nodeY, Integer currentId) 
     {
         
@@ -214,36 +220,31 @@ public class MapGenerator extends JPanel
         {
             Integer neighborX = nodeX + dir[0];
             Integer neighborY = nodeY + dir[1];
+
+            String neighborKey = neighborX + "," + neighborY;
         
             
-            if (Math.abs(neighborX) <= gridSize && Math.abs(neighborY) <= gridSize 
-                && Math.abs(neighborX + neighborY) <= gridSize) 
+            if (axialToIndex.containsKey(neighborKey)) 
             {
-                // Buscar el tile vecino en la lista
-                for (Integer i = 0; i < tiles.size(); i++) 
+                Integer neighborIndex = axialToIndex.get(neighborKey);
+                if (neighborIndex >= 0 && neighborIndex < adjacencyMatrix.length) 
                 {
-                    TileAbstract neighbor = tiles.get(i);
-                    if (neighbor.getNodeX() == neighborX && neighbor.getNodeY() == neighborY) 
+                    TileAbstract neighbor = tiles.get(neighborIndex);
+                
+                    if (neighbor instanceof GenericTile) 
                     {
-                        if (neighbor instanceof GenericTile) 
-                        {
-                            adjacencyMatrix[currentId][i] = 1;
-                            adjacencyMatrix[i][currentId] = 1;
-                        }
+                        adjacencyMatrix[currentId][neighborIndex] = 1;
+                        adjacencyMatrix[neighborIndex][currentId] = 1;
                     }
                 }
             }
         }
     }
 
-    private void initializeAdjacencyMatrix() 
-    {
+     private void initializeAdjacencyMatrix() {
         for (int i = 0; i < adjacencyMatrix.length; i++) 
         {
-            for (int j = 0; j < adjacencyMatrix[i].length; j++) 
-            {
-                adjacencyMatrix[i][j] = 0;
-            }
+            Arrays.fill(adjacencyMatrix[i], 0);
         }
     }
 
