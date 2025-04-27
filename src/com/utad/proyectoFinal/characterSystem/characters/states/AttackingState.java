@@ -7,7 +7,7 @@ import com.utad.proyectoFinal.characterSystem.characters.states.strategies.Heavy
 
 import java.util.Scanner;
 
-class AttackingState extends BaseState {
+public class AttackingState extends BaseState {
 
     private AttackStrategy currentStrategy;
 
@@ -25,7 +25,14 @@ class AttackingState extends BaseState {
     }
 
     private void selectStrategy() {
-        // Lógica muy simple para testing, TODO: conectar a UI externa
+        // Use the common testing mode flag from BaseState
+        if (isTestingMode()) {
+            // Use light attack strategy for testing
+            currentStrategy = new LightAttackStrategy();
+            return;
+        }
+
+        // Normal user input for non-testing mode
         System.out.printf("%n%s: elige tipo de ataque (1) Ligero (2) Pesado ▶ ",
                 character.getName());
         int option = new Scanner(System.in).nextInt();
@@ -38,7 +45,12 @@ class AttackingState extends BaseState {
     public void updateState() {
         // Comprobar si el personaje tiene poco maná después del ataque
         if (!checkAndTransitionToTiredIfNeeded()) {
-            character.transitionTo(character.getStates().getIdleState()); // volver a Idle si tiene suficiente maná
+            // Use the common testing mode flag from BaseState
+            // In testing mode, don't transition back to Idle automatically
+            // This allows tests to check the state after an attack
+            if (!isTestingMode()) {
+                character.transitionTo(character.getStates().getIdleState()); // volver a Idle si tiene suficiente maná
+            }
         }
     }
 

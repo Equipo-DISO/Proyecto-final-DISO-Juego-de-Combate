@@ -14,9 +14,9 @@ public class DecoratingHexagon extends TileAbstract
     private Boolean fillInPolygon;
 
 
-    public DecoratingHexagon(Integer x, Integer y, Integer id, Boolean fill) 
+    public DecoratingHexagon(Integer x, Integer y, Integer id, Boolean fill, Integer nodeX, Integer nodeY) 
     {
-        super(x, y, id);
+        super(x, y, id, nodeX, nodeY);
         this.color = DecoratingHexagon.DEFAULT_COLOR;
         this.strokeWidth = DecoratingHexagon.DEFAULT_STROKE_WIDTH;
         this.fillInPolygon = fill;
@@ -37,6 +37,12 @@ public class DecoratingHexagon extends TileAbstract
 
         graphics2d.setStroke(new BasicStroke(this.strokeWidth)); 
         graphics2d.drawPolygon(super.hexagon);    
+    }
+
+    @Override
+    public boolean contains(Integer mouseX, Integer mouseY) 
+    {
+        return false;
     }
 
     public void setStrokeWidth(Integer w)
