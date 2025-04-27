@@ -3,11 +3,10 @@ package com.utad.proyectoFinal.mapa;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
+
 
 public class MapGenerator extends JPanel 
 {
@@ -50,7 +49,6 @@ public class MapGenerator extends JPanel
         this.addMouseMotionListener(listener);
     }
 
-   
 
     public static MapGenerator getInstance(Integer screenX, Integer screenY, Integer size, Integer spawns)
     {
@@ -105,7 +103,6 @@ public class MapGenerator extends JPanel
             }
         }
 
-        //MapGenerator.isInRange((GenericTile) generatedMap.get(0), (GenericTile) generatedMap.get(5));
         return generatedMap;
     }
     
@@ -124,9 +121,6 @@ public class MapGenerator extends JPanel
         generateDebugLines(g2d);
       
 
-        //drawFogOfWar(g2d);
-
-
         if (this.disableMap)
         {
             drawPendingScreen(g2d);
@@ -136,8 +130,6 @@ public class MapGenerator extends JPanel
         {
             super.setEnabled(true);
         }
-       
-        generateDebugLines(g2d);
     }
 
 
@@ -187,7 +179,7 @@ public class MapGenerator extends JPanel
         Point centerTarget  = new Point(target.getPosX() , target.getPosY());
 
        
-        return centerInitial.distance(centerTarget) < 127.0d; // magic number
+        return centerInitial.distance(centerTarget) < 127.0d; // magic number, distancia maxima a la que estara un tile contiguo
     }
 
     public void generateDebugLines(Graphics2D g2d)
@@ -214,9 +206,8 @@ public class MapGenerator extends JPanel
 
     private void connectNeighbors(List<TileAbstract> tiles, GenericTile currentTile) 
     {
-        
-       for (TileAbstract tile : tiles)
-       {
+        for (TileAbstract tile : tiles)
+        {
             if (tile instanceof GenericTile)
             {
                 if (MapGenerator.isInRange(currentTile, (GenericTile) tile))
@@ -225,9 +216,7 @@ public class MapGenerator extends JPanel
                     this.adjacencyMatrix[tile.getTileId()][currentTile.getTileId()] = 1;
                 }
             }           
-       }
-        
-       
+        }
     }
 
 
