@@ -8,6 +8,8 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.3d;
+    public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
     public static final Integer DEFAULT_GRID_SIZE = 3;
 
@@ -18,8 +20,16 @@ public class MapGenerator extends JPanel
     private Integer screenY = 0;
     private boolean disableMap;
 
-    private MapGenerator(Integer x, Integer y) 
+    private TileFactory factory;
+
+    private Integer gridSize;
+
+    private MapGenerator(Integer x, Integer y, Integer size) 
     {
+        this.gridSize = size;
+
+        this.factory = new NormalTileFactory(calculateTotalTiles(), calculateTotalTiles() / 4);
+
         this.tiles = new ArrayList<TileAbstract>();
         this.screenX = x;
         this.screenY = y;
@@ -32,11 +42,11 @@ public class MapGenerator extends JPanel
         this.addMouseMotionListener(listener);
     }
 
-    public static MapGenerator getInstance(Integer screenX, Integer screenY)
+    public static MapGenerator getInstance(Integer screenX, Integer screenY, Integer size)
     {
         if (MapGenerator.instance == null)
         {
-            MapGenerator.instance = new MapGenerator(screenX, screenY);
+            MapGenerator.instance = new MapGenerator(screenX, screenY, size);
         }
 
         return MapGenerator.instance;
@@ -72,8 +82,8 @@ public class MapGenerator extends JPanel
                 Integer tileX = (int) Math.round(isoX);
                 Integer tileY = (int) Math.round(isoY);
                 
-              
-                this.tiles.add(new GenericTile(tileX, tileY, this.tiles.size() + 1));
+                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, this.tiles.size() + 1);
+                this.tiles.add(tile);
             }
         }
     }
@@ -163,4 +173,5 @@ public class MapGenerator extends JPanel
 
     public void updateRendering() { this.repaint(); }
     public boolean isDisabled()   { return this.disableMap; }
+    public Integer calculateTotalTiles() { return 1 + 3 * this.gridSize * (this.gridSize + 1); }
 }

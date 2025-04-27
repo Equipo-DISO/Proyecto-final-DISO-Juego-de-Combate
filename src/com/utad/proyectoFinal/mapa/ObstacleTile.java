@@ -15,7 +15,6 @@ public class ObstacleTile extends TileAbstract
     public void drawTile(Graphics2D graphics2d) 
     {
         super.createHexagon();
-
     }
 
     @Override

@@ -12,7 +12,7 @@ public class MapTesting
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 1000);
-        frame.add(MapGenerator.getInstance(900, 0));
+        frame.add(MapGenerator.getInstance(900, 0, 4));
         frame.setVisible(true);
 
     }
