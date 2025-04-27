@@ -103,12 +103,10 @@ public class MapGenerator extends JPanel
                 TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId, q, r);
                 generatedMap.add(tile);
 
-                if (tile instanceof GenericTile)
-                {
-                    connectNeighbors(generatedMap, q, r, newTileId - 1);
-                }
-               
-               
+                // if (tile instanceof GenericTile)
+                // {
+                //     connectNeighbors(generatedMap, q, r, newTileId - 1);
+                // }
             }
         }
 
@@ -133,9 +131,12 @@ public class MapGenerator extends JPanel
             t.drawTile(g2d);
         }
 
+        //drawFogOfWar(g2d);
+
+
         if (this.disableMap)
         {
-            setPendingScreen(g2d);
+            drawPendingScreen(g2d);
             super.setEnabled(false);
         }
         else
@@ -143,22 +144,45 @@ public class MapGenerator extends JPanel
             super.setEnabled(true);
         }
        
-        generateDebugLines(g2d);
+        //generateDebugLines(g2d);
     }
 
-
-    public void setPendingScreen(Graphics2D g2d)
+    public void drawFogOfWar(Graphics2D g2d)
     {
         Composite oldComp = g2d.getComposite();
         Color oldColor   = g2d.getColor();
         Font  oldFont    = g2d.getFont();
 
-        // 1) Velo gris semitransparente
+        Composite original = g2d.getComposite();
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.85f));
+        g2d.setColor(new Color(30, 30, 30)); // Fog color
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.20f));
+        g2d.setColor(new Color(30, 30, 30, 10));
+        g2d.fillOval(this.screenX / 2, 0, TileAbstract.HEXAGON_RADIOUS  * 3, TileAbstract.HEXAGON_RADIOUS * 3);
+
+        g2d.setComposite(oldComp);
+        g2d.setColor(oldColor);
+        g2d.setFont(oldFont);
+        g2d.setComposite(original);
+    
+    }
+
+    public void drawPendingScreen(Graphics2D g2d)
+    {
+        Composite oldComp = g2d.getComposite();
+        Color oldColor   = g2d.getColor();
+        Font  oldFont    = g2d.getFont();
+
+       
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
         g2d.setColor(Color.DARK_GRAY);
         g2d.fillRect(0, 0, super.getWidth(), super.getHeight());
 
-        // 2) Texto centrado
+       
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
         g2d.setColor(Color.WHITE);
 
