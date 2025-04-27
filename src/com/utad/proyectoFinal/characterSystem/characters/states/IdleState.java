@@ -56,6 +56,12 @@ public class IdleState extends BaseState {
 
     @Override
     public void updateState() {
+        // Check if character is dead first
+        if (!character.isAlive()) {
+            character.transitionTo(character.getStates().getDeadState());
+            return;
+        }
+
         // Comprobar si el personaje tiene poca energía
         checkAndTransitionToTiredIfNeeded();
     }

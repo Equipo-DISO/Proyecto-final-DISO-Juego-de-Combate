@@ -62,6 +62,11 @@ public class HealState extends BaseState {
 
     @Override
     public void updateState() {
+        // In testing mode, don't transition back to Idle automatically
+        if (isTestingMode()) {
+            return;
+        }
+
         // Volver a Idle después de curarse
         character.transitionTo(character.getStates().getIdleState());
     }

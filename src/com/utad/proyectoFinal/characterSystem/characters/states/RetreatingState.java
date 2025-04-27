@@ -32,6 +32,11 @@ public class RetreatingState extends BaseState {
 
     @Override
     public void updateState() {
+        // In testing mode, don't transition automatically
+        if (isTestingMode()) {
+            return;
+        }
+
         if (character.isRetreatSuccessful()) {
             character.transitionTo(character.getStates().getMovingOnMapState());
         } else {
