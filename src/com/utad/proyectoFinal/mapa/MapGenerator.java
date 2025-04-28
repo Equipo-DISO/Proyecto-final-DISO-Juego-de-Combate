@@ -10,7 +10,7 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.4d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.35d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
     private TileFactory factory;
@@ -128,6 +128,8 @@ public class MapGenerator extends JPanel
         {
             super.setEnabled(true);
         }
+
+        drawPlayerHUD(g2d);
     }
 
 
@@ -162,6 +164,32 @@ public class MapGenerator extends JPanel
         g2d.setColor(oldColor);
         g2d.setFont(oldFont);
     
+    }
+
+    private void drawPlayerHUD(Graphics2D g2d) 
+    {
+        Integer boxWidth = 120;
+        Integer boxHeight = 60;
+
+        Integer boxX = super.getWidth() - boxWidth + 5;
+        Integer boxY = -10;
+
+
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+        g2d.setColor(Color.DARK_GRAY); 
+        g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
+
+       //g2d.drawImage(new SimplifiedImage("Files/img/player.png").generateImage(30, 30), boxX, boxY, boxWidth, boxHeight, null);
+
+       g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+       g2d.setColor(Color.WHITE);
+        
+       Font  oldFont = g2d.getFont();
+       Font font = oldFont.deriveFont(Font.BOLD, 20f);
+        g2d.setFont(font);
+        g2d.drawString(calculateTotalTiles() + "/15", boxX + 55, boxY + 40);
+        g2d.setFont(oldFont);
     }
 
 
