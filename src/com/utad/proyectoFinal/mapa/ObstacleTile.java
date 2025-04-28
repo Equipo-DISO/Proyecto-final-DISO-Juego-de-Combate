@@ -6,9 +6,9 @@ import java.awt.*;
 public class ObstacleTile extends TileAbstract
 {
 
-    public ObstacleTile(Integer x, Integer y, Integer id, Integer nodeX, Integer nodeY) 
+    public ObstacleTile(Integer x, Integer y, Integer id) 
     {
-        super(x, y, id, nodeX, nodeY);
+        super(x, y, id);
     }
 
     @Override

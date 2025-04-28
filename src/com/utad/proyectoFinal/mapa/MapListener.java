@@ -9,6 +9,7 @@ public class MapListener extends MouseAdapter
 {
     private List<TileAbstract> tiles;
     private MapGenerator map;
+   
 
     public MapListener(MapGenerator m, List<TileAbstract> tiles) 
     {
@@ -27,6 +28,7 @@ public class MapListener extends MouseAdapter
             if (t.contains(p.x, p.y)) 
             {
                 System.out.println("Has clicado la tile en: " + t.getTileId());
+
                 break;
             }
         }
@@ -46,7 +48,7 @@ public class MapListener extends MouseAdapter
             if (now != t.getIsHovered()) 
             {
                 t.setHovered(now);
-                System.out.println("hovering " + t.getTileId() + " " + t.getNodeX() + " " + t.getNodeY());
+                System.out.println("hovering " + t.getTileId());
             }
         }
 
