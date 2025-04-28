@@ -4,13 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.35d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.3d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
     private TileFactory factory;
@@ -24,8 +23,7 @@ public class MapGenerator extends JPanel
     private boolean disableMap;
     private Integer gridSize;
 
-    private Integer[][] adjacencyMatrix;
-
+    private Graph graph;
 
     private MapGenerator(Integer x, Integer y, Integer size, Integer spawns) 
     {
@@ -33,8 +31,7 @@ public class MapGenerator extends JPanel
 
         this.factory = new NormalTileFactory(calculateTotalTiles(), spawns);
 
-        this.adjacencyMatrix = new Integer[calculateTotalTiles()][calculateTotalTiles()];
-        initializeAdjacencyMatrix();
+        this.graph = new Graph(calculateTotalTiles());
 
         this.screenX = x;
         this.screenY = y;
@@ -96,7 +93,7 @@ public class MapGenerator extends JPanel
 
                 if (tile instanceof GenericTile)
                 {
-                    connectNeighbors(generatedMap, (GenericTile) tile);
+                    this.graph.connectNeighbors(generatedMap, (GenericTile) tile);
                 }
             }
         }
@@ -198,16 +195,6 @@ public class MapGenerator extends JPanel
      *      MOVIDAS GRAFO
      * 
      */
-
-    private static boolean isInRange(GenericTile initial, GenericTile target)
-    {
-        Point centerInitial = new Point(initial.getPosX(), initial.getPosY());
-        Point centerTarget  = new Point(target.getPosX() , target.getPosY());
-
-       
-        return centerInitial.distance(centerTarget) < 127.0d; // magic number, distancia maxima a la que estara un tile contiguo
-    }
-
     private void generateDebugLines(Graphics2D g2d)
     {
 
@@ -219,10 +206,10 @@ public class MapGenerator extends JPanel
             for (Integer j = 0; j < this.tiles.size(); j++)
             {
                 
-                    TileAbstract t1 = this.tiles.get(i);
-                    TileAbstract t2 = this.tiles.get(j);
+                TileAbstract t1 = this.tiles.get(i);
+                TileAbstract t2 = this.tiles.get(j);
 
-                if (this.adjacencyMatrix[t1.getTileId()][t2.getTileId()] == 1) 
+                if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] == 1) 
                 {
                     g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
                 }
@@ -230,29 +217,6 @@ public class MapGenerator extends JPanel
         }
     }
 
-    private void connectNeighbors(List<TileAbstract> tiles, GenericTile currentTile) 
-    {
-        for (TileAbstract tile : tiles)
-        {
-            if (tile instanceof GenericTile)
-            {
-                if (MapGenerator.isInRange(currentTile, (GenericTile) tile))
-                {
-                    this.adjacencyMatrix[currentTile.getTileId()][tile.getTileId()] = 1;
-                    this.adjacencyMatrix[tile.getTileId()][currentTile.getTileId()] = 1;
-                }
-            }           
-        }
-    }
-
-
-    private void initializeAdjacencyMatrix() 
-    {
-        for (int i = 0; i < adjacencyMatrix.length; i++) 
-        {
-            Arrays.fill(adjacencyMatrix[i], 0);
-        }
-    }
 
     public void setFactory(TileFactory f) { this.factory = f; }
     public void disableMap(boolean b) { this.disableMap = b; }
