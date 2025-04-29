@@ -9,7 +9,7 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.3d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.4d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
     private TileFactory factory;
@@ -98,6 +98,7 @@ public class MapGenerator extends JPanel
             }
         }
 
+        this.graph.findAloneTiles(generatedMap);
         return generatedMap;
     }
     
@@ -190,18 +191,6 @@ public class MapGenerator extends JPanel
     }
 
 
-    /**
-     * 
-     * 
-     * @param initial Tile from where you are moving from
-     * @param objective Destination tile
-     * @return Returns boolean in the event of being a legal move (aka you can move there)
-     */
-
-    public boolean isLegalMove(TileAbstract initial, TileAbstract objective)
-    {
-        return (this.graph.getAdjacencyMatrix()[initial.getTileId()][objective.getTileId()] == 1 ? true : false);
-    }
 
     /*
      * 
@@ -230,7 +219,7 @@ public class MapGenerator extends JPanel
         }
     }
 
-
+    public Graph getGraph() { return this.graph; }
     public void setFactory(TileFactory f) { this.factory = f; }
     public void disableMap(boolean b) { this.disableMap = b; }
     public void updateRendering() { this.repaint(); }

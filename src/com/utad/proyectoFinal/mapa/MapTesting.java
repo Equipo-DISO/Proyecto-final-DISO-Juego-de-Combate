@@ -14,7 +14,7 @@ public class MapTesting
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 1000);
-        frame.add(MapGenerator.getInstance(900, 0, 3, 2));
+        frame.add(MapGenerator.getInstance(900, 0, 2, 2));
         frame.setVisible(true);
         //frame.setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
     }
