@@ -28,12 +28,8 @@ public class Graph
     }
 
     private boolean isInRange(GenericTile initial, GenericTile target)
-    {
-        Point centerInitial = new Point(initial.getPosX(), initial.getPosY());
-        Point centerTarget  = new Point(target.getPosX() , target.getPosY());
-
-       
-        return centerInitial.distance(centerTarget) < 127.0d; // magic number, distancia maxima a la que estara un tile contiguo
+    { 
+        return distanceToTile(initial, target) < 127.0d; // magic number, distancia maxima a la que estara un tile contiguo
     }
 
     private Double distanceToTile(GenericTile initial, GenericTile target)
