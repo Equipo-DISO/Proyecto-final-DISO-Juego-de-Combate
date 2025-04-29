@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Graph 
+public class TileGraph 
 {
 
     private Integer[][] adjacencyMatrix;
     private Integer totalNodes;
 
-    public Graph(Integer maxNodes)
+    public TileGraph(Integer maxNodes)
     {
         this.totalNodes = maxNodes;
         this.adjacencyMatrix = new Integer[maxNodes][maxNodes];
@@ -32,7 +32,7 @@ public class Graph
         return distanceToTile(initial, target) < 127.0d; // magic number, distancia maxima a la que estara un tile contiguo
     }
 
-    private Double distanceToTile(GenericTile initial, GenericTile target)
+    private Double distanceToTile(TileAbstract initial, TileAbstract target)
     {
         Point centerInitial = new Point(initial.getPosX(), initial.getPosY());
         Point centerTarget  = new Point(target.getPosX() , target.getPosY());
@@ -41,27 +41,57 @@ public class Graph
         return centerInitial.distance(centerTarget); // magic number, distancia maxima a la que estara un tile contiguo
     }
 
-    private GenericTile getClosestTile(List<TileAbstract> tiles, GenericTile currentTile)
+    private GenericTile findClosestConnectedTile(List<TileAbstract> allTiles, GenericTile targetTile) 
     {
-        Double closestDistance = Double.MAX_VALUE;
         GenericTile closestTile = null;
-
-        for (TileAbstract tile : tiles)
+        double minDistance = Double.MAX_VALUE;
+        
+        for (TileAbstract tile : allTiles) 
         {
-            if (tile instanceof GenericTile)
+            if (tile instanceof GenericTile && !tile.equals(targetTile)) 
             {
-                Double dist = distanceToTile(currentTile, (GenericTile) tile);
-
-                if (dist < closestDistance)
+                GenericTile genericTile = (GenericTile) tile;
+                
+                if (isTileConnectedOnce(allTiles, genericTile)) 
                 {
-                    closestDistance = dist;
-                    closestTile = (GenericTile) tile;
-
+                    double distance = distanceToTile(targetTile, genericTile);
+                    
+                    if (distance < minDistance) 
+                    {
+                        minDistance = distance;
+                        closestTile = genericTile;
+                    }
                 }
             }
         }
-
+        
         return closestTile;
+    }
+
+
+    public void findBridges(List<TileAbstract> allTiles) 
+    {
+        List<TileAbstract> aloneTiles = findAloneTiles(allTiles);
+        
+       
+        if (aloneTiles.isEmpty()) { return; }
+        
+
+        for (TileAbstract aloneTile : aloneTiles) 
+        {
+            if (aloneTile instanceof GenericTile)
+            {   
+                GenericTile closestConnectedTile = findClosestConnectedTile(allTiles, (GenericTile) aloneTile);
+            
+                if (closestConnectedTile != null) 
+                {
+                    // Crear conexión bidireccional
+                    this.adjacencyMatrix[aloneTile.getTileId()][closestConnectedTile.getTileId()] = 2;
+                    this.adjacencyMatrix[closestConnectedTile.getTileId()][aloneTile.getTileId()] = 2;
+                    
+                }
+            }
+        }
     }
 
     /**
@@ -73,7 +103,7 @@ public class Graph
     */
     public boolean isLegalMove(TileAbstract initial, TileAbstract objective)
     {
-        return (this.adjacencyMatrix[initial.getTileId()][objective.getTileId()] == 1 ? true : false);
+        return (this.adjacencyMatrix[initial.getTileId()][objective.getTileId()] > 0 ? true : false);
     }
 
     public void connectNeighbors(List<TileAbstract> tiles, GenericTile currentTile) 

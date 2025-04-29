@@ -2,6 +2,7 @@ package com.utad.proyectoFinal.mapa;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,7 +10,7 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.4d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.6d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
     private TileFactory factory;
@@ -23,7 +24,7 @@ public class MapGenerator extends JPanel
     private boolean disableMap;
     private Integer gridSize;
 
-    private Graph graph;
+    private TileGraph graph;
 
     private MapGenerator(Integer x, Integer y, Integer size, Integer spawns) 
     {
@@ -31,7 +32,7 @@ public class MapGenerator extends JPanel
 
         this.factory = new NormalTileFactory(calculateTotalTiles(), spawns);
 
-        this.graph = new Graph(calculateTotalTiles());
+        this.graph = new TileGraph(calculateTotalTiles());
 
         this.screenX = x;
         this.screenY = y;
@@ -98,7 +99,7 @@ public class MapGenerator extends JPanel
             }
         }
 
-        this.graph.findAloneTiles(generatedMap);
+        this.graph.findBridges(generatedMap);
         return generatedMap;
     }
     
@@ -128,9 +129,36 @@ public class MapGenerator extends JPanel
         }
 
         drawPlayerHUD(g2d);
+        renderBridges(g2d);
     }
 
+    private void renderBridges(Graphics2D g2d) 
+    {
+        Stroke originalStroke = g2d.getStroke();
+        Color originalColor = g2d.getColor();
+        
+        // Configuración para el puente
+        g2d.setStroke(new BasicStroke(3)); 
+        g2d.setColor(new Color(100, 70, 40)); 
 
+        for (Integer i = 0; i < this.tiles.size(); i++) 
+        {
+            for (Integer j = i + 1; j < this.tiles.size(); j++) 
+            {
+                TileAbstract t1 = this.tiles.get(i);
+                TileAbstract t2 = this.tiles.get(j);
+                
+                if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] == 2) 
+                {
+                    drawWoodenPlanks(g2d, t1, t2);
+                }
+            }
+        }
+        
+        
+        g2d.setStroke(originalStroke);
+        g2d.setColor(originalColor);
+    }
 
     private void drawPendingScreen(Graphics2D g2d)
     {
@@ -205,13 +233,13 @@ public class MapGenerator extends JPanel
 
         for (Integer i = 0; i < this.tiles.size(); i++)
         {
-            for (Integer j = 0; j < this.tiles.size(); j++)
+            for (Integer j = i + 1; j < this.tiles.size(); j++)
             {
                 
                 TileAbstract t1 = this.tiles.get(i);
                 TileAbstract t2 = this.tiles.get(j);
 
-                if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] == 1) 
+                if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] > 0) 
                 {
                     g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
                 }
@@ -219,7 +247,54 @@ public class MapGenerator extends JPanel
         }
     }
 
-    public Graph getGraph() { return this.graph; }
+    private void drawWoodenPlanks(Graphics2D g2d, TileAbstract start, TileAbstract end) 
+    {
+        
+        int plankLength = 14; 
+        int plankWidth = TileAbstract.HEXAGON_RADIOUS / 3;   
+        int spacing = 25;    
+        Color plankColor = new Color(139, 69, 19); 
+        
+        
+        double dx = end.getPosX() - start.getPosX();
+        double dy = end.getPosY() - start.getPosY();
+        double distance = Math.sqrt(dx*dx + dy*dy);
+        double angle = Math.atan2(dy, dx);
+        
+       
+        double stepX = dx / (distance / spacing);
+        double stepY = dy / (distance / spacing);
+        
+        
+        AffineTransform oldTransform = g2d.getTransform();
+        
+        
+        int steps = (int)(distance / spacing);
+        for (int i = 1; i < steps; i++) 
+        {
+            double x = start.getPosX() + i * stepX;
+            double y = start.getPosY() + i * stepY;
+            
+            
+            g2d.rotate(angle + Math.PI/2, x, y);
+            
+          
+            g2d.setColor(plankColor);
+            g2d.fillRect((int)x - plankWidth/2, (int)y - plankLength/2, plankWidth, plankLength);
+            
+           
+            g2d.setTransform(oldTransform);
+            
+           
+            g2d.setColor(Color.BLACK);
+            g2d.fillOval((int)x - 1, (int)y - plankLength/2 + 2, 2, 2);
+            g2d.fillOval((int)x - 1, (int)y + plankLength/2 - 2, 2, 2);
+        }
+        
+        g2d.setTransform(oldTransform);
+    }
+
+    public TileGraph getGraph() { return this.graph; }
     public void setFactory(TileFactory f) { this.factory = f; }
     public void disableMap(boolean b) { this.disableMap = b; }
     public void updateRendering() { this.repaint(); }
