@@ -1,11 +1,9 @@
-package com.utad.proyectoFinal.ui;
+package com.utad.proyectoFinal.ui.lobby;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.utad.proyectoFinal.ui.lobby.MenuInterface;
-
-public class InterfaceMainExample {
+public class MenuInterfaceMainExample {
     public static void main(String[] args) {
         MenuInterface interfaceMain = new MenuInterface();
         interfaceMain.showInterface();

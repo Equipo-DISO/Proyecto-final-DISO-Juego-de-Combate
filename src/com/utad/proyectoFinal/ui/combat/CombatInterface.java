@@ -1,6 +1,7 @@
 package com.utad.proyectoFinal.ui.combat;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;
@@ -22,6 +23,7 @@ public class CombatInterface extends JFrame implements Interface {
     
     JPanel feedPanel = new JPanel();
     private JScrollPane scrollPane;
+    private boolean feedUpdated = false;
 
     public CombatInterface()                              { this("Juego de Combate", 1000, 500); }
     public CombatInterface(String title)                  { this(title, 1000, 500); }
@@ -46,14 +48,15 @@ public class CombatInterface extends JFrame implements Interface {
 
         // Feed
         feedPanel.setLayout(new BoxLayout(feedPanel, BoxLayout.Y_AXIS));
-        feedPanel.setBorder(BorderFactory.createTitledBorder("Feed"));
+        TitledBorder titledBorder = BorderFactory.createTitledBorder("Feed");
+        titledBorder.setTitleFont(new Font(titledBorder.getTitleFont().getName(), Font.BOLD, 14));
+        feedPanel.setBorder(titledBorder);
 
         scrollPane = new JScrollPane(feedPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(Short.MAX_VALUE, 10));
 
-        add(feedPanel, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.CENTER);
 
         // Action Buttons
         JPanel actionsPanel = new JPanel();
@@ -91,6 +94,8 @@ public class CombatInterface extends JFrame implements Interface {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            if (feedUpdated) slideBottom(0);
         }
     }
     
@@ -118,35 +123,56 @@ public class CombatInterface extends JFrame implements Interface {
     }
 
     private void action(int type){
+
+        CombatFeedLine feedLine = new CombatFeedLine("");
+
         switch (type) {
             case 1:
-                feedPanel.add(new CombatFeedLine("Ataque Liguero"));
-                System.out.println("Ataque Liguero");
+                feedLine.setNewLine("Ataque Liguero", Action.ATACK);
                 break;
             case 2:
-                feedPanel.add(new CombatFeedLine("Ataque Potente"));
-                System.out.println("Ataque Potente");
+                feedLine.setNewLine("Ataque Potente", Action.ATACK);
                 break;
             case 3:
-                feedPanel.add(new CombatFeedLine("Curarse (x)"));
-                System.out.println("Curarse (x)");
+                feedLine.setNewLine("Curarse (x)", Action.HEAL);
                 break;
             case 4:
-                feedPanel.add(new CombatFeedLine("Concentrarse"));
-                System.out.println("Concentrarse");
+                feedLine.setNewLine("Concentrarse", Action.CONCENTRATE);
                 break;
             case 5:
-                feedPanel.add(new CombatFeedLine("Huir"));
-                System.out.println("Huir");
+                feedLine.setNewLine("Huir", Action.RUN);
                 break;
             default:
                 System.out.println("Error");
         }
 
+        feedPanel.add(feedLine);
         feedPanel.revalidate();
         feedPanel.repaint();
 
+        feedUpdated = true;
+    }
+
+    public void slideBottom(int value) {
         scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+        feedPanel.revalidate();
+        feedPanel.repaint();
+
+        System.out.println("scroll");
+        feedUpdated = false;
+    }
+
+    public void addFeedLine(String text, Action action) {
+        addFeedLine(text, action.getIcon());
+    }
+    public void addFeedLine(String text, String icon) {
+        CombatFeedLine feedLine = new CombatFeedLine(text, icon);
+        addFeedLine(feedLine);
+    }
+    public void addFeedLine(CombatFeedLine line) {
+        feedPanel.add(line);
+        feedPanel.revalidate();
+        feedPanel.repaint();
     }
 }
 
