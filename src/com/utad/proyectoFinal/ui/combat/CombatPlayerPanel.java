@@ -36,9 +36,7 @@ public class CombatPlayerPanel extends JPanel{
     private JLabel hpBar = new JLabel();
     private JLabel mpBar = new JLabel();
 
-    public CombatPlayerPanel(BaseCharacter character, int alignment){
-        this(alignment, character.getName(), new SimplifiedImage(InterfacePath.PLAYER.getPath(InterfacePath.ColorEnum.GREEN)), character.getHealthPoints)
-    }
+    
     public CombatPlayerPanel(int alignment, String name, SimplifiedImage simplifiedImage, int hp, int hpMax, int mp, int mpMax) {
 
         this.alignment = alignment;
