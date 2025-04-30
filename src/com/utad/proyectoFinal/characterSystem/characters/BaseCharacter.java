@@ -8,7 +8,7 @@ import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
 
 import java.awt.image.BufferedImage;
 
-public abstract class BaseCharacter {
+public class BaseCharacter {
 
     // Contador de personajes (usado para asignar un ID único a cada personaje)
     public static Integer contadorPersonajes = 0;
@@ -20,6 +20,7 @@ public abstract class BaseCharacter {
 
     // Atributos de estado y estadísticas
     private Integer healthPoints;
+    private Integer maxHealthPoints;
     private Double baseAttack;
     private Double baseDefense;
     private Double baseCounterAttackChance;
@@ -71,12 +72,12 @@ public abstract class BaseCharacter {
         this.states = new StatesList(this); // Inicializa el estado del personaje
         this.currentState = states.getIdleState(); // Estado inicial
 
-        // TODO: Implement after creating arma and escudo classes
-        // this.arma = arma;
-        // this.escudo = escudo;
+        this.weapon = null;
+        this.helmet = null;
 
         this.retreatChance = DefaultAttributes.RETREAT_PROBABILITY;
-        this.healthPoints = DefaultAttributes.HEALTH;
+        this.maxHealthPoints = DefaultAttributes.HEALTH;
+        this.healthPoints = this.maxHealthPoints;
 
 //        this.items = new ArrayList<Item>();
 //        this.efectos = new ArrayList<Item>();
@@ -105,6 +106,14 @@ public abstract class BaseCharacter {
 
     public void setHealthPoints(Integer healthPoints) {
         this.healthPoints = healthPoints;
+    }
+
+    public Integer getMaxHealthPoints() {
+        return this.maxHealthPoints;
+    }
+
+    public void setMaxHealthPoints(Integer maxHealthPoints) {
+        this.maxHealthPoints = maxHealthPoints;
     }
 
     public String getName() {
@@ -201,8 +210,6 @@ public abstract class BaseCharacter {
         return id;
     }
 
-    public abstract String getSpecialAbility();
-
     public BaseWeapon getWeapon() {
         return weapon;
     }
@@ -240,7 +247,7 @@ public abstract class BaseCharacter {
     }
 
     public void gainHealth(Integer healthPoints) {
-        this.healthPoints = Math.min(healthPoints, DefaultAttributes.HEALTH);
+        this.healthPoints = Math.min(healthPoints, this.maxHealthPoints);
     }
 
     public boolean isLowEnergy() {

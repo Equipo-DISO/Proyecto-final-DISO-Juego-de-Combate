@@ -1,7 +1,6 @@
 package test.com.utad.proyectoFinal.characterSystem;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 
 /**
  * A concrete implementation of BaseCharacter for testing purposes.
@@ -19,8 +18,4 @@ public class TestCharacter extends BaseCharacter {
         super(name, baseAttack, baseDefense);
     }
 
-    @Override
-    public String getSpecialAbility() {
-        return "Test Special Ability";
-    }
 }

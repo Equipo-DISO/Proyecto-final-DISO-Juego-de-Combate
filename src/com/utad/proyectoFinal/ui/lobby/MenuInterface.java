@@ -1,7 +1,12 @@
-package com.utad.proyectoFinal.ui;
+package com.utad.proyectoFinal.ui.lobby;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+
+import com.utad.proyectoFinal.ui.Interface;
+import com.utad.proyectoFinal.ui.InterfacePath;
+import com.utad.proyectoFinal.ui.SimplifiedImage;
+import com.utad.proyectoFinal.ui.InterfacePath.ColorEnum;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -10,11 +15,11 @@ import java.util.List;
 
 public class MenuInterface extends JFrame implements Interface {
     private JLabel nombreLabel;
-    private SimplifiedImage playerSimplifiedImage = new SimplifiedImage(Path.PLAYER.getPath(Path.ColorEnum.GREEN), 92, 110);
-    private JLabel playerImage = playerSimplifiedImage.generateJLabel(Path.PLAYER.getDefWidth(), Path.PLAYER.getDefHeight());
+    private SimplifiedImage playerSimplifiedImage = new SimplifiedImage(InterfacePath.PLAYER.getPath(InterfacePath.ColorEnum.GREEN), 92, 110);
+    private JLabel playerImage = playerSimplifiedImage.generateJLabel(InterfacePath.PLAYER.getDefWidth(), InterfacePath.PLAYER.getDefHeight());
     private JPanel listaBotsPanel;
     private ArrayList<JPanel> bots = new ArrayList<>();
-    private String playerImagePath = Path.PLAYER.getPath(Path.ColorEnum.GREEN);
+    private String playerImagePath = InterfacePath.PLAYER.getPath(InterfacePath.ColorEnum.GREEN);
     
     public MenuInterface()                              { this("Juego de Combate", 1000, 500); }
     public MenuInterface(String title)                  { this(title, 1000, 500); }
@@ -58,15 +63,15 @@ public class MenuInterface extends JFrame implements Interface {
 
         // Paleta de colores
         JPanel colorPanel = new JPanel(new GridLayout(2, 4));
-        for (int i = 0; i < Path.colorsList.length; i++){
-            String playerPath = Path.PLAYER.getPath(Path.colorsList[i]);
-            String colorPath = Path.COLOR.getPath(Path.colorsList[i]);
+        for (int i = 0; i < InterfacePath.colorsList.length; i++){
+            String playerPath = InterfacePath.PLAYER.getPath(InterfacePath.colorsList[i]);
+            String colorPath = InterfacePath.COLOR.getPath(InterfacePath.colorsList[i]);
             JLabel botton = new SimplifiedImage(colorPath, 100, 50).generateJLabel(80, 40);
             botton.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     playerImagePath = playerPath;
                     playerSimplifiedImage.setPath(playerPath);
-                    playerImage.setIcon(playerSimplifiedImage.generateImageIcon(Path.PLAYER.getDefWidth(), Path.PLAYER.getDefHeight()));
+                    playerImage.setIcon(playerSimplifiedImage.generateImageIcon(InterfacePath.PLAYER.getDefWidth(), InterfacePath.PLAYER.getDefHeight()));
                 }
                 public void mouseEntered(MouseEvent e) {
                     botton.setIcon(new SimplifiedImage(colorPath, 100, 50).generateImageIcon(92, 46));
