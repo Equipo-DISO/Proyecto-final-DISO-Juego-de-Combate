@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -118,7 +119,10 @@ public class MapGenerator extends JPanel
 
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.bridgeTiles.sort(Comparator.comparingInt(t -> t.posY));
+
+
         this.tiles.forEach(t -> t.drawTile(g2d));
+        
         generateDebugLines(g2d);
       
 
@@ -227,62 +231,58 @@ public class MapGenerator extends JPanel
     }
 
     private void drawRockBridge(Graphics2D g2d, TileAbstract start, TileAbstract end) 
-    { 
+    {
         final Integer MIN_SPACING = 10;
-        final Integer MAX_ROCKS = 8;
+        final Integer MAX_ROCKS = 7;
         final Integer ZIGZAG_AMPLITUDE = 15;
-        final Integer MIN_DISTANCE_FROM_ENDPOINTS = TileAbstract.HEXAGON_RADIOUS + MIN_SPACING; 
-    
-       
-        Double dx = Double.valueOf(end.getPosX() - start.getPosX());
-        Double dy = Double.valueOf(end.getPosY() - start.getPosY());
-        Double distance = Math.sqrt(dx*dx + dy*dy);
-    
-        
+        final Integer MIN_DISTANCE_FROM_ENDPOINTS = TileAbstract.HEXAGON_RADIOUS + MIN_SPACING;
+
+        Double dx = (double) end.getPosX() - start.getPosX();
+        Double dy = (double) end.getPosY() - start.getPosY();
+        Double distance = Math.sqrt(dx * dx + dy * dy);
+
         Integer optimalRocks = Math.min(MAX_ROCKS, (int)((distance - 2 * MIN_DISTANCE_FROM_ENDPOINTS) / MIN_SPACING));
-        if (optimalRocks < 2) optimalRocks = 2;
-    
-        
-        Double perpX = -dy/distance * ZIGZAG_AMPLITUDE;
-        Double perpY = dx/distance * ZIGZAG_AMPLITUDE;
-    
-       
+        if (optimalRocks < 3) optimalRocks = 3;
+
+        Double perpX = -dy / distance * ZIGZAG_AMPLITUDE;
+        Double perpY = dx / distance * ZIGZAG_AMPLITUDE;
+
         Shape endTileArea = new Ellipse2D.Double(
             end.getPosX() - MIN_DISTANCE_FROM_ENDPOINTS,
             end.getPosY() - MIN_DISTANCE_FROM_ENDPOINTS,
             MIN_DISTANCE_FROM_ENDPOINTS * 2,
             MIN_DISTANCE_FROM_ENDPOINTS * 2
         );
-    
-       
-        for (Integer i = 0; i < optimalRocks; i++) 
+
+        Double padding = 0.20;
+        Double range = 1.0 - 2 * padding;
+
+        for (int i = 0; i < optimalRocks; i++) 
         {
-            Double t = Double.valueOf(i) / Double.valueOf(optimalRocks - 1);
-            
-            
-            Double adjustedT = 0.22 + t * 0.57;
-            
+            Double t = (double) i / (optimalRocks - 1);
+            Double adjustedT = padding + t * range;
+
             Double baseX = start.getPosX() + adjustedT * dx;
             Double baseY = start.getPosY() + adjustedT * dy;
-            
-           
-            Double zigzagFactor = Math.sin(adjustedT * Math.PI) * ((i % 2 == 0) ? 1.0 : -1.0);
+
+            Double zigzagFactor = Math.sin(adjustedT * Math.PI * 2);
             Integer posX = (int)(baseX + zigzagFactor * perpX);
             Integer posY = (int)(baseY + zigzagFactor * perpY);
-            
-            
-            Point rockPoint = new Point(posX, posY);
-            if (!endTileArea.contains(rockPoint)) 
+
+
+            if (!endTileArea.contains(new Point(posX, posY))) 
             {
                 BridgeTile rock = new BridgeTile(posX, posY, this.bridgeTiles.size());
                 this.bridgeTiles.add(rock);
 
+               
                 Double sizeFactor = 0.6 + 0.4 * Math.sin(adjustedT * Math.PI);
-                rock.setRadious((int)(Double.valueOf(BridgeTile.DEFAULT_RADIOUS) * sizeFactor));
+                rock.setRadious((int)(BridgeTile.DEFAULT_RADIOUS * sizeFactor));
                 rock.drawTile(g2d);
             }
         }
     }
+
 
 
     /*
