@@ -27,7 +27,7 @@ public class MapListener extends MouseAdapter
         {
             if (t.contains(p.x, p.y)) 
             {
-                System.out.println("Has clicado la tile en: " + t.getTileId() + " " + this.map.getGraph().isTileConnectedOnce(tiles, t));
+                //System.out.println("Has clicado la tile en: " + t.getTileId() + " " + this.map.getGraph().isTileConnectedOnce(tiles, t));
                 break;
             }
         }
