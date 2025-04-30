@@ -1,6 +1,9 @@
 package com.utad.proyectoFinal.mapa;
 
 import javax.swing.*;
+
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -279,7 +282,24 @@ public class MapGenerator extends JPanel
         }
     }
 
-   
+    /**
+    * 
+    * 
+    * @param character Character that desires to move
+    * @param objective Destination tile
+    */
+
+    // public void moveToTile(BaseCharacter character, GenericTile objective)
+    // {
+    //     if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
+
+    //     //TODO
+    // }
+
+    // public List<GenericTile> getPathToObjective()
+    // {
+    //     return null;
+    // }
 
     public TileGraph getGraph() { return this.graph; }
     public void setFactory(TileFactory f) { this.factory = f; }
