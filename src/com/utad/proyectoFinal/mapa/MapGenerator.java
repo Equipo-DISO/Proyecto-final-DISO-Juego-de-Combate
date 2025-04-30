@@ -2,22 +2,19 @@ package com.utad.proyectoFinal.mapa;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
 import java.util.List;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.Comparator;
 
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.6d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.4d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
     private TileFactory factory;
     private List<TileAbstract> tiles;
-    private List<BridgeTile> bridgeTiles;
+
 
     private MapListener listener;
     private static MapGenerator instance;
@@ -40,13 +37,12 @@ public class MapGenerator extends JPanel
         this.screenX = x;
         this.screenY = y;
         this.tiles = createHexGrid();
-        this.bridgeTiles = new ArrayList<BridgeTile>();
         this.disableMap = false;
 
 
         this.listener = new MapListener(this, this.tiles);
-        this.addMouseListener(listener);
-        this.addMouseMotionListener(listener);
+        this.addMouseListener(this.listener);
+        this.addMouseMotionListener(this.listener);
     }
 
 
@@ -118,9 +114,6 @@ public class MapGenerator extends JPanel
         super.setBackground(new Color(90, 182, 180)); // agua
 
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
-        this.bridgeTiles.sort(Comparator.comparingInt(t -> t.posY));
-
-
         this.tiles.forEach(t -> t.drawTile(g2d));
         
         generateDebugLines(g2d);
@@ -138,8 +131,6 @@ public class MapGenerator extends JPanel
 
         drawPlayerHUD(g2d);
         renderBridges(g2d);
-
-       
     }
 
     
@@ -207,9 +198,11 @@ public class MapGenerator extends JPanel
         Stroke originalStroke = g2d.getStroke();
         Color originalColor = g2d.getColor();
         
-        // Configuración para el puente
-        g2d.setStroke(new BasicStroke(3)); 
-        g2d.setColor(new Color(100, 70, 40)); 
+        
+        float[] dashPattern = {6f, 6f};
+        g2d.setColor(new Color(40, 30, 30, 120));
+        g2d.setStroke(new BasicStroke(3f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, 
+            dashPattern, 0));
 
         for (Integer i = 0; i < this.tiles.size(); i++) 
         {
@@ -220,7 +213,7 @@ public class MapGenerator extends JPanel
                 
                 if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] == 2) 
                 {
-                    drawRockBridge(g2d, t1, t2);
+                    drawLine(g2d, t1, t2);
                 }
             }
         }
@@ -230,59 +223,33 @@ public class MapGenerator extends JPanel
         g2d.setColor(originalColor);
     }
 
-    private void drawRockBridge(Graphics2D g2d, TileAbstract start, TileAbstract end) 
+    private void drawLine(Graphics2D g2d, TileAbstract t1, TileAbstract t2)
     {
-        final Integer MIN_SPACING = 10;
-        final Integer MAX_ROCKS = 7;
-        final Integer ZIGZAG_AMPLITUDE = 15;
-        final Integer MIN_DISTANCE_FROM_ENDPOINTS = TileAbstract.HEXAGON_RADIOUS + MIN_SPACING;
+        Integer x1 = t1.getPosX();
+        Integer y1 = t1.getPosY();
+        Integer x2 = t2.getPosX();
+        Integer y2 = t2.getPosY();
 
-        Double dx = (double) end.getPosX() - start.getPosX();
-        Double dy = (double) end.getPosY() - start.getPosY();
-        Double distance = Math.sqrt(dx * dx + dy * dy);
+        Double dx = (double) x2 - x1;
+        Double dy = (double) y2 - y1;
+        Double length = Math.sqrt(dx * dx + dy * dy);
 
-        Integer optimalRocks = Math.min(MAX_ROCKS, (int)((distance - 2 * MIN_DISTANCE_FROM_ENDPOINTS) / MIN_SPACING));
-        if (optimalRocks < 3) optimalRocks = 3;
+        if (length == 0) return; 
+        
+        Double ux = dx / length;
+        Double uy = dy / length;
 
-        Double perpX = -dy / distance * ZIGZAG_AMPLITUDE;
-        Double perpY = dx / distance * ZIGZAG_AMPLITUDE;
+        
+        Double offsetX = ux * TileAbstract.HEXAGON_RADIOUS * 0.9;  
+        Double offsetY = uy * TileAbstract.HEXAGON_RADIOUS * 0.55; 
+        
+        Integer newX1 = (int) (x1 + offsetX);
+        Integer newY1 = (int) (y1 + offsetY);
+        Integer newX2 = (int) (x2 - offsetX);
+        Integer newY2 = (int) (y2 - offsetY);
 
-        Shape endTileArea = new Ellipse2D.Double(
-            end.getPosX() - MIN_DISTANCE_FROM_ENDPOINTS,
-            end.getPosY() - MIN_DISTANCE_FROM_ENDPOINTS,
-            MIN_DISTANCE_FROM_ENDPOINTS * 2,
-            MIN_DISTANCE_FROM_ENDPOINTS * 2
-        );
-
-        Double padding = 0.20;
-        Double range = 1.0 - 2 * padding;
-
-        for (int i = 0; i < optimalRocks; i++) 
-        {
-            Double t = (double) i / (optimalRocks - 1);
-            Double adjustedT = padding + t * range;
-
-            Double baseX = start.getPosX() + adjustedT * dx;
-            Double baseY = start.getPosY() + adjustedT * dy;
-
-            Double zigzagFactor = Math.sin(adjustedT * Math.PI * 2);
-            Integer posX = (int)(baseX + zigzagFactor * perpX);
-            Integer posY = (int)(baseY + zigzagFactor * perpY);
-
-
-            if (!endTileArea.contains(new Point(posX, posY))) 
-            {
-                BridgeTile rock = new BridgeTile(posX, posY, this.bridgeTiles.size());
-                this.bridgeTiles.add(rock);
-
-               
-                Double sizeFactor = 0.6 + 0.4 * Math.sin(adjustedT * Math.PI);
-                rock.setRadious((int)(BridgeTile.DEFAULT_RADIOUS * sizeFactor));
-                rock.drawTile(g2d);
-            }
-        }
+        g2d.drawLine(newX1, newY1, newX2, newY2);
     }
-
 
 
     /*
