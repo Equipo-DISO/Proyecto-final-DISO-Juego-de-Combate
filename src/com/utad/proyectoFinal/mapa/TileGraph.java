@@ -94,13 +94,7 @@ public class TileGraph
         }
     }
 
-    /**
-    * 
-    * 
-    * @param initial Tile from where you are moving from
-    * @param objective Destination tile
-    * @return Returns boolean in the event of being a legal move (aka you can move there)
-    */
+   
     public boolean isLegalMove(TileAbstract initial, TileAbstract objective)
     {
         return (this.adjacencyMatrix[initial.getTileId()][objective.getTileId()] > 0 ? true : false);
