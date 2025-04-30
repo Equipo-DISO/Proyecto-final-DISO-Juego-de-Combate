@@ -8,7 +8,7 @@ import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
 
 import java.awt.image.BufferedImage;
 
-public abstract class BaseCharacter {
+public class BaseCharacter {
 
     // Contador de personajes (usado para asignar un ID único a cada personaje)
     public static Integer contadorPersonajes = 0;
@@ -20,12 +20,14 @@ public abstract class BaseCharacter {
 
     // Atributos de estado y estadísticas
     private Integer healthPoints;
+    private Integer maxHealthPoints;
     private Double baseAttack;
     private Double baseDefense;
     private Double baseCounterAttackChance;
     private Double baseCounterAttackDamage;
     private Integer manaPoints;
     private Integer maxManaPoints;
+
 
     // Estados del personaje
     private StatesList states;
@@ -38,8 +40,8 @@ public abstract class BaseCharacter {
 
     // Equipamiento del personaje
     private BaseWeapon weapon;  // Arma equipada
-    // TODO: Implement -> private Escudo escudo;
-    private BaseHelmet helmet;
+    private BaseHelmet helmet;  // Casco equipado
+
     // Inventario y efectos
     // TODO: Implement inventory system (find best approach/pattern) State maybe?
     //    private List<Item> inventario;  // Pociones, vendas, botiquines, etc.
@@ -70,12 +72,12 @@ public abstract class BaseCharacter {
         this.states = new StatesList(this); // Inicializa el estado del personaje
         this.currentState = states.getIdleState(); // Estado inicial
 
-        // TODO: Implement after creating arma and escudo classes
-        // this.arma = arma;
-        // this.escudo = escudo;
+        this.weapon = null;
+        this.helmet = null;
 
         this.retreatChance = DefaultAttributes.RETREAT_PROBABILITY;
-        this.healthPoints = DefaultAttributes.HEALTH;
+        this.maxHealthPoints = DefaultAttributes.HEALTH;
+        this.healthPoints = this.maxHealthPoints;
 
 //        this.items = new ArrayList<Item>();
 //        this.efectos = new ArrayList<Item>();
@@ -94,8 +96,24 @@ public abstract class BaseCharacter {
         return this.healthPoints > 0;
     }
 
-    public void reduceHealth(Integer healthPoints) {
+    public void reduceHealth(Integer damage) {
+        this.healthPoints = Math.max(0, this.healthPoints - damage);
+    }
+
+    public Integer getHealthPoints() {
+        return this.healthPoints;
+    }
+
+    public void setHealthPoints(Integer healthPoints) {
         this.healthPoints = healthPoints;
+    }
+
+    public Integer getMaxHealthPoints() {
+        return this.maxHealthPoints;
+    }
+
+    public void setMaxHealthPoints(Integer maxHealthPoints) {
+        this.maxHealthPoints = maxHealthPoints;
     }
 
     public String getName() {
@@ -114,8 +132,42 @@ public abstract class BaseCharacter {
         this.retreatSuccess = retreatSuccess;
     }
 
+    // Metodo auxiliar para cambiar el estado
+    public void transitionTo(CharacterState newState) {
+        this.currentState = newState;
+    }
+
+    // “setXState” por delegación
     public void setIdleState() {
-        setCurrentState(states.getIdleState());
+        transitionTo(states.getIdleState());
+    }
+
+    public void setAttackingState() {
+        transitionTo(states.getAttackingState());
+    }
+
+    public void setHealState() {
+        transitionTo(states.getHealState());
+    }
+
+    public void setGainManaState() {
+        transitionTo(states.getGainManaState());
+    }
+
+    public void setRetreatingState() {
+        transitionTo(states.getRetreatingState());
+    }
+
+    public void setTiredState() {
+        transitionTo(states.getTiredState());
+    }
+
+    public void setMovingOnMapState() {
+        transitionTo(states.getMovingOnMapState());
+    }
+
+    public void setDeadState() {
+        transitionTo(states.getDeadState());
     }
 
     public void setCurrentState(CharacterState state) {
@@ -125,12 +177,13 @@ public abstract class BaseCharacter {
         this.currentState = state;
     }
 
-    public void setDeadState() {
-        setCurrentState(states.getDeadState());
-    }
-
     public CharacterState getCurrentState() {
         return currentState;
+    }
+
+    // Getter para reutilizar la lista desde los estados
+    public StatesList getStates() {
+        return states;
     }
 
     public Double getBaseCounterAttackChance() {
@@ -157,8 +210,6 @@ public abstract class BaseCharacter {
         return id;
     }
 
-    public abstract String getSpecialAbility();
-
     public BaseWeapon getWeapon() {
         return weapon;
     }
@@ -179,4 +230,27 @@ public abstract class BaseCharacter {
         this.manaPoints = Math.max(0, manaPoints - amount);
     }
 
+    public BaseHelmet getHelmet() {
+        return helmet;
+    }
+
+    public void setHelmet(BaseHelmet helmet) {
+        this.helmet = helmet;
+    }
+
+    public Integer getMaxManaPoints() {
+        return maxManaPoints;
+    }
+
+    public void setMaxManaPoints(Integer maxManaPoints) {
+        this.maxManaPoints = maxManaPoints;
+    }
+
+    public void gainHealth(Integer healthPoints) {
+        this.healthPoints = Math.min(healthPoints, this.maxHealthPoints);
+    }
+
+    public boolean isLowEnergy() {
+        return manaPoints < DefaultAttributes.LOW_MANA_THRESHOLD;
+    }
 }
