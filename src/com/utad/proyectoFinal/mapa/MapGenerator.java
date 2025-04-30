@@ -3,18 +3,14 @@ package com.utad.proyectoFinal.mapa;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
+
 
 public class MapGenerator extends JPanel 
 {
     public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.3d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
-
-    public static final Integer DEFAULT_GRID_SIZE = 3;
 
     private TileFactory factory;
     private List<TileAbstract> tiles;
@@ -27,18 +23,15 @@ public class MapGenerator extends JPanel
     private boolean disableMap;
     private Integer gridSize;
 
-    private Integer[][] adjacencyMatrix;
-    private Map<String, Integer> axialToIndex;
+    private Graph graph;
 
-    private MapGenerator(Integer x, Integer y, Integer size) 
+    private MapGenerator(Integer x, Integer y, Integer size, Integer spawns) 
     {
         this.gridSize = size;
 
-        this.factory = new NormalTileFactory(calculateTotalTiles(), calculateTotalTiles() / 4);
+        this.factory = new NormalTileFactory(calculateTotalTiles(), spawns);
 
-        this.adjacencyMatrix = new Integer[calculateTotalTiles()][calculateTotalTiles()];
-        this.axialToIndex = new HashMap<>();
-        initializeAdjacencyMatrix();
+        this.graph = new Graph(calculateTotalTiles());
 
         this.screenX = x;
         this.screenY = y;
@@ -51,13 +44,12 @@ public class MapGenerator extends JPanel
         this.addMouseMotionListener(listener);
     }
 
-   
 
-    public static MapGenerator getInstance(Integer screenX, Integer screenY, Integer size)
+    public static MapGenerator getInstance(Integer screenX, Integer screenY, Integer size, Integer spawns)
     {
         if (MapGenerator.instance == null)
         {
-            MapGenerator.instance = new MapGenerator(screenX, screenY, size);
+            MapGenerator.instance = new MapGenerator(screenX, screenY, size, spawns);
         }
 
         return MapGenerator.instance;
@@ -93,17 +85,15 @@ public class MapGenerator extends JPanel
                 Integer tileX = (int) Math.round(isoX);
                 Integer tileY = (int) Math.round(isoY);
 
-
                 Integer newTileId = generatedMap.size();
-                String axialKey = q + "," + r;
-                axialToIndex.put(axialKey, newTileId);
-                
-                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId + 1, q, r);
+
+
+                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId);
                 generatedMap.add(tile);
 
                 if (tile instanceof GenericTile)
                 {
-                    connectNeighbors(generatedMap, q, r, newTileId);
+                    this.graph.connectNeighbors(generatedMap, (GenericTile) tile);
                 }
             }
         }
@@ -124,9 +114,7 @@ public class MapGenerator extends JPanel
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.tiles.forEach(t -> t.drawTile(g2d));
         generateDebugLines(g2d);
-    
-        //drawFogOfWar(g2d);
-
+      
 
         if (this.disableMap)
         {
@@ -137,59 +125,13 @@ public class MapGenerator extends JPanel
         {
             super.setEnabled(true);
         }
-       
-        
+
+        drawPlayerHUD(g2d);
     }
 
-    public void drawDebugMessage(Graphics2D g2d, Integer x, Integer y, String msg)
-    {
-        Composite oldComp = g2d.getComposite();
-        Color oldColor   = g2d.getColor();
-        Font  oldFont    = g2d.getFont();
 
 
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-        g2d.setColor(Color.WHITE);
-
-        Font font = oldFont.deriveFont(Font.BOLD, 14f);
-        g2d.setFont(font);
-
-        FontMetrics fm = g2d.getFontMetrics();
-        int tx = (x - fm.stringWidth(msg)) / 2;
-        int ty = (y - fm.getHeight()) / 2 + fm.getAscent();
-        g2d.drawString(msg, tx, ty);
-
-    
-        g2d.setComposite(oldComp);
-        g2d.setColor(oldColor);
-        g2d.setFont(oldFont);
-    }
-
-    public void drawFogOfWar(Graphics2D g2d)
-    {
-        Composite oldComp = g2d.getComposite();
-        Color oldColor   = g2d.getColor();
-        Font  oldFont    = g2d.getFont();
-
-        Composite original = g2d.getComposite();
-
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.85f));
-        g2d.setColor(new Color(30, 30, 30)); // Fog color
-        g2d.fillRect(0, 0, getWidth(), getHeight());
-
-
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.20f));
-        g2d.setColor(new Color(30, 30, 30, 10));
-        g2d.fillOval(this.screenX / 2, 0, TileAbstract.HEXAGON_RADIOUS  * 3, TileAbstract.HEXAGON_RADIOUS * 3);
-
-        g2d.setComposite(oldComp);
-        g2d.setColor(oldColor);
-        g2d.setFont(oldFont);
-        g2d.setComposite(original);
-    
-    }
-
-    public void drawPendingScreen(Graphics2D g2d)
+    private void drawPendingScreen(Graphics2D g2d)
     {
         Composite oldComp = g2d.getComposite();
         Color oldColor   = g2d.getColor();
@@ -221,13 +163,51 @@ public class MapGenerator extends JPanel
     
     }
 
+    private void drawPlayerHUD(Graphics2D g2d) 
+    {
+        Integer boxWidth = 120;
+        Integer boxHeight = 60;
+
+        Integer boxX = super.getWidth() - boxWidth + 5;
+        Integer boxY = -10;
+
+
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+        g2d.setColor(Color.DARK_GRAY); 
+        g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
+
+       //g2d.drawImage(new SimplifiedImage("Files/img/player.png").generateImage(30, 30), boxX, boxY, boxWidth, boxHeight, null);
+
+       g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+       g2d.setColor(Color.WHITE);
+        
+       Font  oldFont = g2d.getFont();
+       Font font = oldFont.deriveFont(Font.BOLD, 20f);
+        g2d.setFont(font);
+        g2d.drawString(calculateTotalTiles() + "/15", boxX + 55, boxY + 40);
+        g2d.setFont(oldFont);
+    }
+
+
+    /**
+     * 
+     * 
+     * @param initial Tile from where you are moving from
+     * @param objective Destination tile
+     * @return Returns boolean in the event of being a legal move (aka you can move there)
+     */
+
+    public boolean isLegalMove(TileAbstract initial, TileAbstract objective)
+    {
+        return (this.graph.getAdjacencyMatrix()[initial.getTileId()][objective.getTileId()] == 1 ? true : false);
+    }
 
     /*
      * 
      *      MOVIDAS GRAFO
      * 
      */
-
     private void generateDebugLines(Graphics2D g2d)
     {
 
@@ -236,60 +216,20 @@ public class MapGenerator extends JPanel
 
         for (Integer i = 0; i < this.tiles.size(); i++)
         {
-            for (Integer j = i+1; j < this.tiles.size(); j++)
+            for (Integer j = 0; j < this.tiles.size(); j++)
             {
-                if (this.adjacencyMatrix[i][j] == 1) 
-                {
-                    TileAbstract t1 = this.tiles.get(i);
-                    TileAbstract t2 = this.tiles.get(j);
+                
+                TileAbstract t1 = this.tiles.get(i);
+                TileAbstract t2 = this.tiles.get(j);
 
-                    drawDebugMessage(g2d, t1.getPosX(), t1.getPosY(), "id " + t1.getTileId());
+                if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] == 1) 
+                {
                     g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
                 }
             }
         }
     }
 
-    private void connectNeighbors(List<TileAbstract> tiles, Integer q, Integer r, Integer currentIndex) 
-    {
-        int[][] directions = {
-            {1, 0}, {1, -1}, {0, -1},
-            {-1, 0}, {-1, 1}, {0, 1}
-        };
-        
-        for (int[] dir : directions) 
-        {
-            Integer neighborQ = q + dir[0];
-            Integer neighborR = r + dir[1];
-            String neighborKey = neighborQ + "," + neighborR;
-            
-            if (axialToIndex.containsKey(neighborKey)) 
-            {
-                Integer neighborIndex = axialToIndex.get(neighborKey);
-                
-               
-                if (neighborIndex >= 0 && neighborIndex < adjacencyMatrix.length) 
-                {
-                    TileAbstract neighbor = tiles.get(neighborIndex);
-                    
-                    
-                    if (neighbor instanceof GenericTile) 
-                    {
-                        adjacencyMatrix[currentIndex][neighborIndex] = 1;
-                        adjacencyMatrix[neighborIndex][currentIndex] = 1;
-                    }
-                }
-            }
-        }
-    }
-
-    private void initializeAdjacencyMatrix() 
-    {
-        for (int i = 0; i < adjacencyMatrix.length; i++) 
-        {
-            Arrays.fill(adjacencyMatrix[i], 0);
-        }
-    }
 
     public void setFactory(TileFactory f) { this.factory = f; }
     public void disableMap(boolean b) { this.disableMap = b; }
@@ -297,3 +237,32 @@ public class MapGenerator extends JPanel
     public boolean isDisabled()   { return this.disableMap; }
     public Integer calculateTotalTiles() { return 1 + 3 * this.gridSize * (this.gridSize + 1); }
 }
+
+
+
+
+// DEPRECATED
+
+
+    // public void drawFogOfWar(Graphics2D g2d)
+    // {
+    //     Composite oldComp = g2d.getComposite();
+    //     Color oldColor   = g2d.getColor();
+    //     Font  oldFont    = g2d.getFont();
+
+    //     Composite original = g2d.getComposite();
+
+    //     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.85f));
+    //     g2d.setColor(new Color(30, 30, 30)); // Fog color
+    //     g2d.fillRect(0, 0, getWidth(), getHeight());
+
+
+    //     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.20f));
+    //     g2d.setColor(new Color(30, 30, 30, 10));
+    //     g2d.fillOval(this.screenX / 2, 0, TileAbstract.HEXAGON_RADIOUS  * 3, TileAbstract.HEXAGON_RADIOUS * 3);
+
+    //     g2d.setComposite(oldComp);
+    //     g2d.setColor(oldColor);
+    //     g2d.setFont(oldFont);
+    //     g2d.setComposite(original);
+    // }

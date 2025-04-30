@@ -14,9 +14,9 @@ public class DecoratingHexagon extends TileAbstract
     private Boolean fillInPolygon;
 
 
-    public DecoratingHexagon(Integer x, Integer y, Integer id, Boolean fill, Integer nodeX, Integer nodeY) 
+    public DecoratingHexagon(Integer x, Integer y, Integer id, Boolean fill) 
     {
-        super(x, y, id, nodeX, nodeY);
+        super(x, y, id);
         this.color = DecoratingHexagon.DEFAULT_COLOR;
         this.strokeWidth = DecoratingHexagon.DEFAULT_STROKE_WIDTH;
         this.fillInPolygon = fill;
