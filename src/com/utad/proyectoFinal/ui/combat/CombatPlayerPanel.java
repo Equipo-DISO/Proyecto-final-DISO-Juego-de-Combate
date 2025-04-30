@@ -19,6 +19,7 @@ import javax.swing.border.*;
 import javax.swing.JSeparator;
 
 import com.utad.proyectoFinal.ui.SimplifiedImage;
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.ui.InterfacePath;
 
 public class CombatPlayerPanel extends JPanel{
@@ -35,6 +36,9 @@ public class CombatPlayerPanel extends JPanel{
     private JLabel hpBar = new JLabel();
     private JLabel mpBar = new JLabel();
 
+    public CombatPlayerPanel(BaseCharacter character, int alignment){
+        this(alignment, character.getName(), new SimplifiedImage(InterfacePath.PLAYER.getPath(InterfacePath.ColorEnum.GREEN)), character.)
+    }
     public CombatPlayerPanel(int alignment, String name, SimplifiedImage simplifiedImage, int hp, int hpMax, int mp, int mpMax) {
 
         this.alignment = alignment;

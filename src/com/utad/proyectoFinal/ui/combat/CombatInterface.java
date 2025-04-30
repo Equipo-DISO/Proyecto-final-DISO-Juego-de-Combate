@@ -119,7 +119,23 @@ public class CombatInterface extends JFrame implements Interface {
 
     public static void main(String[] args) {
         CombatInterface combatInterface = new CombatInterface("Juego de Combate", 1000, 500);
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         combatInterface.showInterface();
+
     }
 
     private void action(int type){
