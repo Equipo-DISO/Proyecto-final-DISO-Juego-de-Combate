@@ -1,6 +1,9 @@
 package com.utad.proyectoFinal.mapa;
 
 import javax.swing.*;
+
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -9,11 +12,12 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.3d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.5d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
     private TileFactory factory;
     private List<TileAbstract> tiles;
+
 
     private MapListener listener;
     private static MapGenerator instance;
@@ -23,7 +27,7 @@ public class MapGenerator extends JPanel
     private boolean disableMap;
     private Integer gridSize;
 
-    private Graph graph;
+    private TileGraph graph;
 
     private MapGenerator(Integer x, Integer y, Integer size, Integer spawns) 
     {
@@ -31,7 +35,7 @@ public class MapGenerator extends JPanel
 
         this.factory = new NormalTileFactory(calculateTotalTiles(), spawns);
 
-        this.graph = new Graph(calculateTotalTiles());
+        this.graph = new TileGraph(calculateTotalTiles());
 
         this.screenX = x;
         this.screenY = y;
@@ -40,8 +44,8 @@ public class MapGenerator extends JPanel
 
 
         this.listener = new MapListener(this, this.tiles);
-        this.addMouseListener(listener);
-        this.addMouseMotionListener(listener);
+        this.addMouseListener(this.listener);
+        this.addMouseMotionListener(this.listener);
     }
 
 
@@ -98,6 +102,7 @@ public class MapGenerator extends JPanel
             }
         }
 
+        this.graph.findBridges(generatedMap);
         return generatedMap;
     }
     
@@ -113,7 +118,8 @@ public class MapGenerator extends JPanel
 
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.tiles.forEach(t -> t.drawTile(g2d));
-        generateDebugLines(g2d);
+        
+        //generateDebugLines(g2d);
       
 
         if (this.disableMap)
@@ -127,9 +133,10 @@ public class MapGenerator extends JPanel
         }
 
         drawPlayerHUD(g2d);
+        renderBridges(g2d);
     }
 
-
+    
 
     private void drawPendingScreen(Graphics2D g2d)
     {
@@ -189,19 +196,64 @@ public class MapGenerator extends JPanel
         g2d.setFont(oldFont);
     }
 
-
-    /**
-     * 
-     * 
-     * @param initial Tile from where you are moving from
-     * @param objective Destination tile
-     * @return Returns boolean in the event of being a legal move (aka you can move there)
-     */
-
-    public boolean isLegalMove(TileAbstract initial, TileAbstract objective)
+    private void renderBridges(Graphics2D g2d) 
     {
-        return (this.graph.getAdjacencyMatrix()[initial.getTileId()][objective.getTileId()] == 1 ? true : false);
+        Stroke originalStroke = g2d.getStroke();
+        Color originalColor = g2d.getColor();
+        
+        
+        float[] dashPattern = {6f, 6f};
+        g2d.setColor(new Color(40, 30, 30, 120));
+        g2d.setStroke(new BasicStroke(3f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, 
+            dashPattern, 0));
+
+        for (Integer i = 0; i < this.tiles.size(); i++) 
+        {
+            for (Integer j = i + 1; j < this.tiles.size(); j++) 
+            {
+                TileAbstract t1 = this.tiles.get(i);
+                TileAbstract t2 = this.tiles.get(j);
+                
+                if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] == 2) 
+                {
+                    drawLine(g2d, t1, t2);
+                }
+            }
+        }
+        
+        
+        g2d.setStroke(originalStroke);
+        g2d.setColor(originalColor);
     }
+
+    private void drawLine(Graphics2D g2d, TileAbstract t1, TileAbstract t2)
+    {
+        Integer x1 = t1.getPosX();
+        Integer y1 = t1.getPosY();
+        Integer x2 = t2.getPosX();
+        Integer y2 = t2.getPosY();
+
+        Double dx = (double) x2 - x1;
+        Double dy = (double) y2 - y1;
+        Double length = Math.sqrt(dx * dx + dy * dy);
+
+        if (length == 0) return; 
+        
+        Double ux = dx / length;
+        Double uy = dy / length;
+
+        
+        Double offsetX = ux * TileAbstract.HEXAGON_RADIOUS * 0.9;  
+        Double offsetY = uy * TileAbstract.HEXAGON_RADIOUS * 0.55; 
+        
+        Integer newX1 = (int) (x1 + offsetX);
+        Integer newY1 = (int) (y1 + offsetY);
+        Integer newX2 = (int) (x2 - offsetX);
+        Integer newY2 = (int) (y2 - offsetY);
+
+        g2d.drawLine(newX1, newY1, newX2, newY2);
+    }
+
 
     /*
      * 
@@ -216,13 +268,13 @@ public class MapGenerator extends JPanel
 
         for (Integer i = 0; i < this.tiles.size(); i++)
         {
-            for (Integer j = 0; j < this.tiles.size(); j++)
+            for (Integer j = i + 1; j < this.tiles.size(); j++)
             {
                 
                 TileAbstract t1 = this.tiles.get(i);
                 TileAbstract t2 = this.tiles.get(j);
 
-                if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] == 1) 
+                if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] > 0) 
                 {
                     g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
                 }
@@ -230,7 +282,26 @@ public class MapGenerator extends JPanel
         }
     }
 
+    /**
+    * 
+    * 
+    * @param character Character that desires to move
+    * @param objective Destination tile
+    */
 
+    // public void moveToTile(BaseCharacter character, GenericTile objective)
+    // {
+    //     if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
+
+    //     //TODO
+    // }
+
+    // public List<GenericTile> getPathToObjective()
+    // {
+    //     return null;
+    // }
+
+    public TileGraph getGraph() { return this.graph; }
     public void setFactory(TileFactory f) { this.factory = f; }
     public void disableMap(boolean b) { this.disableMap = b; }
     public void updateRendering() { this.repaint(); }

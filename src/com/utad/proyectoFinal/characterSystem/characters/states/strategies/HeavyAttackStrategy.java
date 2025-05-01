@@ -5,7 +5,7 @@ import com.utad.proyectoFinal.characterSystem.tools.Calculator;
 
 public class HeavyAttackStrategy extends AbstractAttackStrategy {
 
-    private static final int MANA_COST = 14;
+    private static final int MANA_COST = 10;
     private static final double HIT_CHANCE = 60.0; // Probabilidad de acierto 60%
     private static final double DAMAGE_MULTIPLIER = 2.0;
     // Constante del coste de durabilidad

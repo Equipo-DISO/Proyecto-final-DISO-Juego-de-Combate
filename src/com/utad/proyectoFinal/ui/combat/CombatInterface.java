@@ -83,26 +83,13 @@ public class CombatInterface extends JFrame implements Interface {
         add(actionsPanel, BorderLayout.SOUTH);
     }
 
+    // INTERFACE FUNCTIONS
     public void showInterface(){
         setVisible(true);
     }
-
-    public void waitTillClose(){
-        while (isVisible()){
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            if (feedUpdated) slideBottom(0);
-        }
-    }
-    
     public void hideInterface() {
         setVisible(false);
     }
-
     public List<String> getData() {
         List<String> dataList = new ArrayList<>();
         dataList.add(playerImagePath);
@@ -117,27 +104,7 @@ public class CombatInterface extends JFrame implements Interface {
         return dataList;
     }
 
-    public static void main(String[] args) {
-        CombatInterface combatInterface = new CombatInterface("Juego de Combate", 1000, 500);
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        combatInterface.showInterface();
-
-    }
-
+    // ACTION BUTTONS FUNCTION
     private void action(int type){
 
         CombatFeedLine feedLine = new CombatFeedLine("");
@@ -169,15 +136,7 @@ public class CombatInterface extends JFrame implements Interface {
         feedUpdated = true;
     }
 
-    public void slideBottom(int value) {
-        scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
-        feedPanel.revalidate();
-        feedPanel.repaint();
-
-        System.out.println("scroll");
-        feedUpdated = false;
-    }
-
+    // FEED FUNCTIONS 
     public void addFeedLine(String text, Action action) {
         addFeedLine(text, action.getIcon());
     }
@@ -189,6 +148,49 @@ public class CombatInterface extends JFrame implements Interface {
         feedPanel.add(line);
         feedPanel.revalidate();
         feedPanel.repaint();
+    }
+
+    // ON MAIN FUNCTIONS
+    public void waitTillClose(){
+        while (isVisible()){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if (feedUpdated) slideBottom();
+        }
+    }
+    private void slideBottom() {
+        scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+        feedPanel.revalidate();
+        feedPanel.repaint();
+
+        System.out.println("scroll");
+        feedUpdated = false;
+    }
+
+    // TEST MAIN
+    public static void main(String[] args) {
+        CombatInterface combatInterface = new CombatInterface("Juego de Combate", 1000, 500);
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        combatInterface.showInterface();
+
     }
 }
 
