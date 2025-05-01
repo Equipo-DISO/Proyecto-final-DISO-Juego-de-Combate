@@ -14,10 +14,11 @@ public class Bot extends BaseCharacter {
 
     private GenericTile currentPosition;
     private BotAI botAi;
-    private BaseHelmet currentHelmet;
-    private BaseWeapon currentWeapon;
-    private MapGenerator x;
+    // private BaseHelmet currentHelmet; Heredadas de BaseCharacter
+    // private BaseWeapon currentWeapon; Heredadas de BaseCharacter
 
+    private MapGenerator x;
+    private
     public Bot() {
         this(BOTNAME, ATTACK, DEFENSE);
     }
@@ -28,14 +29,14 @@ public class Bot extends BaseCharacter {
 
     public void BotMove(GenericTile random) {
         if (botAi != null) {
-            botAi.decideNextMove(this.getCurrentPosition());
+            botAi.executeTurn(this);
         } else {
             System.out.println("AI no definida para este bot.");
         }
     }
 
-    @Override
-    public String getSpecialAbility() {
+
+    //public String getSpecialAbility() {
         return "";
     }
 
