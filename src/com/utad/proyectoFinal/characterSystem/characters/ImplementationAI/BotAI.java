@@ -1,4 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
 
-public class BotAI {
+import com.utad.proyectoFinal.mapa.GenericTile;
+
+public abstract class BotAI {
+    public abstract void decideNextMove(GenericTile tile);
 }
