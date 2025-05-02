@@ -101,8 +101,8 @@ public class MapGenerator extends JPanel
             }
         }
 
-        //this.graph.findBridges(generatedMap);
         this.graph.connectSubGraphs(generatedMap);
+
         return generatedMap;
     }
     
@@ -119,7 +119,7 @@ public class MapGenerator extends JPanel
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.tiles.forEach(t -> t.drawTile(g2d));
         
-        generateDebugLines(g2d);
+        //generateDebugLines(g2d);
       
 
         if (this.disableMap)
