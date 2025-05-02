@@ -46,10 +46,12 @@ public class BufferedImageCharacterTest extends JFrame {
                                            DefaultAttributes.ATTACK, 
                                            DefaultAttributes.DEFENSE, 
                                            characterImage);
+
+
             
             // Create equipment
             sword = new BaseWeapon(WeaponType.SWORD);
-            helmet = new BaseHelmet(HelmetType.DEMON_HELMET);
+            helmet = new BaseHelmet(HelmetType.SIMPLE_HELMET);
             
             // Set up UI components
             setupUI();

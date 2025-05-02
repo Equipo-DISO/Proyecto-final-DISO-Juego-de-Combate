@@ -46,8 +46,8 @@ public class BaseCharacter {
 
 
     // Equipamiento del personaje
-    private BaseWeapon weapon;  // Arma equipada
-    private BaseHelmet helmet;  // Casco equipado
+    protected BaseWeapon weapon;  // Arma equipada
+    protected BaseHelmet helmet;  // Casco equipado
 
     // Inventario y efectos
     // TODO: Implement inventory system (find best approach/pattern) State maybe?

@@ -14,4 +14,12 @@ public class BaseCharacterImage implements CharacterImage {
     public void render(Graphics2D g, int x, int y) {
         g.drawImage(avatar, x, y, null);
     }
+    
+    /**
+     * Returns the original BufferedImage used by this base image
+     * @return The BufferedImage avatar
+     */
+    public BufferedImage getBufferedImage() {
+        return this.avatar;
+    }
 }

@@ -2,9 +2,9 @@ package com.utad.proyectoFinal.characterSystem.tools;
 
 public enum HelmetType {
 
-    SIMPLE_HELMET("Simple Helmet", 4.0, 3, Constants.FILES_IMG_HELMET_PLACEHOLDER_PNG),
-    NORMAL_HELMET("Normal Helmet", 9.0, 5, Constants.FILES_IMG_HELMET_PLACEHOLDER_PNG),
-    DEMON_HELMET("Demon Helmet", 15.0, 7, Constants.FILES_IMG_HELMET_PLACEHOLDER_PNG);
+    SIMPLE_HELMET("Simple Helmet", 4.0, 3, "/Files/img/MedievalHelmet.png"),
+    NORMAL_HELMET("Normal Helmet", 9.0, 5, "/Files/img/MilitarHelmet.png"),
+    DEMON_HELMET("Demon Helmet", 15.0, 7, "/Files/img/DemonHelmet.png");
 
     private final String name;
     private final Double defense;
@@ -34,7 +34,5 @@ public enum HelmetType {
         return imagePath;
     }
 
-    private static class Constants {
-        public static final String FILES_IMG_HELMET_PLACEHOLDER_PNG = "/Files/img/Helmet-placeholder.png";
-    }
+
 }
