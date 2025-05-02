@@ -88,11 +88,23 @@ public abstract class TileAbstract
     public Integer getPosY() { return this.posY; }
     public Integer getTileId() { return this.tileId; }
     public boolean getIsHovered() { return this.isHovered; }
+    public Object getOcupiedObject() { return this.ocupiedObject; }
 
+    public boolean isOcupied() { return this.ocupiedObject != null; }
     
-    public void setOcupiedObject(Object ocupiedObject) { this.ocupiedObject = ocupiedObject; }
     public void setHovered(boolean isHovered) { this.isHovered = isHovered; }
-    public void setSpecialImage(Image specialImage) { this.specialImage = specialImage; }
+    public void setOcupiedObject(Object ocupiedObject) 
+    { 
+        this.ocupiedObject = ocupiedObject; 
+
+        if (ocupiedObject instanceof MapObject)
+        {
+            MapObject o = (MapObject) ocupiedObject;
+            setSpecialImage(o.getImage());
+        }
+    }
+
+    protected void setSpecialImage(Image specialImage) { this.specialImage = specialImage; }
 
     @Override
     public String toString() 
