@@ -2,6 +2,8 @@ package com.utad.proyectoFinal.ui;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -58,6 +60,18 @@ public class SimplifiedImage {
     }
     public ImageIcon generateImageIcon(Integer reescalatedWidth, Integer reescalatedHeight) {
         return new ImageIcon(this.generateImage(reescalatedWidth, reescalatedHeight));
+    }
+
+    public BufferedImage generateBufferedImage() {
+        return this.generateBufferedImage(width, height, 0, 0);
+    }
+    public BufferedImage generateBufferedImage(Integer x, Integer y) {
+        return this.generateBufferedImage(width, height, x, y);
+    }
+    public BufferedImage generateBufferedImage(Integer x, Integer y, Integer reescalatedWidth, Integer reescalatedHeight) {
+        BufferedImage bufferedImage = new BufferedImage(reescalatedWidth, reescalatedHeight, BufferedImage.TYPE_INT_ARGB);
+        bufferedImage.getGraphics().drawImage(this.generateImage(), x, y, null);
+        return bufferedImage;
     }
 
     public JLabel generateJLabel(){
