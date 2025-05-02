@@ -318,7 +318,7 @@ public class MapGenerator extends JPanel
     {
          // Define punto de inicio y destino
         GenericTile startTile = (GenericTile) this.tiles.get(0);
-        GenericTile endTile = (GenericTile) this.tiles.get(27);
+        GenericTile endTile = (GenericTile) this.tiles.get(60);
         
         // Encuentra el camino
         List<GenericTile> path = this.graph.pathFinding(startTile, List.of(endTile), this.tiles);
@@ -352,17 +352,6 @@ public class MapGenerator extends JPanel
 
                 if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] > 0) 
                 {
-                    if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] == 3)
-                    {
-                        g2d.setColor(new Color(120, 255, 0));
-                        g2d.setStroke(new BasicStroke(1));
-                    }
-                    else
-                    {
-                        g2d.setColor(new Color(120, 0, 0));
-                        g2d.setStroke(new BasicStroke(1));
-                    }
-
                     g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
                 }
             }
