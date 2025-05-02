@@ -3,7 +3,9 @@ package com.utad.proyectoFinal.mapa;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TileGraph 
 {
@@ -18,46 +20,10 @@ public class TileGraph
         initializeAdjacencyMatrix();
     }
 
-    // TODO
-    // los void son place holder
-    /*    
-    public void bfs(?????) // implementar bfs
-    public void connectSubGraphs(?????) // -> mirar findBridges para ver como conectar dos tiles
-    public void searchPathToDestination(?????) 
-
-        IMPORTANTE !
-
-        Descomentar linea 122 en MapGenerator para dibujar las lineas de conexion del grafo
-    */
-
-    public void findBridges(List<TileAbstract> allTiles) 
+   
+    public boolean isLegalMove(GenericTile initial, GenericTile objective)
     {
-        List<TileAbstract> aloneTiles = findAloneTiles(allTiles);
-        
-       
-        if (aloneTiles.isEmpty()) { return; }
-        
-
-        for (TileAbstract aloneTile : aloneTiles) 
-        {
-            if (aloneTile instanceof GenericTile)
-            {   
-                GenericTile closestConnectedTile = findClosestConnectedTile(allTiles, (GenericTile) aloneTile);
-            
-                if (closestConnectedTile != null) 
-                {
-                    // Crear puente | 1 = conexión normal | 2 = lo mismo que 1, pero se renderiza un puente
-                    this.adjacencyMatrix[aloneTile.getTileId()][closestConnectedTile.getTileId()] = 2;
-                    this.adjacencyMatrix[closestConnectedTile.getTileId()][aloneTile.getTileId()] = 2;
-                    
-                }
-            }
-        }
-    }
-
-    public boolean isLegalMove(TileAbstract initial, TileAbstract objective)
-    {
-        return (this.adjacencyMatrix[initial.getTileId()][objective.getTileId()] > 0 ? true : false);
+        return this.adjacencyMatrix[initial.getTileId()][objective.getTileId()] > 0;
     }
 
     public void connectNeighbors(List<TileAbstract> tiles, GenericTile currentTile) 
@@ -75,40 +41,17 @@ public class TileGraph
         }
     }
 
-    public List<TileAbstract> findAloneTiles(List<TileAbstract> tiles)
+    public void connectSubGraphs(List<TileAbstract> allTiles) 
     {
-        List<TileAbstract> returnTiles = new ArrayList<TileAbstract>();
+        Map<Integer, List<GenericTile>> connectedComponents = findConnectedComponents(allTiles);
+        
+       
+        if (connectedComponents.size() <= 1) { return; }
 
-        for (TileAbstract currentTile : tiles)
+        for (List<GenericTile> component : connectedComponents.values()) 
         {
-            if (currentTile instanceof GenericTile)
-            {
-                if (!isTileConnectedOnce(tiles, currentTile) && !returnTiles.contains(currentTile))
-                {
-                    returnTiles.add(currentTile);
-                }
-            }
+            connectComponentToNearest(allTiles, component, connectedComponents);
         }
-
-        return returnTiles;
-    }
-
-    private boolean isTileConnectedOnce(List<TileAbstract> tiles, TileAbstract currentTile)
-    {
-        boolean res = false;
-
-        for (TileAbstract tileToSearch : tiles)
-        {
-            if (tileToSearch instanceof GenericTile && !currentTile.equals(tileToSearch) &&
-                this.adjacencyMatrix[currentTile.getTileId()][tileToSearch.getTileId()] != null && 
-                this.adjacencyMatrix[currentTile.getTileId()][tileToSearch.getTileId()] == 1
-            )
-            {
-               res = true;
-            }
-        }
-
-        return res;
     }
 
     private void initializeAdjacencyMatrix() 
@@ -133,31 +76,94 @@ public class TileGraph
         return centerInitial.distance(centerTarget);
     }
 
-    private GenericTile findClosestConnectedTile(List<TileAbstract> allTiles, GenericTile targetTile) 
+
+    // ---------------------------------
+    //
+    //
+    //         Conexion de grafos
+    //
+    //
+    // ---------------------------------
+
+
+    private Map<Integer, List<GenericTile>> findConnectedComponents(List<TileAbstract> allTiles) 
     {
-        GenericTile closestTile = null;
-        double minDistance = Double.MAX_VALUE;
-        
+        Map<Integer, List<GenericTile>> components = new HashMap<>();
+        List<GenericTile> genericTiles = new ArrayList<>();
+
+        // Filtramos solo los GenericTile
         for (TileAbstract tile : allTiles) 
         {
-            if (tile instanceof GenericTile && !tile.equals(targetTile)) 
+            if (tile instanceof GenericTile) 
             {
-                GenericTile genericTile = (GenericTile) tile;
-                
-                if (isTileConnectedOnce(allTiles, genericTile)) 
+                genericTiles.add((GenericTile) tile);
+            }
+        }
+
+        boolean[] visited = new boolean[totalNodes];
+        Integer componentId = 0;
+
+        for (GenericTile tile : genericTiles) 
+        {
+            if (!visited[tile.getTileId()]) 
+            {
+                List<GenericTile> component = new ArrayList<>();
+                dfs(tile, visited, component, genericTiles);
+                components.put(componentId++, component);
+            }
+        }
+
+        return components;
+    }
+
+    // https://en.wikipedia.org/wiki/Depth-first_search
+    private void dfs(GenericTile current, boolean[] visited, List<GenericTile> component, List<GenericTile> allTiles) 
+    {
+        visited[current.getTileId()] = true;
+        component.add(current);
+
+        for (GenericTile neighbor : allTiles) 
+        {
+            if (!visited[neighbor.getTileId()] && adjacencyMatrix[current.getTileId()][neighbor.getTileId()] > 0) 
+            {
+                dfs(neighbor, visited, component, allTiles);
+            }
+        }
+    }
+
+    private void connectComponentToNearest(List<TileAbstract> allTiles, List<GenericTile> component, Map<Integer, List<GenericTile>> allComponents) 
+    {
+        GenericTile closestFrom = null;
+        GenericTile closestTo = null;
+        Double minDistance = Double.MAX_VALUE;
+
+        // Buscamos en todos los otros componentes
+        for (List<GenericTile> otherComponent : allComponents.values()) 
+        {
+            if (otherComponent.equals(component)) { continue; }
+
+            // Buscamos el par más cercano entre este componente y el otro
+            for (GenericTile tileFrom : component) 
+            {
+                for (GenericTile tileTo : otherComponent) 
                 {
-                    double distance = distanceToTile(targetTile, genericTile);
-                    
+                    Double distance = distanceToTile(tileFrom, tileTo);
                     if (distance < minDistance) 
                     {
                         minDistance = distance;
-                        closestTile = genericTile;
+                        closestFrom = tileFrom;
+                        closestTo = tileTo;
                     }
                 }
             }
         }
+
         
-        return closestTile;
+        if (closestFrom != null && closestTo != null) 
+        {
+            adjacencyMatrix[closestFrom.getTileId()][closestTo.getTileId()] = 2;
+            adjacencyMatrix[closestTo.getTileId()][closestFrom.getTileId()] = 2;
+        }
     }
 
     public Integer[][] getAdjacencyMatrix() { return this.adjacencyMatrix; }
