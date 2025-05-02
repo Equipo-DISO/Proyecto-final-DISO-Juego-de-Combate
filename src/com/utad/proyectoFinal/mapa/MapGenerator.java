@@ -2,7 +2,6 @@ package com.utad.proyectoFinal.mapa;
 
 import javax.swing.*;
 
-import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 
 import java.awt.*;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.5d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.6d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
     private TileFactory factory;
@@ -102,7 +101,8 @@ public class MapGenerator extends JPanel
             }
         }
 
-        this.graph.findBridges(generatedMap);
+        this.graph.connectSubGraphs(generatedMap);
+
         return generatedMap;
     }
     
@@ -293,8 +293,9 @@ public class MapGenerator extends JPanel
     // {
     //     if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
 
-    //     //TODO
+    //     //TODO logica de cambio de movidas ocupadas en los tiles
     // }
+
 
     // public List<GenericTile> getPathToObjective()
     // {
