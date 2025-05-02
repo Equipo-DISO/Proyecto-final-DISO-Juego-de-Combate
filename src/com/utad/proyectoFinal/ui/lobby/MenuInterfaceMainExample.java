@@ -3,12 +3,20 @@ package com.utad.proyectoFinal.ui.lobby;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.utad.proyectoFinal.mapa.MapGenerator;
+
 public class MenuInterfaceMainExample {
     public static void main(String[] args) {
         MenuInterface interfaceMain = new MenuInterface();
         interfaceMain.showInterface();
         interfaceMain.waitTillClose();
+
         List<String> data = interfaceMain.getData();
+
+        MapGenerator instance = MapGenerator.getInstance(1100, 0, 3, 4);
+        instance.displayMap();
+
+        
         
         // Primer elemento de la lista es el jugador humano
         // Los siguientes elementos son los bots

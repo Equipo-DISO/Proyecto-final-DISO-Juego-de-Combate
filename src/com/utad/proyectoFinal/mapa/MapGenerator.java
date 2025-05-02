@@ -3,6 +3,7 @@ package com.utad.proyectoFinal.mapa;
 import javax.swing.*;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 import java.awt.*;
 import java.util.List;
@@ -14,6 +15,7 @@ public class MapGenerator extends JPanel
 {
     public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.6d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
+
 
     private TileFactory factory;
     private List<TileAbstract> tiles;
@@ -29,12 +31,15 @@ public class MapGenerator extends JPanel
 
     private TileGraph graph;
 
+    private List<BaseCharacter> players;
+
+
     private MapGenerator(Integer x, Integer y, Integer size, Integer spawns) 
     {
+        super();
         this.gridSize = size;
 
         this.factory = new NormalTileFactory(calculateTotalTiles(), spawns);
-
         this.graph = new TileGraph(calculateTotalTiles());
 
         this.screenX = x;
@@ -48,6 +53,16 @@ public class MapGenerator extends JPanel
         this.addMouseMotionListener(this.listener);
     }
 
+    public void displayMap()
+    {
+        JFrame frame = new JFrame("Hexágono 3D Testing");
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1500, 1000);
+        frame.add(this);
+        frame.setVisible(true);
+        frame.setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
+    }
 
     public static MapGenerator getInstance(Integer screenX, Integer screenY, Integer size, Integer spawns)
     {
@@ -58,6 +73,7 @@ public class MapGenerator extends JPanel
 
         return MapGenerator.instance;
     }
+
 
     public List<TileAbstract> createHexGrid() 
     {
@@ -173,6 +189,28 @@ public class MapGenerator extends JPanel
 
     private void drawPlayerHUD(Graphics2D g2d) 
     {
+        createMouseMovementTip(g2d);
+        createPlayerCounter(g2d);
+    }
+
+    private void createMouseMovementTip(Graphics2D g2d)
+    {
+        Integer boxWidth = 250;
+        Integer boxHeight = 60;
+
+        Integer boxX = (super.getWidth() / 2);
+        Integer boxY = (super.getHeight() - boxHeight - 20);
+
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+        g2d.setColor(Color.DARK_GRAY); 
+        g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
+
+       createText(g2d, boxX + 20, boxY + 35, "Hold left click to move");
+    }
+
+    private void createPlayerCounter(Graphics2D g2d)
+    {
         Integer boxWidth = 120;
         Integer boxHeight = 60;
 
@@ -180,20 +218,23 @@ public class MapGenerator extends JPanel
         Integer boxY = -10;
 
 
-
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
         g2d.setColor(Color.DARK_GRAY); 
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
        //g2d.drawImage(new SimplifiedImage("Files/img/player.png").generateImage(30, 30), boxX, boxY, boxWidth, boxHeight, null);
+       createText(g2d, boxX + 55, boxY + 45, "nig/15");
+    }
 
-       g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-       g2d.setColor(Color.WHITE);
+    private void createText(Graphics2D g2d, Integer posX, Integer posY, String msg)
+    {
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+        g2d.setColor(Color.WHITE);
         
-       Font  oldFont = g2d.getFont();
-       Font font = oldFont.deriveFont(Font.BOLD, 20f);
+        Font  oldFont = g2d.getFont();
+        Font font = oldFont.deriveFont(Font.BOLD, 20f);
         g2d.setFont(font);
-        g2d.drawString(calculateTotalTiles() + "/15", boxX + 55, boxY + 40);
+        g2d.drawString(msg, posX, posY);
         g2d.setFont(oldFont);
     }
 
