@@ -48,6 +48,7 @@ public class MapGenerator extends JPanel
         this.screenX = x;
         this.screenY = y;
         this.tiles = createHexGrid();
+        debugPathFinding();
         this.disableMap = false;
 
         this.viewportX = 0;
@@ -113,7 +114,7 @@ public class MapGenerator extends JPanel
                 Integer newTileId = generatedMap.size();
 
 
-                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId);
+                TileAbstract tile = this.factory.createTile(tileX, tileY, newTileId);
                 generatedMap.add(tile);
 
                 if (tile instanceof GenericTile)
@@ -124,6 +125,8 @@ public class MapGenerator extends JPanel
         }
 
         this.graph.connectSubGraphs(generatedMap);
+
+       
 
         return generatedMap;
     }
@@ -143,7 +146,8 @@ public class MapGenerator extends JPanel
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.tiles.forEach(t -> t.drawTile(g2d));
         
-        //generateDebugLines(g2d);
+        
+        generateDebugLines(g2d);
       
 
         if (this.disableMap)
@@ -309,6 +313,29 @@ public class MapGenerator extends JPanel
      *      MOVIDAS GRAFO
      * 
      */
+
+    private void debugPathFinding()
+    {
+         // Define punto de inicio y destino
+        GenericTile startTile = (GenericTile) this.tiles.get(0);
+        GenericTile endTile = (GenericTile) this.tiles.get(27);
+        
+        // Encuentra el camino
+        List<GenericTile> path = this.graph.pathFinding(startTile, List.of(endTile), this.tiles);
+        
+        // Resalta las tiles del camino
+        for (GenericTile tile : path) {
+            tile.setDebugColor(Color.YELLOW);  // Color para el camino
+        }
+        
+        // Resalta inicio y fin con colores diferentes
+        startTile.setDebugColor(Color.GREEN);  // Color para el inicio
+        endTile.setDebugColor(Color.RED);      // Color para el destino
+        
+        // Actualiza la representación visual
+        updateRendering();
+    }
+
     private void generateDebugLines(Graphics2D g2d)
     {
 
@@ -325,6 +352,17 @@ public class MapGenerator extends JPanel
 
                 if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] > 0) 
                 {
+                    if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] == 3)
+                    {
+                        g2d.setColor(new Color(120, 255, 0));
+                        g2d.setStroke(new BasicStroke(1));
+                    }
+                    else
+                    {
+                        g2d.setColor(new Color(120, 0, 0));
+                        g2d.setStroke(new BasicStroke(1));
+                    }
+
                     g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
                 }
             }

@@ -89,8 +89,8 @@ public abstract class TileAbstract
     public Integer getTileId() { return this.tileId; }
     public boolean getIsHovered() { return this.isHovered; }
     public Object getOcupiedObject() { return this.ocupiedObject; }
-
     public boolean isOcupied() { return this.ocupiedObject != null; }
+
     
     public void setHovered(boolean isHovered) { this.isHovered = isHovered; }
     public void setOcupiedObject(Object ocupiedObject) 
