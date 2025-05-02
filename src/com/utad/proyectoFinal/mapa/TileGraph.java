@@ -168,5 +168,54 @@ public class TileGraph
         }
     }
 
+    public List<GenericTile> pathFinding(GenericTile start, List<GenericTile> targets, List<TileAbstract> allTiles){
+
+        Map<Integer, GenericTile> idToTile = new HashMap<>(); //hash que traduce Id's into ObjetoTile
+        Boolean[] visited = new boolean[totalNodes];
+        List<GenericTile> path = new ArrayList<>();
+
+        for(TileAbstract tile: allTiles){
+            //por cada tile del mapa, verifico si es un GenericTile
+            if(tile instanceof GenericTile){
+                //insertamos el tile en el hash
+                idToTile.put(tile.getTileId(), tile);
+            }
+        }
+
+        for(GenericTile target : targets){
+            Arrays.fill(visited, false);
+            path.clear();
+            //prueba si hay un camino entre start y target y si lo encuentra lo aloja en path
+            if(dfsPath(start, target, visited, path, idToTile)){
+                return new ArrayList<>(path);
+            }
+        }
+    }
+
+    private Boolean dfsPath(GenericTile current, GenericTile target, Boolean[] visited, List<GenericTile> path, Map<Integer, GenericTile> idToTile) {
+
+        visited[current.getTileId()] = true;
+        path.add(current);
+
+        if(current.equals(target)){
+            //encontramos el objetivo
+            return true;
+        }
+
+        for(Integer neighBorId = 0; neighBorId < totalNodes; neighBorId++){
+            if(adjacencyMatrix[current.getTileId()][neighBorId] != null && adjacencyMatrix[current.getTileId()][neighborId] > 0 && !visited[neighBorId]){
+                //filtramos si hay conexion > 0 entre actual y vecino y si no hemos visitado todavía el vecino
+                GenericTile neighbor = idToTile.get(neighBorId);
+
+                if(neighbor != null && dfsPath(neighbor, target, visited, path, idToTile)){
+                    return true; //si el camino por el vecino funciona, devuelve true
+                }
+            }
+        }
+
+        path.remove(path.size() - 1); //backtrack
+        return false;
+
+    }
     public Integer[][] getAdjacencyMatrix() { return this.adjacencyMatrix; }
 }
