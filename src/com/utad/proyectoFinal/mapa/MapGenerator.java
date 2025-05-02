@@ -13,7 +13,7 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.6d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.45d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
 
@@ -28,6 +28,9 @@ public class MapGenerator extends JPanel
     private Integer screenY;
     private boolean disableMap;
     private Integer gridSize;
+
+    private Integer viewportX;
+    private Integer viewportY;
 
     private TileGraph graph;
 
@@ -47,6 +50,8 @@ public class MapGenerator extends JPanel
         this.tiles = createHexGrid();
         this.disableMap = false;
 
+        this.viewportX = 0;
+        this.viewportY = 0;
 
         this.listener = new MapListener(this, this.tiles);
         this.addMouseListener(this.listener);
@@ -58,7 +63,7 @@ public class MapGenerator extends JPanel
         JFrame frame = new JFrame("Hexágono 3D Testing");
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1500, 1000);
+        frame.setSize(1300, 800);
         frame.add(this);
         frame.setVisible(true);
         frame.setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
@@ -133,6 +138,8 @@ public class MapGenerator extends JPanel
         Graphics2D g2d = (Graphics2D) g;
         super.setBackground(new Color(90, 182, 180)); // agua
 
+        g2d.translate(-this.viewportX, -this.viewportY);
+
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.tiles.forEach(t -> t.drawTile(g2d));
         
@@ -176,8 +183,8 @@ public class MapGenerator extends JPanel
        
         String text = "ON GOING FIGHT";
         FontMetrics fm = g2d.getFontMetrics();
-        int tx = (super.getWidth() - fm.stringWidth(text)) / 2;
-        int ty = (super.getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+        int tx = (this.viewportX + super.getWidth() - fm.stringWidth(text)) / 2;
+        int ty = (this.viewportY + super.getHeight() - fm.getHeight()) / 2 + fm.getAscent();
         g2d.drawString(text, tx, ty);
 
     
@@ -198,8 +205,8 @@ public class MapGenerator extends JPanel
         Integer boxWidth = 250;
         Integer boxHeight = 60;
 
-        Integer boxX = (super.getWidth() / 2);
-        Integer boxY = (super.getHeight() - boxHeight - 20);
+        Integer boxX = (this.viewportX + ((super.getWidth() - boxWidth / 2) / 2));
+        Integer boxY = (this.viewportY + super.getHeight() - boxHeight - 20);
 
 
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
@@ -214,15 +221,15 @@ public class MapGenerator extends JPanel
         Integer boxWidth = 120;
         Integer boxHeight = 60;
 
-        Integer boxX = super.getWidth() - boxWidth + 5;
-        Integer boxY = -10;
+        Integer boxX = this.viewportX + super.getWidth() - boxWidth + 5;
+        Integer boxY = this.viewportY + (-10);
 
 
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
         g2d.setColor(Color.DARK_GRAY); 
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
-       //g2d.drawImage(new SimplifiedImage("Files/img/player.png").generateImage(30, 30), boxX, boxY, boxWidth, boxHeight, null);
+       //g2d.drawImage(new SimplifiedImage("Files/img/player.png").generateImage(30, 30), 200, 200, boxWidth, boxHeight, null);
        createText(g2d, boxX + 55, boxY + 45, "nig/15");
     }
 
@@ -346,6 +353,19 @@ public class MapGenerator extends JPanel
         return this.graph.pathFinding(currentPos, botTargets, this.tiles);
     }
 
+    public void moveViewport(Integer dx, Integer dy) 
+    {
+        int minX = -350;
+        int minY = -300;
+        int maxX =  300;
+        int maxY =  300;
+        
+        this.viewportX = Math.max(minX, Math.min(maxX, viewportX + dx));
+        this.viewportY = Math.max(minY, Math.min(maxY, viewportY + dy));
+    }
+
+    public Integer getViewX() { return this.viewportX; }
+    public Integer getViewY() { return this.viewportY; }
     public TileGraph getGraph() { return this.graph; }
     public void setFactory(TileFactory f) { this.factory = f; }
     public void disableMap(boolean b) { this.disableMap = b; }

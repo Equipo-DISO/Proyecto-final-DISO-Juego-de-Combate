@@ -13,7 +13,7 @@ public class MenuInterfaceMainExample {
 
         List<String> data = interfaceMain.getData();
 
-        MapGenerator instance = MapGenerator.getInstance(1100, 0, 3, 4);
+        MapGenerator instance = MapGenerator.getInstance(1100, 0, 4, 4);
         instance.displayMap();
 
         
