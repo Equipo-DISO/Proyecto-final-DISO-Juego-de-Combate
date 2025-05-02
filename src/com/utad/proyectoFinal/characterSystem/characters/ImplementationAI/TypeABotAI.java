@@ -1,22 +1,66 @@
 package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
 
 import com.utad.proyectoFinal.mapa.GenericTile;
+import java.util.ArrayList;
+import java.util.List;
+import com.utad.proyectoFinal.mapa.TileGraph;
+import com.utad.proyectoFinal.mapa.TileAbstract;
 
 public class TypeABotAI extends BotAI {
 
     @Override
-    protected void analyzeSituation(Bot bot) {
+    public void analyzeSituation(Bot bot) {
         //lógica para analizar si movernos a objeto o atacar (path)
+        this.targets = filtrarObjetivos(bot, true);
     }
 
     @Override
-    protected void decideNextMove(GenericTile tile) {
+    public void decideNextMove(GenericTile tile, Bot bot) {
         //movernos o atacar (decisión)
+        if(targets == null || targets.isEmpty()) {
+            return;
+        }
+
+        TileGraph graph = bot.getMap().getGraph();
+        List<GenericTile> path = graph.pathFinding(currentTile, targets, bot.getMap().getTiles());
+
+        if(path != null && path.size() > 1){
+            bot.setCurrentPosition(path.get(1));
+        }
     }
 
     @Override
-    protected void performAction(Bot bot) {
+    public void performAction(Bot bot) {
         //realizar la acción
+
     }
+
+    public List<GenericTile> filtrarObjetivos(Bot bot, boolean priorizarItems) {
+        List<GenericTile> items = new ArrayList<>();
+        List<GenericTile> enemigos = new ArrayList<>();
+
+        for (TileAbstract tile : bot.getMap().getTiles()) {
+            if (!(tile instanceof GenericTile)) continue;
+            GenericTile gTile = (GenericTile) tile;
+
+            if (gTile.hasItem()) {
+                items.add(gTile);
+            } else if (gTile.contieneEnemigo(bot)) {
+                enemigos.add(gTile);
+            }
+        }
+
+        List<GenericTile> result = new ArrayList<>();
+        if (priorizarItems) {
+            result.addAll(items);
+            result.addAll(enemigos);
+        } else {
+            result.addAll(enemigos);
+            result.addAll(items);
+        }
+
+        return result;
+    }
+
 }
 

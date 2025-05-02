@@ -5,6 +5,7 @@ public class TypeBBotFactory implements BotFactory {
     public Bot createBot() {
         Bot bot = new Bot();
         bot.setBotAI(new TypeBBotAI()); // IA defensiva, por ejemplo
+        bot.setMap(MapGenerator.getInstance(1280, 720, 3, 2));
         return bot;
     }
 }

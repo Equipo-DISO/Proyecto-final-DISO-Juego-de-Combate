@@ -5,6 +5,8 @@ public class TypeABotFactory implements BotFactory {
     public Bot createBot(){
         Bot bot = new Bot();
         bot.setBotAI(new TypeABotAI());
+
+        bot.setMap(MapGenerator.getInstance(1280, 720, 3, 2));
         return bot;
     }
 

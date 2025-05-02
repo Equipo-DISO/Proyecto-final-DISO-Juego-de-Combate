@@ -17,8 +17,7 @@ public class Bot extends BaseCharacter {
     // private BaseHelmet currentHelmet; Heredadas de BaseCharacter
     // private BaseWeapon currentWeapon; Heredadas de BaseCharacter
 
-    private MapGenerator x;
-    private
+    private MapGenerator map;
     public Bot() {
         this(BOTNAME, ATTACK, DEFENSE);
     }
@@ -37,38 +36,44 @@ public class Bot extends BaseCharacter {
 
 
     //public String getSpecialAbility() {
-        return "";
-    }
+    //    return "";
+
 
     public GenericTile getCurrentPosition() {
-        return currentPosition;
-    }
+    return currentPosition;
+}
 
     public void setCurrentPosition(GenericTile currentPosition) {
-        this.currentPosition = currentPosition;
-    }
+    this.currentPosition = currentPosition;
+}
 
     public void setBotAI(BotAI botAi) {
-        this.botAi = botAi;
-    }
+    this.botAi = botAi;
+}
 
     public BotAI getBotAI() {
-        return botAi;
-    }
+    return botAi;
+}
 
     public BaseHelmet getCurrentHelmet() {
-        return currentHelmet;
+        return getHelmet();
     }
 
-    public void setCurrentHelmet(BaseHelmet currentHelmet) {
-        this.currentHelmet = currentHelmet;
-    }
+    //public void setCurrentHelmet(BaseHelmet currentHelmet) {;}
 
     public BaseWeapon getCurrentWeapon() {
-        return currentWeapon;
+        return getWeapon();
     }
 
-    public void setCurrentWeapon(BaseWeapon currentWeapon) {
-        this.currentWeapon = currentWeapon;
-    }
+    //public void setCurrentWeapon(BaseWeapon currentWeapon) {
+    //this.currentWeapon = currentWeapon;
+    //}
+
+    public MapGenerator getMap(){
+    return this.map;
+}
+
+    public void setMap(MapGenerator map){
+    this.map = map;
+}
 }
