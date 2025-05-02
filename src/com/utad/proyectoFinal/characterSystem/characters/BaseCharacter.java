@@ -5,6 +5,7 @@ import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
 import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
+import com.utad.proyectoFinal.mapa.GenericTile;
 
 import java.awt.image.BufferedImage;
 
@@ -53,6 +54,7 @@ public class BaseCharacter {
 
     // Atributos de posicionamiento
     // TODO: Implement -> Tile
+    private GenericTile currentPosition;
     //    private Tile ubicacionActual;
     //    private Tile destinoObjetivo;
 
@@ -252,5 +254,9 @@ public class BaseCharacter {
 
     public boolean isLowEnergy() {
         return manaPoints < DefaultAttributes.LOW_MANA_THRESHOLD;
+    }
+
+    public GenericTile getCurrentPosition() {
+        return this.currentPosition;
     }
 }
