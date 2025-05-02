@@ -11,7 +11,7 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.5d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.6d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
     private TileFactory factory;
@@ -101,7 +101,7 @@ public class MapGenerator extends JPanel
             }
         }
 
-        this.graph.connectSubGraphs(generatedMap);
+        this.graph.connectSubGraphs(generatedMap, 2);
 
         return generatedMap;
     }
@@ -119,7 +119,7 @@ public class MapGenerator extends JPanel
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.tiles.forEach(t -> t.drawTile(g2d));
         
-        //generateDebugLines(g2d);
+        generateDebugLines(g2d);
       
 
         if (this.disableMap)

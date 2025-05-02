@@ -41,17 +41,20 @@ public class TileGraph
         }
     }
 
-    public void connectSubGraphs(List<TileAbstract> allTiles) 
+    public void connectSubGraphs(List<TileAbstract> allTiles, Integer iterations) 
     {
-        Map<Integer, List<GenericTile>> connectedComponents = findConnectedComponents(allTiles);
-        
-       
-        if (connectedComponents.size() <= 1) { return; }
-
-        for (List<GenericTile> component : connectedComponents.values()) 
+        for (Integer i = 0; i < iterations; i++)
         {
-            connectComponentToNearest(allTiles, component, connectedComponents);
-        }
+            Map<Integer, List<GenericTile>> connectedComponents = findConnectedComponents(allTiles);
+            
+        
+            if (connectedComponents.size() <= 1) { return; }
+
+            for (List<GenericTile> component : connectedComponents.values()) 
+            {
+                connectComponentToNearest(allTiles, component, connectedComponents);
+            }
+        }    
     }
 
     private void initializeAdjacencyMatrix() 
