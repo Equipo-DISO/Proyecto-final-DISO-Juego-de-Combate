@@ -1,9 +1,10 @@
 package com.utad.proyectoFinal.mapa;
 
 
-import java.awt.image.BufferedImage;
+import java.awt.Image;
+
 
 public interface MapObject 
 {
-    public BufferedImage getBufferedImage();
+    public Image getImage();
 }
