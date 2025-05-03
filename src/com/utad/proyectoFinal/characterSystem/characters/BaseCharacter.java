@@ -10,6 +10,8 @@ import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
 import com.utad.proyectoFinal.characterSystem.images.*; // Importa los decoradores
 import com.utad.proyectoFinal.mapa.GenericTile;
+import com.utad.proyectoFinal.mapa.MapObject;
+import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,7 +19,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
-public class BaseCharacter implements CombatCharacter{
+public class BaseCharacter implements CombatCharacter, MapObject {
 
 
     // Contador de personajes (usado para asignar un ID único a cada personaje)
@@ -379,5 +381,11 @@ public class BaseCharacter implements CombatCharacter{
     public BufferedImage getCompleteImage() {
         // Devuelve la imagen decorada completa
         return characterImage.getCompleteImage();
+    }
+
+    @Override
+    public Image getImage() {
+        // Devuelve la imagen decorada completa
+        return SimplifiedImage.generateImage(getCompleteImage());
     }
 }
