@@ -2,8 +2,10 @@ package com.utad.proyectoFinal.characterSystem.tools;
 
 import com.utad.proyectoFinal.mapa.MapObject;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.List;
 
 public class Chest implements MapObject {
 
@@ -30,7 +32,7 @@ public class Chest implements MapObject {
     }
 
     @Override
-    public BufferedImage getBufferedImage() {
+    public Image getImage() {
         return null;
     }
 }

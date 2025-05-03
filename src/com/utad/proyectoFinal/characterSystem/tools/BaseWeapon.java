@@ -4,6 +4,7 @@ import com.utad.proyectoFinal.mapa.MapObject;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -68,7 +69,7 @@ public class BaseWeapon implements MapObject {
         this.durability -= i;
     }
 
-    // --- Metodo para obtener el Avatar ---
+    // --- Metodo para fumar ---
     public BufferedImage getAvatar() {
         BufferedImage avatar = null;
 
@@ -110,7 +111,7 @@ public class BaseWeapon implements MapObject {
     }
 
     @Override
-    public BufferedImage getBufferedImage() {
-        return null;
+    public Image getImage() {
+        return SimplifiedImage.generateImage(getAvatar());
     }
 }

@@ -2,8 +2,10 @@ package com.utad.proyectoFinal.characterSystem.tools;
 
 
 import com.utad.proyectoFinal.mapa.MapObject;
+import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -88,8 +90,9 @@ public class BaseHelmet implements MapObject {
         return avatar;
     }
 
+
     @Override
-    public BufferedImage getBufferedImage() {
-        return null;
+    public Image getImage() {
+        return SimplifiedImage.generateImage(getAvatar());
     }
 }
