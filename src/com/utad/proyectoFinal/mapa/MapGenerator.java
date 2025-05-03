@@ -373,12 +373,9 @@ public class MapGenerator extends JPanel
     }
 
     /**
-    * 
-    * 
     * @param character Character that desires to move
     * @param objective Destination tile
     */
-
     public void moveToTile(BaseCharacter character, GenericTile objective)
     {
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
@@ -388,11 +385,17 @@ public class MapGenerator extends JPanel
 
     }
 
+    /**
+    * @param currentPos Current position
+    * @param strategy Get your closest point of interest
+    * @return returns list of tiles as a path
+    */
+    public List<GenericTile> getPathToObjective(GenericTile currentPos, PathFindingStrategy strategy)
+    {
+        return this.graph.pathFindingBFS(currentPos, strategy.getTargetTileId(currentPos, this.tiles), this.tiles);
+    }
 
-    // public List<GenericTile> getPathToObjective(GenericTile currentPos, List<GenericTile> botTargets)
-    // {
-    //     return this.graph.pathFinding(currentPos, botTargets, this.tiles);
-    // }
+
 
     public void moveViewport(Integer dx, Integer dy) 
     {

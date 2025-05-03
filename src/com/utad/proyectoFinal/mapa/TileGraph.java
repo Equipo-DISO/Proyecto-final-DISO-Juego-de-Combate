@@ -70,10 +70,10 @@ public class TileGraph
 
     private boolean isInRange(GenericTile initial, GenericTile target)
     { 
-        return distanceToTile(initial, target) < 127.0d; // magic number, distancia maxima a la que estara un tile contiguo
+        return TileGraph.distanceToTile(initial, target) < 127.0d; // magic number, distancia maxima a la que estara un tile contiguo
     }
 
-    private Double distanceToTile(TileAbstract initial, TileAbstract target)
+    public static Double distanceToTile(TileAbstract initial, TileAbstract target)
     {
         Point centerInitial = new Point(initial.getPosX(), initial.getPosY());
         Point centerTarget  = new Point(target.getPosX() , target.getPosY());
