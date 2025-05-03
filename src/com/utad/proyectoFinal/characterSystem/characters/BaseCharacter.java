@@ -70,8 +70,8 @@ public class BaseCharacter implements CombatCharacter, MapObject {
     // Comportamiento
     private Boolean esControlado;  // Indica si es controlado por IA
 
-    public BaseCharacter(String name, Double baseAttack, Double baseDefense) {
-        this(name, baseAttack, baseDefense, loadDefaultAvatar());
+    public BaseCharacter(String name, Double baseAttack) {
+        this(name, baseAttack, loadDefaultAvatar());
     }
 
     private static BufferedImage loadDefaultAvatar() {
@@ -84,7 +84,7 @@ public class BaseCharacter implements CombatCharacter, MapObject {
         }
     }
 
-    public BaseCharacter(String name, Double baseAttack, Double baseDefense, BufferedImage baseAvatar) {
+    public BaseCharacter(String name, Double baseAttack, BufferedImage baseAvatar) {
         this.name = name;
         this.baseAttack = baseAttack;
         this.manaPoints = DefaultAttributes.MANA_POINTS; // Valor por defecto para los puntos de maná

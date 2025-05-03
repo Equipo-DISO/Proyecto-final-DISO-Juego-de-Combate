@@ -18,7 +18,7 @@ public class TestCharacter extends BaseCharacter {
      * @param baseDefense The character's base defense value
      */
     public TestCharacter(String name, Double baseAttack, Double baseDefense) {
-        super(name, baseAttack, baseDefense);
+        super(name, baseAttack);
     }
 
     /**
@@ -30,7 +30,7 @@ public class TestCharacter extends BaseCharacter {
      * @param avatar The character's custom avatar
      */
     public TestCharacter(String name, Double baseAttack, Double baseDefense, BufferedImage avatar) {
-        super(name, baseAttack, baseDefense, avatar);
+        super(name, baseAttack, avatar);
     }
 
 

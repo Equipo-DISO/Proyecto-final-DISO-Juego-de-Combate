@@ -10,18 +10,18 @@ public class Bot extends BaseCharacter {
 
     private static final String BOTNAME = "B.O.T";
     private static final Double ATTACK = 10.00;
-    private static final Double DEFENSE = 10.0;
     private BotActionType botActionType;
     private BotAI botAi;
 
     private MapGenerator map;
+
     public Bot() {
-        this(BOTNAME, ATTACK, DEFENSE);
+        this(BOTNAME, ATTACK);
         botActionType = BotActionType.NONE;
     }
 
-    public Bot(String name, Double baseAttack, Double baseDefense) {
-        super(name, baseAttack, baseDefense);
+    public Bot(String name, Double baseAttack) {
+        super(name, baseAttack);
     }
 
     public void BotMove() {
@@ -41,11 +41,6 @@ public class Bot extends BaseCharacter {
     return botAi;
 }
 
-    public BaseHelmet getCurrentHelmet() {
-        return getHelmet();
-    }
-
-
     public MapGenerator getMap(){
         return this.map;
     }
@@ -61,4 +56,6 @@ public class Bot extends BaseCharacter {
     public void setBotActionType(BotActionType botActionType) {
         this.botActionType = botActionType;
     }
+
+
 }
