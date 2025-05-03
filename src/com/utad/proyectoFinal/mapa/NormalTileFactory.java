@@ -42,6 +42,7 @@ public class NormalTileFactory extends TileFactory
             if (super.bots.size() < 1)
             {
                 tile.setOcupiedObject(super.player);
+                super.player.setCurrentPosition((GenericTile) tile);
             }
             else
             {

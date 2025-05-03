@@ -310,7 +310,9 @@ public class MapGenerator extends JPanel
         if (objective.isOcupied()) { return; }
         
         //TODO logica de cambio de movidas ocupadas en los tiles
-
+        character.getCurrentPosition().setOcupiedObject(null);
+        objective.setOcupiedObject(character);
+        character.setCurrentPosition(objective);
     }
 
     /**
@@ -342,10 +344,9 @@ public class MapGenerator extends JPanel
     public void updateRendering() { this.repaint(); }
     public boolean isDisabled()   { return this.disableMap; }
     public Integer calculateTotalTiles() { return 1 + 3 * this.gridSize * (this.gridSize + 1); }
+    public BaseCharacter getPlayer() { return this.player; }
 
-    public List<TileAbstract> getTiles() {
-        return this.tiles;
-    }
+   
 }
 
 // DEBUG

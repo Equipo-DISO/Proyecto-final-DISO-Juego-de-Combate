@@ -106,6 +106,10 @@ public abstract class TileAbstract
             MapObject o = (MapObject) ocupiedObject;
             setSpecialImage(o.getImage());
         }
+        else if (ocupiedObject == null)
+        {
+            setSpecialImage(null);
+        }
     }
 
     protected void setSpecialImage(Image specialImage) { this.specialImage = specialImage; }

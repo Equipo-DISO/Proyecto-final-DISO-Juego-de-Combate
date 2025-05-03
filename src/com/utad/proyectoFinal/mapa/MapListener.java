@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+
 
 public class MapListener extends MouseAdapter
 {
@@ -15,6 +17,7 @@ public class MapListener extends MouseAdapter
     private Point dragStart;
     private Integer dx = 0;
     private Integer dy = 0;
+
 
     public MapListener(MapGenerator m, List<TileAbstract> tiles) 
     {
@@ -65,6 +68,7 @@ public class MapListener extends MouseAdapter
         {
             if (t.contains(p.x, p.y)) 
             {
+                this.map.moveToTile(this.map.getPlayer(), (GenericTile) t);
                 System.out.println("Has clicado la tile en: " + t.getTileId());
                 break;
             }
