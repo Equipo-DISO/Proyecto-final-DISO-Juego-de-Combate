@@ -2,8 +2,12 @@ package com.utad.proyectoFinal.ui;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.nio.Buffer;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -59,6 +63,17 @@ public class SimplifiedImage {
     }
     public ImageIcon generateImageIcon(Integer reescalatedWidth, Integer reescalatedHeight) {
         return new ImageIcon(this.generateImage(reescalatedWidth, reescalatedHeight));
+    }
+
+    public BufferedImage generateBufferedImage(){
+        
+        File file = new File(path);
+        try { return ImageIO.read(file); }
+        catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error: No se ha podido cargar la imagen desde la ruta: " + path);
+            return null;
+        }
     }
 
     public JLabel generateJLabel(){
