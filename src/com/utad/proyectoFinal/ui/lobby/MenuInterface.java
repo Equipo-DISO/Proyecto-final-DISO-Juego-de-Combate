@@ -3,6 +3,7 @@ package com.utad.proyectoFinal.ui.lobby;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;
@@ -12,15 +13,21 @@ import com.utad.proyectoFinal.ui.InterfacePath.ColorEnum;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MenuInterface extends JFrame implements Interface {
+    public static Integer MAXBOTS = 7;
+    
     private JLabel nombreLabel;
+
     private SimplifiedImage playerSimplifiedImage = new SimplifiedImage(InterfacePath.PLAYER.getPath(InterfacePath.ColorEnum.GREEN), 92, 110);
     private JLabel playerImage = playerSimplifiedImage.generateJLabel(InterfacePath.PLAYER.getDefWidth(), InterfacePath.PLAYER.getDefHeight());
+    private String playerImagePath = InterfacePath.PLAYER.getPath(InterfacePath.ColorEnum.GREEN);
+    
+    private JPanel addBotPanel;
     private JPanel listaBotsPanel;
     private ArrayList<JPanel> bots = new ArrayList<>();
-    private String playerImagePath = InterfacePath.PLAYER.getPath(InterfacePath.ColorEnum.GREEN);
     
     public MenuInterface()                              { this("Juego de Combate", 1000, 500); }
     public MenuInterface(String title)                  { this(title, 1000, 500); }
@@ -88,13 +95,13 @@ public class MenuInterface extends JFrame implements Interface {
         panelSuperior.add(colorPanel, BorderLayout.EAST);
         add(panelSuperior, BorderLayout.NORTH);
 
-        // Panel central para la lista de bots (modular y redimensionable)
+        // Panel central para la lista de bots
         listaBotsPanel = new JPanel();
         listaBotsPanel.setLayout(new BoxLayout(listaBotsPanel, BoxLayout.Y_AXIS));
         JScrollPane scrollPane = new JScrollPane(listaBotsPanel);
         add(scrollPane, BorderLayout.CENTER);
         
-        JPanel addBotPanel = new JPanel(new BorderLayout());
+        addBotPanel = new JPanel(new BorderLayout());
         JLabel addBot = new JLabel("➕ Añadir Bot", SwingConstants.LEFT);
         addBotPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         addBotPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, 20));
@@ -102,65 +109,11 @@ public class MenuInterface extends JFrame implements Interface {
 
         addBotPanel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                JPanel nuevoBotPanel = new JPanel(new BorderLayout());
-                nuevoBotPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                nuevoBotPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, 30));
-                
-                JLabel botImg = new SimplifiedImage("Files/img/BotFace.png", 30, 30).generateJLabel(20, 18);
-
-                JLabel botName = new JLabel("Bot " + (bots.size() + 1));
-                botName.setFont(new Font("SansSerif", Font.PLAIN, 14));
-                botName.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-
-                JLabel removeButton = new JLabel("❌", SwingConstants.CENTER);
-                removeButton.setPreferredSize(new Dimension(30, 30));
-                removeButton.addMouseListener(new MouseAdapter() {
-                    public void mouseClicked(MouseEvent e) {
-                        listaBotsPanel.remove(nuevoBotPanel);
-                        bots.remove(nuevoBotPanel);
-                        listaBotsPanel.revalidate();
-                        listaBotsPanel.repaint();
-                    }
-                });
-
-                botName.addMouseListener(new MouseAdapter() {
-                    public void mouseClicked(MouseEvent e) {
-                        String nuevoNombre = JOptionPane.showInputDialog("Introduce un nuevo nombre:");
-                        if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
-                            botName.setText(nuevoNombre);
-                        }
-                    }
-
-                    public void mouseEntered(MouseEvent e) {
-                        botName.setFont(botName.getFont().deriveFont(Font.ITALIC));
-                        nuevoBotPanel.add(removeButton, BorderLayout.EAST);
-                    }
-                });
-
-                nuevoBotPanel.addMouseListener(new MouseAdapter() {
-                    public void mouseExited(MouseEvent e) {
-                        botName.setFont(botName.getFont().deriveFont(Font.PLAIN));
-                        nuevoBotPanel.remove(removeButton);
-                    }
-                });
-
-                listaBotsPanel.addMouseListener(new MouseAdapter() {
-                    public void mouseExited(MouseEvent e) {
-                        botName.setFont(botName.getFont().deriveFont(Font.PLAIN));
-                        nuevoBotPanel.remove(removeButton);
-                    }
-                });
-
-                nuevoBotPanel.add(botImg, BorderLayout.WEST);
-                nuevoBotPanel.add(botName, BorderLayout.CENTER);
-                bots.add(nuevoBotPanel);
-
-                listaBotsPanel.add(nuevoBotPanel, listaBotsPanel.getComponentCount() - 1);
-                listaBotsPanel.revalidate();
-                listaBotsPanel.repaint();
+                createNewBot();
             }
         });
 
+        createNewBot(); // bot1
         listaBotsPanel.add(addBotPanel);
         
         // Panel de Jugar
@@ -182,6 +135,71 @@ public class MenuInterface extends JFrame implements Interface {
         panelBotones.add(playButton, SwingConstants.CENTER);
         add(panelBotones, BorderLayout.SOUTH);
     }
+
+    private void createNewBot() {
+        JPanel nuevoBotPanel = new JPanel(new BorderLayout());
+        nuevoBotPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        nuevoBotPanel.setMaximumSize(new Dimension(Short.MAX_VALUE, 30));
+        
+        JLabel botImg = new SimplifiedImage("Files/img/BotFace.png", 30, 30).generateJLabel(20, 18);
+
+        JLabel botName = new JLabel("Bot " + (bots.size() + 1));
+        botName.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        botName.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+
+        JLabel removeButton = new JLabel("❌", SwingConstants.CENTER);
+        removeButton.setPreferredSize(new Dimension(30, 30));
+        removeButton.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                listaBotsPanel.remove(nuevoBotPanel);
+                bots.remove(nuevoBotPanel);
+                if (bots.size() < MAXBOTS) addBotPanel.setVisible(true);
+                if (bots.size() <= 0) createNewBot();
+
+                listaBotsPanel.revalidate();
+                listaBotsPanel.repaint();
+            }
+        });
+
+        botName.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                String nuevoNombre = JOptionPane.showInputDialog("Introduce un nuevo nombre:");
+                if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
+                    botName.setText(nuevoNombre);
+                }
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                botName.setFont(botName.getFont().deriveFont(Font.ITALIC));
+                if (bots.size() > 1) nuevoBotPanel.add(removeButton, BorderLayout.EAST);
+            }
+        });
+
+        nuevoBotPanel.addMouseListener(new MouseAdapter() {
+            public void mouseExited(MouseEvent e) {
+                botName.setFont(botName.getFont().deriveFont(Font.PLAIN));
+                nuevoBotPanel.remove(removeButton);
+            }
+        });
+
+        listaBotsPanel.addMouseListener(new MouseAdapter() {
+            public void mouseExited(MouseEvent e) {
+                botName.setFont(botName.getFont().deriveFont(Font.PLAIN));
+                nuevoBotPanel.remove(removeButton);
+            }
+        });
+
+        nuevoBotPanel.add(botImg, BorderLayout.WEST);
+        nuevoBotPanel.add(botName, BorderLayout.CENTER);
+        bots.add(nuevoBotPanel);
+
+        if (bots.size() >= MAXBOTS) addBotPanel.setVisible(false);
+
+        listaBotsPanel.add(nuevoBotPanel, listaBotsPanel.getComponentCount() - 1);
+        listaBotsPanel.revalidate();
+        listaBotsPanel.repaint();
+    }
+
 
     public void showInterface(){
         setVisible(true);
@@ -215,6 +233,22 @@ public class MenuInterface extends JFrame implements Interface {
         }
 
         return dataList;
+    }
+
+    public String getPlayerPath(){
+        return playerImagePath;
+    }
+
+    public LinkedList<Bot> getBotList(){
+        LinkedList<Bot> botList = new LinkedList<Bot>();
+
+        for (int i = 0; i < bots.size(); i++){
+            Bot bot = new Bot(((JLabel) bots.get(i).getComponent(1)).getText());
+            bot.setImage(playerImagePath);
+            botList.add(bot);
+        }
+
+        return botList;
     }
 }
 

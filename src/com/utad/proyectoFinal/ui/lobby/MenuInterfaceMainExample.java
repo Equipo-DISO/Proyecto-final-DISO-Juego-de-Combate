@@ -12,10 +12,6 @@ public class MenuInterfaceMainExample {
         interfaceMain.waitTillClose();
 
         List<String> data = interfaceMain.getData();
-
-        MapGenerator instance = MapGenerator.getInstance(1100, 0, 6, 4);
-        instance.displayMap();
-
         
         
         // Primer elemento de la lista es el jugador humano
@@ -25,5 +21,9 @@ public class MenuInterfaceMainExample {
             else if(data.indexOf(element) == 1) System.out.println("Nombre del Jugador: " + element + "\nLista de Bots: ");
             else System.out.println("#" + (data.indexOf(element) - 1) + ": " + element);
         }
+
+        
+        MapGenerator instance = MapGenerator.getInstance(1100, 0, 6, 0);
+        instance.displayMap();
     }
 }
