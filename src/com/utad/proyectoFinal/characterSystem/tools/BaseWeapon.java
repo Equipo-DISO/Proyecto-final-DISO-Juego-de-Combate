@@ -49,20 +49,12 @@ public class BaseWeapon implements MapObject {
         return criticalDamage;
     }
 
-    public Double calculateCriticalDamage(){ //cómputo del crítico + daño base
-        return this.getDamage() * this.getCriticalDamage();
-    }
-
     public WeaponType getType() {
         return type;
     }
 
     public Integer getDurability() {
         return durability;
-    }
-
-    public void decreaseDurability(){
-        this.durability--;
     }
 
     public void decreaseDurability(int i) {
@@ -76,29 +68,9 @@ public class BaseWeapon implements MapObject {
         try {
             // Remove the leading slash if present
             String path = this.imagePath;
-            if (path.startsWith("/")) {
-                path = path.substring(1);
-            }
-            
-            File file = new File(path);
-            if (file.exists()) {
-                avatar = ImageIO.read(file);
-            } else {
-                System.err.println("Weapon image file not found: " + path);
-                // Try alternate path with a generic sword image
-                file = new File("Files/img/sword-placeholder.png");
-                if (file.exists()) {
-                    avatar = ImageIO.read(file);
-                } else {
-                    System.err.println("Weapon placeholder image not found. Trying generic placeholder.");
-                    file = new File("Files/img/Helmet-placeholder.png");
-                    if (file.exists()) {
-                        avatar = ImageIO.read(file);
-                    } else {
-                        throw new IOException("No placeholder images found");
-                    }
-                }
-            }
+
+            throw new IOException("No placeholder images found");
+
         } catch (IOException e) {
             System.err.println("Error loading weapon image: " + e.getMessage());
             e.printStackTrace();

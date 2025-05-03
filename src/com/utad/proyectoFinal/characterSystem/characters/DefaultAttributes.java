@@ -7,9 +7,6 @@ public final class DefaultAttributes {
     // Offensive attributes
     public static final Double ATTACK = 5.0;
 
-    // Defensive attributes
-    public static final Double DEFENSE = 0.0;
-
     // Upgrade attributes
     public static final Integer POTION_HEAL_AMOUNT = 50;
     public static final Integer UPGRADE_HEALTH_AMOUNT = 25;

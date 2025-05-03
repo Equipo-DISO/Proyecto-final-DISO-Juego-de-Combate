@@ -15,10 +15,6 @@ public class GenericItem implements MapObject {
     public GenericItemType getType() {
         return type;
     }
-    @Override
-    public BufferedImage getBufferedImage() {
-        return null;
-    }
 
     @Override
     public Image getImage() {

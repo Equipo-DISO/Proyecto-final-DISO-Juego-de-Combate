@@ -59,8 +59,8 @@ public class CriticalHitAndDurabilityTest extends JFrame {
             TestUtils.setTestingMode(true);
             
             // Initialize characters with a character image
-            BufferedImage attackerImage = loadImage("Files/img/GreenGuy.png");
-            BufferedImage defenderImage = loadImage("Files/img/RedGuy.png");
+            Image attackerImage = loadImage("Files/img/GreenGuy.png");
+            Image defenderImage = loadImage("Files/img/RedGuy.png");
             
             // Create characters
             attacker = new TestCharacter("Attacker", 20.0, 10.0, attackerImage);
@@ -487,7 +487,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         combatLog.setCaretPosition(combatLog.getDocument().getLength());
     }
     
-    private BufferedImage loadImage(String path) throws IOException {
+    private Image loadImage(String path) throws IOException {
         File file = new File(path);
         if (!file.exists()) {
             throw new IOException("File not found: " + path);

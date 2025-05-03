@@ -7,7 +7,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,9 +21,12 @@ import com.utad.proyectoFinal.characterSystem.tools.HelmetType;
 import com.utad.proyectoFinal.characterSystem.tools.WeaponType;
 
 /**
- * Test class that demonstrates character equipment visualization using BufferedImage
+ * Test class that demonstrates character equipment visualization using Image
  */
 public class BufferedImageCharacterTest extends JFrame {
+    
+    // Default defense value for testing
+    private static final Double DEFAULT_DEFENSE = 10.0;
     
     private TestCharacter character;
     private BaseWeapon sword;
@@ -32,7 +35,7 @@ public class BufferedImageCharacterTest extends JFrame {
     private JLabel characterInfoLabel;
     
     public BufferedImageCharacterTest() {
-        super("Character Equipment Test - BufferedImage");
+        super("Character Equipment Test - Image");
         
         // Set up frame properties
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -41,10 +44,10 @@ public class BufferedImageCharacterTest extends JFrame {
         
         try {
             // Initialize character with a character image
-            BufferedImage characterImage = loadImage("Files/img/GreenGuy.png");
+            Image characterImage = loadImage("Files/img/GreenGuy.png");
             character = new TestCharacter("Test Warrior", 
                                            DefaultAttributes.ATTACK, 
-                                           DefaultAttributes.DEFENSE, 
+                                           DEFAULT_DEFENSE, 
                                            characterImage);
 
 
@@ -218,7 +221,7 @@ public class BufferedImageCharacterTest extends JFrame {
         JOptionPane.showMessageDialog(this, stats.toString(), "Character Stats", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private BufferedImage loadImage(String path) throws IOException {
+    private Image loadImage(String path) throws IOException {
         File file = new File(path);
         if (!file.exists()) {
             throw new IOException("File not found: " + path);

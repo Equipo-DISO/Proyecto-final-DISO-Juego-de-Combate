@@ -1,6 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.images;
 
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 
 public abstract class ImageDecorator implements CharacterImage {
     protected final CharacterImage inner;
@@ -10,7 +10,7 @@ public abstract class ImageDecorator implements CharacterImage {
     }
     
     @Override
-    public BufferedImage getCompleteImage() {
+    public Image getCompleteImage() {
         // By default, get the inner component's complete image
         return inner.getCompleteImage();
     }
