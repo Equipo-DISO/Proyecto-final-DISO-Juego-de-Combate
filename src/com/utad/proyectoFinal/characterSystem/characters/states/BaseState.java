@@ -1,7 +1,9 @@
 package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
 import com.utad.proyectoFinal.characterSystem.tools.Calculator;
+import com.utad.proyectoFinal.mapa.GenericTile;
 import test.com.utad.proyectoFinal.characterSystem.TestUtils;
 
 public abstract class BaseState implements CharacterState {
@@ -33,7 +35,7 @@ public abstract class BaseState implements CharacterState {
     }
 
     @Override
-    public void handleAttack(BaseCharacter opponent) {
+    public void handleAttack(BaseCharacter opponent, AttackStrategy attackStrategy) {
         // Implementación por defecto (puede ser vacía o lanzar una excepción)
         throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
     }
@@ -46,7 +48,13 @@ public abstract class BaseState implements CharacterState {
 
 
     @Override
-    public void handleMove(Object toBeReplacedByTileClass) {
+    public void handleMove(GenericTile moveToTile) {
+        // Implementación por defecto (puede ser vacía o lanzar una excepción)
+        throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
+    }
+
+    @Override
+    public void handleHeal() {
         // Implementación por defecto (puede ser vacía o lanzar una excepción)
         throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
     }

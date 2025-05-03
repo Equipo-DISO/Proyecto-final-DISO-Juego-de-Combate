@@ -12,12 +12,13 @@ public final class DefaultAttributes {
     public static final Double DEFENSE = 0.0;
 
     // Action probabilities
-    public static final Double RETREAT_PROBABILITY = 20.0;
     public static final Double COUNTERATTACK_PROBABILITY = 10.0;
 
-    // Inventory limits
-    public static final Integer INITIAL_ITEMS = 0;
-    public static final Integer MAX_ITEMS = 5;
+    // Upgrade attributes
+    public static final Integer POTION_HEAL_AMOUNT = 50;
+    public static final Integer UPGRADE_HEALTH_AMOUNT = 25;
+    public static final Integer UPGRADE_MANA_AMOUNT = 20;
+
 
     // Mana attributes
     public static final Integer MANA_POINTS = 50;

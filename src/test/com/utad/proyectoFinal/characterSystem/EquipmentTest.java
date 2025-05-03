@@ -99,7 +99,7 @@ public class EquipmentTest {
         final BaseHelmet helmet = new BaseHelmet(HelmetType.DEMON_HELMET);
         
         JButton addWeaponBtn = new JButton("Add Weapon");
-        addWeaponBtn.addActionListener(_ -> {
+        addWeaponBtn.addActionListener(e -> {
             character.setWeapon(sword);
             weaponLabel.setText("Weapon: " + sword.getName());
             attackLabel.setText(ATTACK +
@@ -109,7 +109,7 @@ public class EquipmentTest {
         });
         
         JButton removeWeaponBtn = new JButton("Remove Weapon");
-        removeWeaponBtn.addActionListener(_ -> {
+        removeWeaponBtn.addActionListener(e -> {
             character.setWeapon(null);
             weaponLabel.setText("Weapon: None");
             attackLabel.setText(ATTACK + character.getBaseAttack());
@@ -118,7 +118,7 @@ public class EquipmentTest {
         });
         
         JButton addHelmetBtn = new JButton("Add Helmet");
-        addHelmetBtn.addActionListener(_ -> {
+        addHelmetBtn.addActionListener(e -> {
             character.setHelmet(helmet);
             helmetLabel.setText("Helmet: " + helmet.getName());
             defenseLabel.setText(DEFENSE +
@@ -128,7 +128,7 @@ public class EquipmentTest {
         });
         
         JButton removeHelmetBtn = new JButton("Remove Helmet");
-        removeHelmetBtn.addActionListener(_ -> {
+        removeHelmetBtn.addActionListener(e -> {
             character.setHelmet(null);
             helmetLabel.setText("Helmet: None");
             defenseLabel.setText(DEFENSE + character.getBaseDefense());

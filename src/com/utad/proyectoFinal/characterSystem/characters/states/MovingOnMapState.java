@@ -1,6 +1,8 @@
 package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
+import com.utad.proyectoFinal.mapa.GenericTile;
 
 /**
  * Estado que representa cuando el personaje se mueve en el mapa.
@@ -14,7 +16,7 @@ public class MovingOnMapState extends BaseState {
     }
 
     @Override
-    public void handleAttack(BaseCharacter opponent) {
+    public void handleAttack(BaseCharacter opponent, AttackStrategy attackStrategy) {
         System.out.printf("%s está moviéndose y no puede atacar en este momento.%n",
                 character.getName());
     }
@@ -26,7 +28,7 @@ public class MovingOnMapState extends BaseState {
     }
 
     @Override
-    public void handleMove(Object tile) {
+    public void handleMove(GenericTile moveToTile) {
         // Lógica de movimiento (a implementar cuando se tenga la clase Tile)
         System.out.printf("%s se ha movido a una nueva posición.%n", character.getName());
 

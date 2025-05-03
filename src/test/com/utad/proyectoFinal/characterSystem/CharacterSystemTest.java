@@ -1,13 +1,13 @@
 package test.com.utad.proyectoFinal.characterSystem;
 
 import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
-import com.utad.proyectoFinal.characterSystem.characters.states.AttackingState;
-import com.utad.proyectoFinal.characterSystem.characters.states.BaseState;
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
 import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
 import com.utad.proyectoFinal.characterSystem.tools.HelmetType;
 import com.utad.proyectoFinal.characterSystem.tools.WeaponType;
+import com.utad.proyectoFinal.mapa.GenericTile;
 
 /**
  * Test class for the character system.
@@ -150,7 +150,7 @@ public class CharacterSystemTest {
         // Save current state to verify it's Idle
         CharacterState initialState = character.getCurrentState();
         // Call handleAttack on the current state (which should be Idle)
-        initialState.handleAttack(opponent);
+        initialState.handleAttack(opponent, new HeavyAttackStrategy());
         System.out.println("Current state: " + character.getCurrentState().getName());
         if (character.getCurrentState().getName().equals("Attacking")) {
             System.out.println("✓ Transition to Attacking state via handleAttack test passed");
@@ -182,7 +182,7 @@ public class CharacterSystemTest {
         // First, reduce mana to trigger tired state
         character.setManaPoints(DefaultAttributes.LOW_MANA_THRESHOLD - 1);
         // Call handleAttack which should check mana and transition to Tired
-        character.getCurrentState().handleAttack(opponent);
+        character.getCurrentState().handleAttack(opponent, new HeavyAttackStrategy());
         System.out.println("Current state: " + character.getCurrentState().getName());
         if (character.getCurrentState().getName().equals("Tired")) {
             System.out.println("✓ Transition to Tired state test passed");
@@ -223,7 +223,7 @@ public class CharacterSystemTest {
 
         // Transition to Attacking state by calling handleAttack on Idle state
         System.out.println("Transitioning to Attacking state via handleAttack...");
-        character.getCurrentState().handleAttack(opponent);
+        character.getCurrentState().handleAttack(opponent, new HeavyAttackStrategy());
         System.out.println("Current state after attack: " + character.getCurrentState().getName());
 
         // In testing mode, the state should remain Attacking and not auto-transition to Idle
@@ -272,7 +272,7 @@ public class CharacterSystemTest {
         // Test MovingOnMap State
         System.out.println("\nTesting MovingOnMap State without auto-transition...");
         character.setIdleState(); // Start from Idle
-        character.getCurrentState().handleMove(new Object()); // Placeholder object
+        character.getCurrentState().handleMove(new GenericTile(1, 1, 1)); // Placeholder object
         System.out.println("Current state after move: " + character.getCurrentState().getName());
         if (character.getCurrentState().getName().equals("MovingOnMap")) {
             System.out.println("✓ State remains MovingOnMap after move (no auto-transition)");
@@ -284,7 +284,7 @@ public class CharacterSystemTest {
         System.out.println("\nTesting Tired State without auto-transition...");
         character.setIdleState(); // Start from Idle
         character.setManaPoints(DefaultAttributes.LOW_MANA_THRESHOLD - 1); // Set low mana
-        character.getCurrentState().handleAttack(opponent); // Should transition to Tired
+        character.getCurrentState().handleAttack(opponent, new HeavyAttackStrategy()); // Should transition to Tired
         System.out.println("Current state after attack with low mana: " + character.getCurrentState().getName());
         if (character.getCurrentState().getName().equals("Tired")) {
             System.out.println("✓ State remains Tired after attack with low mana (no auto-transition)");

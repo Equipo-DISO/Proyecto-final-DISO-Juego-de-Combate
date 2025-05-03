@@ -7,45 +7,48 @@ public class WeaponDecorator extends EquipmentDecorator {
     private BufferedImage weapon;
     
     // Constants for weapon positioning
-    private static final double WEAPON_RELATIVE_X = 0.8; // Position to the right side of the character
-    private static final double WEAPON_RELATIVE_Y = 0.4; // Position in the middle-right of the character
-    private static final double WEAPON_WIDTH_RATIO = 0.6; // The weapon will be 60% of the character width
+    private static final double WEAPON_RELATIVE_X = 0.6; // Position weapon to the right side
+    private static final double WEAPON_RELATIVE_Y = 0.3; // Position weapon at about the middle
+    private static final double WEAPON_WIDTH_RATIO = 0.65; // Weapon will be 65% of character width
     
-    public WeaponDecorator(CharacterImage decoratedImage, BufferedImage weaponAvatar) {
+    public WeaponDecorator(CharacterImage decoratedImage, BufferedImage weaponImage) {
         super(decoratedImage);
-        this.weapon = weaponAvatar;
+        this.weapon = weaponImage;
     }
 
     @Override
-    public void render(Graphics2D g, int x, int y) {
-        // First render the decorated image (character with any previous decorations)
-        super.decoratedImage.render(g, x, y);
-        
-        if (weapon != null) {
-            // Get the original image to know its dimensions
-            BufferedImage originalImage = getOriginalBufferedImage();
-            
-            // If we can't get the original image, use default values
-            int characterWidth = originalImage != null ? originalImage.getWidth() : 82;
-            int characterHeight = originalImage != null ? originalImage.getHeight() : 100;
-            
-            // Get original weapon dimensions
-            int originalWeaponWidth = weapon.getWidth();
-            int originalWeaponHeight = weapon.getHeight();
-            
-            // Calculate new weapon width based on character width
-            int newWeaponWidth = (int)(characterWidth * WEAPON_WIDTH_RATIO);
-            
-            // Maintain weapon proportions
-            double scaleFactor = (double)newWeaponWidth / originalWeaponWidth;
-            int newWeaponHeight = (int)(originalWeaponHeight * scaleFactor);
-            
-            // Calculate position to place weapon in the character's hand
-            int weaponX = x + (int)(characterWidth * WEAPON_RELATIVE_X) - (newWeaponWidth / 2);
-            int weaponY = y + (int)(characterHeight * WEAPON_RELATIVE_Y);
-            
-            // Draw the scaled weapon
-            g.drawImage(weapon, weaponX, weaponY, newWeaponWidth, newWeaponHeight, null);
+    public BufferedImage getCompleteImage() {
+        BufferedImage baseImage = decoratedImage.getCompleteImage();
+        if (weapon == null) {
+            return baseImage;
         }
+        // Original dimensions
+        int characterWidth = baseImage.getWidth();
+        int characterHeight = baseImage.getHeight();
+        int originalWeaponWidth = weapon.getWidth();
+        int originalWeaponHeight = weapon.getHeight();
+        // Scaled weapon size
+        int newWeaponWidth = (int)(characterWidth * WEAPON_WIDTH_RATIO);
+        double scaleFactor = (double)newWeaponWidth / originalWeaponWidth;
+        int newWeaponHeight = (int)(originalWeaponHeight * scaleFactor);
+        // Weapon position relative to base
+        int weaponX = (int)(characterWidth * WEAPON_RELATIVE_X);
+        int weaponY = (int)(characterHeight * WEAPON_RELATIVE_Y);
+        // Compute bounding box to allow overflow
+        int minX = Math.min(0, weaponX);
+        int minY = Math.min(0, weaponY);
+        int maxX = Math.max(characterWidth, weaponX + newWeaponWidth);
+        int maxY = Math.max(characterHeight, weaponY + newWeaponHeight);
+        int resultWidth = maxX - minX;
+        int resultHeight = maxY - minY;
+        // Create result canvas that fits both base and weapon
+        BufferedImage result = new BufferedImage(resultWidth, resultHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = result.createGraphics();
+        // Draw base image with offset
+        g.drawImage(baseImage, -minX, -minY, null);
+        // Draw weapon overlay with offset
+        g.drawImage(weapon, weaponX - minX, weaponY - minY, newWeaponWidth, newWeaponHeight, null);
+        g.dispose();
+        return result;
     }
 }
