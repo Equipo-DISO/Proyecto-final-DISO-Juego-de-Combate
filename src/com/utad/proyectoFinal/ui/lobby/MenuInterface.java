@@ -3,6 +3,7 @@ package com.utad.proyectoFinal.ui.lobby;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 import com.utad.proyectoFinal.ui.Interface;
@@ -235,20 +236,26 @@ public class MenuInterface extends JFrame implements Interface {
         return dataList;
     }
 
-    public String getPlayerPath(){
-        return playerImagePath;
-    }
-
     public LinkedList<Bot> getBotList(){
         LinkedList<Bot> botList = new LinkedList<Bot>();
+        int j = 0;
 
         for (int i = 0; i < bots.size(); i++){
+            String path = InterfacePath.PLAYER.getPath(InterfacePath.colorsList[j++]);
+            if (path.equals(playerImagePath)) j++;
+
             Bot bot = new Bot(((JLabel) bots.get(i).getComponent(1)).getText());
-            bot.setImage(playerImagePath);
+            bot.setImage(path);
             botList.add(bot);
         }
 
         return botList;
+    }
+
+    public BaseCharacter getPlayerCharacter() {
+        BaseCharacter player = new BaseCharacter(nombreLabel.getText(), 10.0);
+        player.setImage(playerImagePath);
+        return player;
     }
 }
 
