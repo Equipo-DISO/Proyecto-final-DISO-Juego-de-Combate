@@ -242,7 +242,10 @@ public class MenuInterface extends JFrame implements Interface {
 
         for (int i = 0; i < bots.size(); i++){
             String path = InterfacePath.PLAYER.getPath(InterfacePath.colorsList[j++]);
-            if (path.equals(playerImagePath)) j++;
+            if (path.equals(playerImagePath)) 
+            {
+                path = InterfacePath.PLAYER.getPath(InterfacePath.colorsList[j++]);
+            }
 
             Bot bot = new Bot(((JLabel) bots.get(i).getComponent(1)).getText());
             bot.setImage(path);
