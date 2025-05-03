@@ -125,8 +125,6 @@ public class MapGenerator extends JPanel
 
         this.graph.connectSubGraphs(generatedMap);
 
-       
-
         return generatedMap;
     }
     
@@ -216,8 +214,8 @@ public class MapGenerator extends JPanel
         g2d.setColor(Color.DARK_GRAY); 
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
-       //g2d.drawImage(new SimplifiedImage("Files/img/player.png").generateImage(30, 30), 200, 200, boxWidth, boxHeight, null);
-       createText(g2d, boxX + 55, boxY + 45, "nig/15", 20f);
+       g2d.drawImage(new SimplifiedImage("Files/img/PeopleIcon.png").generateBufferedImage(), boxX + 15, boxY + 20, 30, 30, null);
+       createText(g2d, boxX + 50, boxY + 40, "nig/15", 20f);
     }
 
     private void createText(Graphics2D g2d, Integer posX, Integer posY, String msg, Float fontSize)
