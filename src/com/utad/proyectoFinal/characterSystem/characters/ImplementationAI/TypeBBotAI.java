@@ -1,6 +1,9 @@
 package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
 
 import com.utad.proyectoFinal.mapa.GenericTile;
+import com.utad.proyectoFinal.mapa.MapGenerator;
+import com.utad.proyectoFinal.mapa.TileGraph;
+
 import java.util.*;
 
 public class TypeBBotAI extends BotAI {
@@ -8,16 +11,13 @@ public class TypeBBotAI extends BotAI {
     @Override
     public void analyzeSituation(Bot bot) {
         //same para Type B bot
-        this.targets = filtrarObjetivos(bot, false);
+        // TODO: filtrarObjetivos
+//        this.targets = MapGenerator.getInstance().filtrarObjetivos(bot, false);
     }
 
-    @Override
-    protected void decideNextMove(GenericTile tile, Bot bot) {
-
-    }
 
     @Override
-    public void decideNextMove(GenericTile tile) {
+    public void decideNextMove(GenericTile tile, Bot bot) {
         //same para Type B bot
         if (targets == null || targets.isEmpty()){
             return;

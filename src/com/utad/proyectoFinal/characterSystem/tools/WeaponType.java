@@ -2,8 +2,8 @@ package com.utad.proyectoFinal.characterSystem.tools;
 
 public enum WeaponType {
     // Define weapon types with their attributes
-    TISSUE("Tissue", 2.0, 0.05, 1.05, 2, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG),
-    STICK("Stick", 5.0, 0.10, 1.10, 3, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG),
+    STICK("Tissue", 2.0, 0.05, 1.05, 2, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG),
+    KNIFE("Stick", 5.0, 0.10, 1.10, 3, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG),
     DAGGER("Dagger", 10.0, 0.20, 1.20, 4, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG),
     SWORD("Sword", 20.0, 0.10, 1.50,5, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG),
     SPEAR("Spear", 15.0, 0.15, 1.30, 6, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG);

@@ -10,7 +10,7 @@ public abstract class BotAI {
     // Método plantilla para recoger las 3 distintas acciones
     public final void executeTurn(Bot bot) {
         analyzeSituation(bot);
-        decideNextMove(bot.getCurrentPosition(), this);
+        decideNextMove(bot.getCurrentPosition(), bot);
         performAction(bot);
     }
 

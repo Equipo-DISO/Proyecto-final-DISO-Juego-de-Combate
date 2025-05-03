@@ -42,11 +42,12 @@ public class TypeABotAI extends BotAI {
             if (!(tile instanceof GenericTile)) continue;
             GenericTile gTile = (GenericTile) tile;
 
-            if (gTile.hasItem()) {
-                items.add(gTile);
-            } else if (gTile.contieneEnemigo(bot)) {
-                enemigos.add(gTile);
-            }
+            // TODO: filtrarObjetivos
+//            if (gTile.hasItem()) {
+//                items.add(gTile);
+//            } else if (gTile.contieneEnemigo(bot)) {
+//                enemigos.add(gTile);
+//            }
         }
 
         List<GenericTile> result = new ArrayList<>();
