@@ -13,7 +13,7 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.45d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.4d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
 
@@ -48,7 +48,6 @@ public class MapGenerator extends JPanel
         this.screenX = x;
         this.screenY = y;
         this.tiles = createHexGrid();
-        debugPathFinding();
         this.disableMap = false;
 
         this.viewportX = 0;
@@ -57,6 +56,8 @@ public class MapGenerator extends JPanel
         this.listener = new MapListener(this, this.tiles);
         this.addMouseListener(this.listener);
         this.addMouseMotionListener(this.listener);
+
+        pathFindingTesting();
     }
 
     public void displayMap()
@@ -114,7 +115,7 @@ public class MapGenerator extends JPanel
                 Integer newTileId = generatedMap.size();
 
 
-                TileAbstract tile = this.factory.createTile(tileX, tileY, newTileId);
+                TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId);
                 generatedMap.add(tile);
 
                 if (tile instanceof GenericTile)
@@ -314,25 +315,50 @@ public class MapGenerator extends JPanel
      * 
      */
 
-    private void debugPathFinding()
+    private GenericTile getRandomTile()
     {
-         // Define punto de inicio y destino
-        GenericTile startTile = (GenericTile) this.tiles.get(0);
-        GenericTile endTile = (GenericTile) this.tiles.get(60);
+        TileAbstract t = this.tiles.get((int) (Math.random() * this.tiles.size()));
+
+
+        if (t instanceof GenericTile)
+        {
+            return (GenericTile) t;
+        }
+        else
+        {
+           return getRandomTile();
+        }
+    }
+
+    private void pathFindingTesting()
+    {
+        GenericTile startTile = getRandomTile();
+        GenericTile endTile = getRandomTile();
         
-        // Encuentra el camino
-        List<GenericTile> path = this.graph.pathFinding(startTile, List.of(endTile), this.tiles);
+
+        List<GenericTile> myTiles = new ArrayList<>();
+
+        for (TileAbstract tile : this.tiles) 
+        {
+            if (tile instanceof GenericTile)
+            {
+                myTiles.add((GenericTile) tile);
+            }
+        }
+
+      
+
+        List<GenericTile> path = this.graph.pathFinding(startTile, endTile.getTileId(), myTiles);
+        System.out.println("path size " + path.size());
         
-        // Resalta las tiles del camino
-        for (GenericTile tile : path) {
-            tile.setDebugColor(Color.YELLOW);  // Color para el camino
+        for (GenericTile tile : path) 
+        {
+            tile.setDebugColor(Color.YELLOW);  
         }
         
-        // Resalta inicio y fin con colores diferentes
-        startTile.setDebugColor(Color.GREEN);  // Color para el inicio
-        endTile.setDebugColor(Color.RED);      // Color para el destino
+        startTile.setDebugColor(Color.GREEN); 
+        endTile.setDebugColor(Color.RED);      
         
-        // Actualiza la representación visual
         updateRendering();
     }
 
@@ -375,10 +401,10 @@ public class MapGenerator extends JPanel
     }
 
 
-    public List<GenericTile> getPathToObjective(GenericTile currentPos, List<GenericTile> botTargets)
-    {
-        return this.graph.pathFinding(currentPos, botTargets, this.tiles);
-    }
+    // public List<GenericTile> getPathToObjective(GenericTile currentPos, List<GenericTile> botTargets)
+    // {
+    //     return this.graph.pathFinding(currentPos, botTargets, this.tiles);
+    // }
 
     public void moveViewport(Integer dx, Integer dy) 
     {

@@ -65,7 +65,7 @@ public class MapListener extends MouseAdapter
         {
             if (t.contains(p.x, p.y)) 
             {
-                //System.out.println("Has clicado la tile en: " + t.getTileId());
+                System.out.println("Has clicado la tile en: " + t.getTileId());
                 break;
             }
         }

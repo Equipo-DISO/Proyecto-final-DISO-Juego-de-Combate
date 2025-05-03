@@ -3,9 +3,12 @@ package com.utad.proyectoFinal.mapa;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class TileGraph 
 {
@@ -168,67 +171,55 @@ public class TileGraph
         }
     }
 
-    public List<GenericTile> pathFinding(GenericTile start, List<GenericTile> targets, List<TileAbstract> allTiles)
-    {
 
-        Map<Integer, GenericTile> idToTile = new HashMap<>(); //hash que traduce Id's into ObjetoTile
-        boolean[] visited = new boolean[this.totalNodes];
+    public List<GenericTile> pathFinding(GenericTile start, Integer targetTileId, List<GenericTile> allTiles) 
+    {
         List<GenericTile> path = new ArrayList<>();
+        Set<Integer> visited = new HashSet<>();
 
-        for(TileAbstract tile: allTiles)
-        {
-            //por cada tile del mapa, verifico si es un GenericTile
-            if(tile instanceof GenericTile)
-            {
-                //insertamos el tile en el hash
-                idToTile.put(tile.getTileId(), (GenericTile) tile);
-            }
-        }
+        int[] found = new int[1];
+        found[0] = 0;
+        
+        pathFindingRecursive(start, targetTileId, allTiles, path, visited, found);
+        
 
-        for(GenericTile target : targets)
-        {
-            Arrays.fill(visited, false);
-            path.clear();
-            //prueba si hay un camino entre start y target y si lo encuentra lo aloja en path
-            if(dfsPath(start, target, visited, path, idToTile))
-            {
-                return path;
-            }
-        }
-
-        return null;
+        return path; 
     }
 
-    private boolean dfsPath(GenericTile current, GenericTile target, boolean[] visited, List<GenericTile> path, Map<Integer, GenericTile> idToTile) 
+    private void pathFindingRecursive(GenericTile current, Integer targetTileId, List<GenericTile> allTiles, List<GenericTile> path, Set<Integer> visited, int[] found) 
     {
-
-        visited[current.getTileId()] = true;
         path.add(current);
+        visited.add(current.getTileId());
+       
+        if (found[0] == 1) { return; }
 
-
-        if(current.equals(target))
-        {
-            return true;
+        if (current.getTileId().equals(targetTileId)) 
+        {   
+            found[0] = 1; 
+            return; 
         }
 
-        for(Integer neighBorId = 0; neighBorId < totalNodes; neighBorId++)
+        
+        for (int neighborId = 0; neighborId < this.totalNodes && (found[0] == 0); neighborId++) 
         {
-            if(adjacencyMatrix[current.getTileId()][neighBorId] != null && adjacencyMatrix[current.getTileId()][neighBorId] > 0 && !visited[neighBorId])
+            if (neighborId >= allTiles.size()) continue;
+            
+            GenericTile neighbor = allTiles.get(neighborId);
+            
+            if (this.adjacencyMatrix[current.getTileId()][neighbor.getTileId()] > 0 && !visited.contains(neighbor.getTileId())) 
             {
-                //filtramos si hay conexion > 0 entre actual y vecino y si no hemos visitado todavía el vecino
-                GenericTile neighbor = idToTile.get(neighBorId);
-
-                if(neighbor != null && dfsPath(neighbor, target, visited, path, idToTile))
-                {
-                    return true; //si el camino por el vecino funciona, devuelve true
-                }
+                pathFindingRecursive(neighbor, targetTileId, allTiles, path, visited, found);
             }
         }
-
-        path.remove(path.size() - 1); //backtrack
-        return false;
+        
+       
+        if (found[0] == 0) 
+        {
+            path.remove(path.size() - 1);
+        }
     }
 
 
+   
     public Integer[][] getAdjacencyMatrix() { return this.adjacencyMatrix; }
 }
