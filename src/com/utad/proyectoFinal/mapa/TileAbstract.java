@@ -104,7 +104,7 @@ public abstract class TileAbstract
         if (ocupiedObject instanceof MapObject)
         {
             MapObject o = (MapObject) ocupiedObject;
-            setSpecialImage(o.getBufferedImage());
+            setSpecialImage(o.getImage());
         }
     }
 
