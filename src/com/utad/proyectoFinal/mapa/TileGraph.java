@@ -194,7 +194,7 @@ public class TileGraph
             }
             
         
-            for (int neighborId = 0; neighborId < this.totalNodes; neighborId++) 
+            for (Integer neighborId = 0; neighborId < this.totalNodes; neighborId++) 
             {
 
                 TileAbstract neighbor = allTiles.get(neighborId);
