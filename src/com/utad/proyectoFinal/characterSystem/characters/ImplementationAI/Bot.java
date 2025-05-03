@@ -15,6 +15,7 @@ public class Bot extends BaseCharacter {
     private MapGenerator map;
     public Bot() {
         this(BOTNAME, ATTACK, DEFENSE);
+
     }
 
     public Bot(String name, Double baseAttack, Double baseDefense) {

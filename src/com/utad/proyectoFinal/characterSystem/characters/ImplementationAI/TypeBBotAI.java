@@ -1,8 +1,12 @@
 package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
 
+import com.utad.proyectoFinal.characterSystem.characters.states.AttackingState;
+import com.utad.proyectoFinal.characterSystem.characters.states.MovingOnMapState;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 import com.utad.proyectoFinal.mapa.TileGraph;
+import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
+import com.utad.proyectoFinal.mapa.ClosestLootStrategy;
 
 import java.util.*;
 
@@ -11,24 +15,19 @@ public class TypeBBotAI extends BotAI {
     @Override
     public void analyzeSituation(Bot bot) {
         //same para Type B bot
-        // TODO: filtrarObjetivos
-//        this.targets = MapGenerator.getInstance().filtrarObjetivos(bot, false);
+        // TODO: pathfinding
+        this.targets = MapGenerator.getInstance(0,0, 0, 0).getPathToObjective(bot.getCurrentPosition(), new ClosestEnemyStrategy());
     }
 
 
     @Override
     public void decideNextMove(GenericTile tile, Bot bot) {
         //same para Type B bot
-        if (targets == null || targets.isEmpty()){
-            return;
-        }
-
-        TileGraph graph = bot.getMap().getGraph();
-        List<GenericTile> path = graph.pathFinding(tile, targets, bot.getMap().getTiles());
-
-
-        if (path != null && path.size() > 1) {
-            bot.setCurrentPosition(path.get(1)); // avanzar un paso
+        if(targets.size() < 3){
+            //tenemos el enemy al lado, seteamos attacking state
+            //bot.attack()
+        }else{
+            //bot.move();
         }
     }
 

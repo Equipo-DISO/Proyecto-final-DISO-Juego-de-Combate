@@ -9,7 +9,7 @@ public class MovingOnMapState extends BaseState {
 
     // Ya no hay coste de maná para moverse
 
-    MovingOnMapState(BaseCharacter character) {
+    public MovingOnMapState(BaseCharacter character) {
         super(character);
     }
 
