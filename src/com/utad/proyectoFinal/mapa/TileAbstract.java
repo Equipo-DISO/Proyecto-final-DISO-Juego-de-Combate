@@ -1,11 +1,9 @@
 package com.utad.proyectoFinal.mapa;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.ui.SimplifiedImage;
 
-import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 
 
 public abstract class TileAbstract 
@@ -16,8 +14,8 @@ public abstract class TileAbstract
 	public static final Integer HEXAGON_HEIGHT = 2 * TileAbstract.HEXAGON_RADIOUS;
 
     
-	public static final Integer IMAGE_WIDTH  = (int) (0.8 * TileAbstract.HEXAGON_WIDTH); 
-	public static final Integer IMAGE_HEIGHT = (int) (0.8 * TileAbstract.HEXAGON_HEIGHT); 
+	public static final Integer IMAGE_WIDTH  = (int) (0.43 * TileAbstract.HEXAGON_WIDTH); 
+	public static final Integer IMAGE_HEIGHT = (int) (0.43 * TileAbstract.HEXAGON_HEIGHT); 
 
     protected Integer radious;
 
@@ -31,7 +29,7 @@ public abstract class TileAbstract
 
 	protected Object  ocupiedObject; 
 	protected boolean isHovered;
-	protected BufferedImage specialImage;
+	protected Image specialImage;
 
 
     public TileAbstract(Integer x, Integer y, Integer id)
@@ -46,7 +44,7 @@ public abstract class TileAbstract
         
         this.ocupiedObject = null;
         this.isHovered = false;
-        this.specialImage = null;
+        this.specialImage = new SimplifiedImage("Files/img/Pergamino.png").generateImage();
     }
 
     protected void createHexagon()
@@ -111,7 +109,7 @@ public abstract class TileAbstract
         }
     }
 
-    protected void setSpecialImage(BufferedImage specialImage) { this.specialImage = specialImage; }
+    protected void setSpecialImage(Image specialImage) { this.specialImage = specialImage; }
 
     @Override
     public String toString() 
