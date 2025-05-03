@@ -309,6 +309,10 @@ public class MapGenerator extends JPanel
     public void updateRendering() { this.repaint(); }
     public boolean isDisabled()   { return this.disableMap; }
     public Integer calculateTotalTiles() { return 1 + 3 * this.gridSize * (this.gridSize + 1); }
+
+    public List<TileAbstract> getTiles() {
+        return this.tiles;
+    }
 }
 
 

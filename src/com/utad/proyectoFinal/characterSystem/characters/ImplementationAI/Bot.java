@@ -26,7 +26,7 @@ public class Bot extends BaseCharacter {
         super(name, baseAttack, baseDefense);
     }
 
-    public void BotMove(GenericTile random) {
+    public void BotMove() {
         if (botAi != null) {
             botAi.executeTurn(this);
         } else {
@@ -61,19 +61,19 @@ public class Bot extends BaseCharacter {
 
     //public void setCurrentHelmet(BaseHelmet currentHelmet) {;}
 
-    public BaseWeapon getCurrentWeapon() {
+    /*public BaseWeapon getCurrentWeapon() {
         return getWeapon();
     }
-
+    */
     //public void setCurrentWeapon(BaseWeapon currentWeapon) {
     //this.currentWeapon = currentWeapon;
     //}
 
     public MapGenerator getMap(){
-    return this.map;
-}
+        return this.map;
+    }
 
     public void setMap(MapGenerator map){
-    this.map = map;
-}
+        this.map = map;
+    }
 }
