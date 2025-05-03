@@ -1,5 +1,7 @@
 package com.utad.proyectoFinal.mapa;
 
+import com.utad.proyectoFinal.ui.SimplifiedImage;
+
 public class NormalTileFactory extends TileFactory
 {
 
@@ -23,6 +25,13 @@ public class NormalTileFactory extends TileFactory
     @Override
     public TileAbstract generateRandomTile(Integer x, Integer y, Integer tileId) 
     {
-        return Math.random() < MapGenerator.DEFAULT_OBSTACLE_PROBABILITY ? this.creatileObstacle(x, y, tileId) : this.createTile(x, y, tileId);
+        TileAbstract tile = (Math.random() < MapGenerator.DEFAULT_OBSTACLE_PROBABILITY ? this.creatileObstacle(x, y, tileId) : this.createTile(x, y, tileId));
+
+        if (Math.random() < MapGenerator.DEFAULT_LOOT_PROBABILITY)
+        {
+            tile.setSpecialImage(new SimplifiedImage("Files/img/Pergamino.png").generateImage());
+        }
+
+        return tile;
     }
 }

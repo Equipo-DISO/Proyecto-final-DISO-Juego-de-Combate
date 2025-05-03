@@ -43,7 +43,7 @@ public abstract class TileAbstract
         
         this.ocupiedObject = null;
         this.isHovered = false;
-        this.specialImage = new SimplifiedImage("Files/img/Pergamino.png").generateImage();
+        this.specialImage = null;
     }
 
     protected void createHexagon()
