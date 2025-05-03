@@ -13,7 +13,7 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.45d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.4d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
 
 
@@ -56,6 +56,8 @@ public class MapGenerator extends JPanel
         this.listener = new MapListener(this, this.tiles);
         this.addMouseListener(this.listener);
         this.addMouseMotionListener(this.listener);
+
+        pathFindingTesting();
     }
 
     public void displayMap()
@@ -125,6 +127,8 @@ public class MapGenerator extends JPanel
 
         this.graph.connectSubGraphs(generatedMap);
 
+       
+
         return generatedMap;
     }
     
@@ -143,7 +147,8 @@ public class MapGenerator extends JPanel
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.tiles.forEach(t -> t.drawTile(g2d));
         
-        //generateDebugLines(g2d);
+        
+        generateDebugLines(g2d);
       
 
         if (this.disableMap)
@@ -309,6 +314,42 @@ public class MapGenerator extends JPanel
      *      MOVIDAS GRAFO
      * 
      */
+
+    private GenericTile getRandomTile()
+    {
+        TileAbstract t = this.tiles.get((int) (Math.random() * this.tiles.size()));
+
+
+        if (t instanceof GenericTile)
+        {
+            return (GenericTile) t;
+        }
+        else
+        {
+           return getRandomTile();
+        }
+    }
+
+    private void pathFindingTesting()
+    {
+        GenericTile startTile = getRandomTile();
+        GenericTile endTile = getRandomTile();
+        
+
+    
+        List<GenericTile> path = this.graph.pathFindingBFS(startTile, endTile.getTileId(), this.tiles);
+        
+        for (GenericTile tile : path) 
+        {
+            tile.setDebugColor(Color.YELLOW);  
+        }
+        
+        startTile.setDebugColor(Color.GREEN); 
+        endTile.setDebugColor(Color.RED);      
+        
+        updateRendering();
+    }
+
     private void generateDebugLines(Graphics2D g2d)
     {
 
@@ -332,12 +373,9 @@ public class MapGenerator extends JPanel
     }
 
     /**
-    * 
-    * 
     * @param character Character that desires to move
     * @param objective Destination tile
     */
-
     public void moveToTile(BaseCharacter character, GenericTile objective)
     {
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
@@ -347,11 +385,17 @@ public class MapGenerator extends JPanel
 
     }
 
-
-    public List<GenericTile> getPathToObjective(GenericTile currentPos, List<GenericTile> botTargets)
+    /**
+    * @param currentPos Current position
+    * @param strategy Get your closest point of interest
+    * @return returns list of tiles as a path
+    */
+    public List<GenericTile> getPathToObjective(GenericTile currentPos, PathFindingStrategy strategy)
     {
-        return this.graph.pathFinding(currentPos, botTargets, this.tiles);
+        return this.graph.pathFindingBFS(currentPos, strategy.getTargetTileId(currentPos, this.tiles), this.tiles);
     }
+
+
 
     public void moveViewport(Integer dx, Integer dy) 
     {
