@@ -64,6 +64,7 @@ public class MapGenerator extends JPanel
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1300, 800);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.add(this);
         frame.setVisible(true);
         frame.setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
@@ -319,8 +320,8 @@ public class MapGenerator extends JPanel
 
     public void moveViewport(Integer dx, Integer dy) 
     {
-        int minX = -350;
-        int minY = -300;
+        int minX = -1200;
+        int minY = -400;
         int maxX =  300;
         int maxY =  300;
         

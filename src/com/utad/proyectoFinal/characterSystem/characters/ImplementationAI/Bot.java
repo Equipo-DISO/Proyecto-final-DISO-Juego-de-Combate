@@ -16,12 +16,16 @@ public class Bot extends BaseCharacter {
     private MapGenerator map;
 
     public Bot() {
-        this(BOTNAME, ATTACK);
-        botActionType = BotActionType.NONE;
+        this(BOTNAME);
+    }
+
+    public Bot(String name) {
+        this(name, ATTACK);
     }
 
     public Bot(String name, Double baseAttack) {
         super(name, baseAttack);
+        botActionType = BotActionType.NONE;
     }
 
     public void BotMove() {

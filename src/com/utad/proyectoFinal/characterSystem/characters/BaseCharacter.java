@@ -60,7 +60,7 @@ public class BaseCharacter implements CombatCharacter, MapObject {
 
     // Sistema de decoradores de imagen
     protected CharacterImage characterImage;
-    protected final BufferedImage baseAvatar; // Guarda la imagen base original
+    protected BufferedImage baseAvatar; // Guarda la imagen base original
 
 
     // Atributos de posicionamiento
@@ -377,5 +377,13 @@ public class BaseCharacter implements CombatCharacter, MapObject {
     public Image getImage() {
         // Devuelve la imagen decorada completa
         return SimplifiedImage.generateImage(getCompleteImage());
+    }
+
+    // Image
+    public void setImage(String path){
+        try {this.baseAvatar = ImageIO.read(new File(path)); }
+        catch (IOException e) {
+            loadDefaultAvatar();
+        }
     }
 }
