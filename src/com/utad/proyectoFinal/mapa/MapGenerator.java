@@ -336,20 +336,8 @@ public class MapGenerator extends JPanel
         GenericTile endTile = getRandomTile();
         
 
-        List<GenericTile> myTiles = new ArrayList<>();
-
-        for (TileAbstract tile : this.tiles) 
-        {
-            if (tile instanceof GenericTile)
-            {
-                myTiles.add((GenericTile) tile);
-            }
-        }
-
-      
-
-        List<GenericTile> path = this.graph.pathFinding(startTile, endTile.getTileId(), myTiles);
-        System.out.println("path size " + path.size());
+    
+        List<GenericTile> path = this.graph.pathFindingBFS(startTile, endTile.getTileId(), this.tiles);
         
         for (GenericTile tile : path) 
         {

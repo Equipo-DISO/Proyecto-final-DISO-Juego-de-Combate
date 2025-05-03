@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -172,51 +173,45 @@ public class TileGraph
     }
 
 
-    public List<GenericTile> pathFinding(GenericTile start, Integer targetTileId, List<GenericTile> allTiles) 
+    public List<GenericTile> pathFindingBFS(GenericTile start, Integer targetTileId, List<TileAbstract> allTiles) 
     {
-        List<GenericTile> path = new ArrayList<>();
+        LinkedList<List<GenericTile>> queue = new LinkedList<>();
         Set<Integer> visited = new HashSet<>();
-
-        int[] found = new int[1];
-        found[0] = 0;
         
-        pathFindingRecursive(start, targetTileId, allTiles, path, visited, found);
         
-
-        return path; 
-    }
-
-    private void pathFindingRecursive(GenericTile current, Integer targetTileId, List<GenericTile> allTiles, List<GenericTile> path, Set<Integer> visited, int[] found) 
-    {
-        path.add(current);
-        visited.add(current.getTileId());
-       
-        if (found[0] == 1) { return; }
-
-        if (current.getTileId().equals(targetTileId)) 
-        {   
-            found[0] = 1; 
-            return; 
-        }
-
+        queue.offer(new ArrayList<>(Arrays.asList(start)));
+        visited.add(start.getTileId());
         
-        for (int neighborId = 0; neighborId < this.totalNodes && (found[0] == 0); neighborId++) 
+        while (!queue.isEmpty()) 
         {
-            if (neighborId >= allTiles.size()) continue;
+            List<GenericTile> currentPath = queue.poll();
+            GenericTile lastTile = currentPath.get(currentPath.size() - 1);
             
-            GenericTile neighbor = allTiles.get(neighborId);
-            
-            if (this.adjacencyMatrix[current.getTileId()][neighbor.getTileId()] > 0 && !visited.contains(neighbor.getTileId())) 
+  
+            if (lastTile.getTileId().equals(targetTileId)) 
             {
-                pathFindingRecursive(neighbor, targetTileId, allTiles, path, visited, found);
+                return currentPath;
+            }
+            
+        
+            for (int neighborId = 0; neighborId < this.totalNodes; neighborId++) 
+            {
+
+                TileAbstract neighbor = allTiles.get(neighborId);
+
+                if (this.adjacencyMatrix[lastTile.getTileId()][neighbor.getTileId()] > 0 && !visited.contains(neighbor.getTileId())) 
+                {
+                    visited.add(neighbor.getTileId());
+                    
+
+                    List<GenericTile> newPath = new ArrayList<>(currentPath);
+                    newPath.add((GenericTile) neighbor);
+                    queue.offer(newPath);
+                }
             }
         }
         
-       
-        if (found[0] == 0) 
-        {
-            path.remove(path.size() - 1);
-        }
+        return Collections.emptyList(); 
     }
 
 
