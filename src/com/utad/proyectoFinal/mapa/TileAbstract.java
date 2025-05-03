@@ -26,7 +26,7 @@ public abstract class TileAbstract
     protected Integer tileId;
 	
 
-	protected Object  ocupiedObject; 
+	protected MapObject  ocupiedObject; 
 	protected boolean isHovered;
 	protected Image specialImage;
 
@@ -90,14 +90,14 @@ public abstract class TileAbstract
     public Integer getPosY() { return this.posY; }
     public Integer getTileId() { return this.tileId; }
     public boolean getIsHovered() { return this.isHovered; }
-    public Object getOcupiedObject() { return this.ocupiedObject; }
+    public MapObject getOcupiedObject() { return this.ocupiedObject; }
     public boolean isOcupied() { return this.ocupiedObject != null; }
 
     public boolean isOcupiedByCharacter() { return isOcupied() && this.ocupiedObject instanceof BaseCharacter; }
     public boolean isOcupiedByLoot() { return isOcupied() && this.ocupiedObject instanceof MapObject && !isOcupiedByCharacter(); }
     
     public void setHovered(boolean isHovered) { this.isHovered = isHovered; }
-    public void setOcupiedObject(Object ocupiedObject) 
+    public void setOcupiedObject(MapObject ocupiedObject) 
     { 
         this.ocupiedObject = ocupiedObject; 
 

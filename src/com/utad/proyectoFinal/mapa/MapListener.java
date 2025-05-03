@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
-import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-
 
 public class MapListener extends MouseAdapter
 {

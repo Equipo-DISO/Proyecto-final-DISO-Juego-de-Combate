@@ -307,12 +307,28 @@ public class MapGenerator extends JPanel
     public void moveToTile(BaseCharacter character, GenericTile objective)
     {
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
-        if (objective.isOcupied()) { return; }
         
         //TODO logica de cambio de movidas ocupadas en los tiles
-        character.getCurrentPosition().setOcupiedObject(null);
-        objective.setOcupiedObject(character);
-        character.setCurrentPosition(objective);
+        if (objective.isOcupiedByCharacter())
+        {
+
+        }
+        else if (objective.isOcupiedByLoot())
+        {
+            
+            MapObject loot = objective.getOcupiedObject();
+            objective.setOcupiedObject(null);
+            // TODO: trabaja tonto character.addLoot??
+
+            character.getCurrentPosition().setOcupiedObject(null);
+            character.move(objective);
+        }
+        else
+        {
+            character.getCurrentPosition().setOcupiedObject(null);
+            objective.setOcupiedObject(character);
+            character.move(objective);
+        }
     }
 
     /**
