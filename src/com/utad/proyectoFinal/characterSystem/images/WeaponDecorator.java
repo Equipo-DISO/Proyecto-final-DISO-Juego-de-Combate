@@ -7,8 +7,8 @@ public class WeaponDecorator extends EquipmentDecorator {
     private Image weapon;
     
     // Constants for weapon positioning
-    private static final double WEAPON_RELATIVE_X = 0.6; // Position weapon to the right side
-    private static final double WEAPON_RELATIVE_Y = 0.3; // Position weapon at about the middle
+    private static final double WEAPON_RELATIVE_X = 0.5; // Position weapon to the right side
+    private static final double WEAPON_RELATIVE_Y = 0.2; // Position weapon at about the middle
     private static final double WEAPON_WIDTH_RATIO = 0.65; // Weapon will be 65% of character width
     
     public WeaponDecorator(CharacterImage decoratedImage, Image weaponImage) {

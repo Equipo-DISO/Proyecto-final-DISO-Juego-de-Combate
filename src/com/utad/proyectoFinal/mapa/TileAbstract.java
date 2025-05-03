@@ -71,7 +71,8 @@ public abstract class TileAbstract
        {
             if (this.specialImage != null)
             {
-                graphics2d.drawImage(this.specialImage, imageX, imageY, TileAbstract.IMAGE_WIDTH, TileAbstract.IMAGE_HEIGHT, null);
+                // He cambiado el tamaño de la imagen porque creo que se ve mejor. Matesanz
+                graphics2d.drawImage(this.specialImage, imageX-10, imageY-30, TileAbstract.IMAGE_WIDTH+20, TileAbstract.IMAGE_HEIGHT+20, null);
             }
 	   } 
        catch (Exception e) 
