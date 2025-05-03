@@ -7,6 +7,7 @@ public class GenericTile extends TileAbstract
 {
 
     public static final Integer DEFAULT_FACE_DEPTH = 35;
+    public Color color = new Color(135, 190, 88);
 
     public GenericTile(Integer x, Integer y, Integer id) 
     {
@@ -69,7 +70,7 @@ public class GenericTile extends TileAbstract
 
        
            
-        graphics2d.setColor(new Color(135, 190, 88)); 
+        graphics2d.setColor(this.color); 
         graphics2d.fillPolygon(super.hexagon);
 
         super.drawImage(graphics2d);
@@ -80,6 +81,11 @@ public class GenericTile extends TileAbstract
             graphics2d.fillPolygon(super.hexagon);
             graphics2d.drawPolygon(super.hexagon);  
         }
+    }
+
+    public void setDebugColor(Color c)
+    {
+        this.color = c;
     }
 
    

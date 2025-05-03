@@ -3,9 +3,13 @@ package com.utad.proyectoFinal.mapa;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class TileGraph 
 {
@@ -66,10 +70,10 @@ public class TileGraph
 
     private boolean isInRange(GenericTile initial, GenericTile target)
     { 
-        return distanceToTile(initial, target) < 127.0d; // magic number, distancia maxima a la que estara un tile contiguo
+        return TileGraph.distanceToTile(initial, target) < 127.0d; // magic number, distancia maxima a la que estara un tile contiguo
     }
 
-    private Double distanceToTile(TileAbstract initial, TileAbstract target)
+    public static Double distanceToTile(TileAbstract initial, TileAbstract target)
     {
         Point centerInitial = new Point(initial.getPosX(), initial.getPosY());
         Point centerTarget  = new Point(target.getPosX() , target.getPosY());
@@ -168,67 +172,49 @@ public class TileGraph
         }
     }
 
-    public List<GenericTile> pathFinding(GenericTile start, List<GenericTile> targets, List<TileAbstract> allTiles)
+
+    public List<GenericTile> pathFindingBFS(GenericTile start, Integer targetTileId, List<TileAbstract> allTiles) 
     {
-
-        Map<Integer, GenericTile> idToTile = new HashMap<>(); //hash que traduce Id's into ObjetoTile
-        boolean[] visited = new boolean[this.totalNodes];
-        List<GenericTile> path = new ArrayList<>();
-
-        for(TileAbstract tile: allTiles)
+        LinkedList<List<GenericTile>> queue = new LinkedList<>();
+        Set<Integer> visited = new HashSet<>();
+        
+        
+        queue.offer(new ArrayList<>(Arrays.asList(start)));
+        visited.add(start.getTileId());
+        
+        while (!queue.isEmpty()) 
         {
-            //por cada tile del mapa, verifico si es un GenericTile
-            if(tile instanceof GenericTile)
+            List<GenericTile> currentPath = queue.poll();
+            GenericTile lastTile = currentPath.get(currentPath.size() - 1);
+            
+  
+            if (lastTile.getTileId().equals(targetTileId)) 
             {
-                //insertamos el tile en el hash
-                idToTile.put(tile.getTileId(), (GenericTile) tile);
+                return currentPath;
             }
-        }
-
-        for(GenericTile target : targets)
-        {
-            Arrays.fill(visited, false);
-            path.clear();
-            //prueba si hay un camino entre start y target y si lo encuentra lo aloja en path
-            if(dfsPath(start, target, visited, path, idToTile))
+            
+        
+            for (int neighborId = 0; neighborId < this.totalNodes; neighborId++) 
             {
-                return path;
-            }
-        }
 
-        return null;
-    }
+                TileAbstract neighbor = allTiles.get(neighborId);
 
-    private boolean dfsPath(GenericTile current, GenericTile target, boolean[] visited, List<GenericTile> path, Map<Integer, GenericTile> idToTile) 
-    {
-
-        visited[current.getTileId()] = true;
-        path.add(current);
-
-
-        if(current.equals(target))
-        {
-            return true;
-        }
-
-        for(Integer neighBorId = 0; neighBorId < totalNodes; neighBorId++)
-        {
-            if(adjacencyMatrix[current.getTileId()][neighBorId] != null && adjacencyMatrix[current.getTileId()][neighBorId] > 0 && !visited[neighBorId])
-            {
-                //filtramos si hay conexion > 0 entre actual y vecino y si no hemos visitado todavía el vecino
-                GenericTile neighbor = idToTile.get(neighBorId);
-
-                if(neighbor != null && dfsPath(neighbor, target, visited, path, idToTile))
+                if (this.adjacencyMatrix[lastTile.getTileId()][neighbor.getTileId()] > 0 && !visited.contains(neighbor.getTileId())) 
                 {
-                    return true; //si el camino por el vecino funciona, devuelve true
+                    visited.add(neighbor.getTileId());
+                    
+
+                    List<GenericTile> newPath = new ArrayList<>(currentPath);
+                    newPath.add((GenericTile) neighbor);
+                    queue.offer(newPath);
                 }
             }
         }
-
-        path.remove(path.size() - 1); //backtrack
-        return false;
+        
+        return Collections.emptyList(); 
     }
 
 
+   
     public Integer[][] getAdjacencyMatrix() { return this.adjacencyMatrix; }
 }

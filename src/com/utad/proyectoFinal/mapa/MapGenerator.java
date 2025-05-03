@@ -3,6 +3,7 @@ package com.utad.proyectoFinal.mapa;
 import javax.swing.*;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 import java.awt.*;
 import java.util.List;
@@ -12,8 +13,9 @@ import java.util.Comparator;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.6d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.4d;
     public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
+
 
     private TileFactory factory;
     private List<TileAbstract> tiles;
@@ -27,14 +29,20 @@ public class MapGenerator extends JPanel
     private boolean disableMap;
     private Integer gridSize;
 
+    private Integer viewportX;
+    private Integer viewportY;
+
     private TileGraph graph;
+
+    private List<BaseCharacter> players;
+
 
     private MapGenerator(Integer x, Integer y, Integer size, Integer spawns) 
     {
+        super();
         this.gridSize = size;
 
         this.factory = new NormalTileFactory(calculateTotalTiles(), spawns);
-
         this.graph = new TileGraph(calculateTotalTiles());
 
         this.screenX = x;
@@ -42,12 +50,26 @@ public class MapGenerator extends JPanel
         this.tiles = createHexGrid();
         this.disableMap = false;
 
+        this.viewportX = 0;
+        this.viewportY = 0;
 
         this.listener = new MapListener(this, this.tiles);
         this.addMouseListener(this.listener);
         this.addMouseMotionListener(this.listener);
+
+        pathFindingTesting();
     }
 
+    public void displayMap()
+    {
+        JFrame frame = new JFrame("Hexágono 3D Testing");
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1300, 800);
+        frame.add(this);
+        frame.setVisible(true);
+        frame.setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
+    }
 
     public static MapGenerator getInstance(Integer screenX, Integer screenY, Integer size, Integer spawns)
     {
@@ -58,6 +80,7 @@ public class MapGenerator extends JPanel
 
         return MapGenerator.instance;
     }
+
 
     public List<TileAbstract> createHexGrid() 
     {
@@ -104,6 +127,8 @@ public class MapGenerator extends JPanel
 
         this.graph.connectSubGraphs(generatedMap);
 
+       
+
         return generatedMap;
     }
     
@@ -117,10 +142,13 @@ public class MapGenerator extends JPanel
         Graphics2D g2d = (Graphics2D) g;
         super.setBackground(new Color(90, 182, 180)); // agua
 
+        g2d.translate(-this.viewportX, -this.viewportY);
+
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.tiles.forEach(t -> t.drawTile(g2d));
         
-        //generateDebugLines(g2d);
+        
+        generateDebugLines(g2d);
       
 
         if (this.disableMap)
@@ -160,8 +188,8 @@ public class MapGenerator extends JPanel
        
         String text = "ON GOING FIGHT";
         FontMetrics fm = g2d.getFontMetrics();
-        int tx = (super.getWidth() - fm.stringWidth(text)) / 2;
-        int ty = (super.getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+        int tx = (this.viewportX + super.getWidth() - fm.stringWidth(text)) / 2;
+        int ty = (this.viewportY + super.getHeight() - fm.getHeight()) / 2 + fm.getAscent();
         g2d.drawString(text, tx, ty);
 
     
@@ -173,27 +201,52 @@ public class MapGenerator extends JPanel
 
     private void drawPlayerHUD(Graphics2D g2d) 
     {
-        Integer boxWidth = 120;
+        createMouseMovementTip(g2d);
+        createPlayerCounter(g2d);
+    }
+
+    private void createMouseMovementTip(Graphics2D g2d)
+    {
+        Integer boxWidth = 250;
         Integer boxHeight = 60;
 
-        Integer boxX = super.getWidth() - boxWidth + 5;
-        Integer boxY = -10;
-
+        Integer boxX = (this.viewportX + ((super.getWidth() - boxWidth / 2) / 2));
+        Integer boxY = (this.viewportY + super.getHeight() - boxHeight - 20);
 
 
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
         g2d.setColor(Color.DARK_GRAY); 
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
-       //g2d.drawImage(new SimplifiedImage("Files/img/player.png").generateImage(30, 30), boxX, boxY, boxWidth, boxHeight, null);
+       createText(g2d, boxX + 20, boxY + 35, "Hold left click to move");
+    }
 
-       g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-       g2d.setColor(Color.WHITE);
+    private void createPlayerCounter(Graphics2D g2d)
+    {
+        Integer boxWidth = 120;
+        Integer boxHeight = 60;
+
+        Integer boxX = this.viewportX + super.getWidth() - boxWidth + 5;
+        Integer boxY = this.viewportY + (-10);
+
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+        g2d.setColor(Color.DARK_GRAY); 
+        g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
+
+       //g2d.drawImage(new SimplifiedImage("Files/img/player.png").generateImage(30, 30), 200, 200, boxWidth, boxHeight, null);
+       createText(g2d, boxX + 55, boxY + 45, "nig/15");
+    }
+
+    private void createText(Graphics2D g2d, Integer posX, Integer posY, String msg)
+    {
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+        g2d.setColor(Color.WHITE);
         
-       Font  oldFont = g2d.getFont();
-       Font font = oldFont.deriveFont(Font.BOLD, 20f);
+        Font  oldFont = g2d.getFont();
+        Font font = oldFont.deriveFont(Font.BOLD, 20f);
         g2d.setFont(font);
-        g2d.drawString(calculateTotalTiles() + "/15", boxX + 55, boxY + 40);
+        g2d.drawString(msg, posX, posY);
         g2d.setFont(oldFont);
     }
 
@@ -261,6 +314,42 @@ public class MapGenerator extends JPanel
      *      MOVIDAS GRAFO
      * 
      */
+
+    private GenericTile getRandomTile()
+    {
+        TileAbstract t = this.tiles.get((int) (Math.random() * this.tiles.size()));
+
+
+        if (t instanceof GenericTile)
+        {
+            return (GenericTile) t;
+        }
+        else
+        {
+           return getRandomTile();
+        }
+    }
+
+    private void pathFindingTesting()
+    {
+        GenericTile startTile = getRandomTile();
+        GenericTile endTile = getRandomTile();
+        
+
+    
+        List<GenericTile> path = this.graph.pathFindingBFS(startTile, endTile.getTileId(), this.tiles);
+        
+        for (GenericTile tile : path) 
+        {
+            tile.setDebugColor(Color.YELLOW);  
+        }
+        
+        startTile.setDebugColor(Color.GREEN); 
+        endTile.setDebugColor(Color.RED);      
+        
+        updateRendering();
+    }
+
     private void generateDebugLines(Graphics2D g2d)
     {
 
@@ -284,12 +373,9 @@ public class MapGenerator extends JPanel
     }
 
     /**
-    * 
-    * 
     * @param character Character that desires to move
     * @param objective Destination tile
     */
-
     public void moveToTile(BaseCharacter character, GenericTile objective)
     {
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
@@ -299,12 +385,31 @@ public class MapGenerator extends JPanel
 
     }
 
-
-    public List<GenericTile> getPathToObjective(GenericTile currentPos, List<GenericTile> botTargets)
+    /**
+    * @param currentPos Current position
+    * @param strategy Get your closest point of interest
+    * @return returns list of tiles as a path
+    */
+    public List<GenericTile> getPathToObjective(GenericTile currentPos, PathFindingStrategy strategy)
     {
-        return this.graph.pathFinding(currentPos, botTargets, this.tiles);
+        return this.graph.pathFindingBFS(currentPos, strategy.getTargetTileId(currentPos, this.tiles), this.tiles);
     }
 
+
+
+    public void moveViewport(Integer dx, Integer dy) 
+    {
+        int minX = -350;
+        int minY = -300;
+        int maxX =  300;
+        int maxY =  300;
+        
+        this.viewportX = Math.max(minX, Math.min(maxX, viewportX + dx));
+        this.viewportY = Math.max(minY, Math.min(maxY, viewportY + dy));
+    }
+
+    public Integer getViewX() { return this.viewportX; }
+    public Integer getViewY() { return this.viewportY; }
     public TileGraph getGraph() { return this.graph; }
     public void setFactory(TileFactory f) { this.factory = f; }
     public void disableMap(boolean b) { this.disableMap = b; }
