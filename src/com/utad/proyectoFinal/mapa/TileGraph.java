@@ -193,7 +193,6 @@ public class TileGraph
                 return currentPath;
             }
             
-        
             for (Integer neighborId = 0; neighborId < this.totalNodes; neighborId++) 
             {
 

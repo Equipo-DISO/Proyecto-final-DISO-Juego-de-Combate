@@ -56,6 +56,8 @@ public class MapGenerator extends JPanel
         this.listener = new MapListener(this, this.tiles);
         this.addMouseListener(this.listener);
         this.addMouseMotionListener(this.listener);
+
+        pathFindingTesting();
     }
 
     public void displayMap()
@@ -144,8 +146,6 @@ public class MapGenerator extends JPanel
 
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.tiles.forEach(t -> t.drawTile(g2d));
-        
-        
 
         if (this.disableMap)
         {
@@ -321,8 +321,6 @@ public class MapGenerator extends JPanel
     {
         return this.graph.pathFindingBFS(currentPos, strategy.getTargetTileId(currentPos, this.tiles), this.tiles);
     }
-
-
 
     public void moveViewport(Integer dx, Integer dy) 
     {

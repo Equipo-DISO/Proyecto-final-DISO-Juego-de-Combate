@@ -18,6 +18,7 @@ import java.io.IOException;
 
 public class BaseCharacter {
 
+
     // Contador de personajes (usado para asignar un ID único a cada personaje)
     public static Integer contadorPersonajes = 0;
 
@@ -55,7 +56,7 @@ public class BaseCharacter {
     //    private List<Item> inventario;  // Pociones, vendas, botiquines, etc.
     //    private List<Item> efectosActivos;  // Efectos negativos de las trampas, etc.
     private Integer capacidadMaximaInventario;
-    
+
 
     // Sistema de decoradores de imagen
     private CharacterImage characterImage;
@@ -65,16 +66,15 @@ public class BaseCharacter {
     // Atributos de posicionamiento
     // TODO: Implement -> Tile
     private GenericTile currentPosition;
-    //    private Tile ubicacionActual;
-    //    private Tile destinoObjetivo;
+    private GenericTile nextPosition; // Posición objetivo del personaje en el mapa
 
     // Comportamiento
     private Boolean esControlado;  // Indica si es controlado por IA
-    
+
     public BaseCharacter(String name, Double baseAttack, Double baseDefense) {
         this(name, baseAttack, baseDefense, loadDefaultAvatar());
     }
-    
+
     private static BufferedImage loadDefaultAvatar() {
         try {
             return ImageIO.read(new File("Files/img/GreenGuy.png"));
@@ -84,7 +84,7 @@ public class BaseCharacter {
             return new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
         }
     }
-    
+
     public BaseCharacter(String name, Double baseAttack, Double baseDefense, BufferedImage baseAvatar) {
         this.name = name;
         this.baseAttack = baseAttack;
@@ -111,7 +111,7 @@ public class BaseCharacter {
 
         this.baseAvatar = baseAvatar;
         this.characterImage = new BaseCharacterImage(baseAvatar);
-        
+
         // Todo: Implement -> re-add after Tile class is created
         //this.ubicacionActual = null;
         //this.destinoObjetivo = null;
@@ -313,5 +313,9 @@ public class BaseCharacter {
 
     public GenericTile getCurrentPosition() {
         return this.currentPosition;
+    }
+
+    public void setCurrentPosition(GenericTile currentPosition) {
+        this.currentPosition = currentPosition;
     }
 }
