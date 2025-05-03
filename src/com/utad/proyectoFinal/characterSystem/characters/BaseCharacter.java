@@ -1,6 +1,5 @@
 package com.utad.proyectoFinal.characterSystem.characters;
 
-
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
@@ -19,14 +18,12 @@ import java.io.IOException;
 
 public class BaseCharacter implements CombatCharacter, MapObject {
 
-
     // Contador de personajes (usado para asignar un ID único a cada personaje)
     public static Integer contadorPersonajes = 0;
 
     // Atributos de identificación
     private Integer id;
     private String name;
-
 
     // Atributos de estado y estadísticas
     private Integer healthPoints;
@@ -36,7 +33,6 @@ public class BaseCharacter implements CombatCharacter, MapObject {
     private Integer maxManaPoints;
     private Integer hpPotions; // Cantidad de pociones de salud
 
-
     // Estados del personaje
     private StatesList states;
     private CharacterState currentState; // Estado actual del personaje
@@ -44,22 +40,19 @@ public class BaseCharacter implements CombatCharacter, MapObject {
     // Atributos de combate
     private Boolean retreatSuccess;
 
-
     // Equipamiento del personaje
-    protected BaseWeapon weapon;  // Arma equipada
-    protected BaseHelmet helmet;  // Casco equipado
+    protected BaseWeapon weapon; // Arma equipada
+    protected BaseHelmet helmet; // Casco equipado
 
     // Sistema de decoradores de imagen
     protected CharacterImage characterImage;
     protected Image baseAvatar; // Guarda la imagen base original
 
-
     // Atributos de posicionamiento
     private GenericTile currentPosition;
 
     // Comportamiento
-    private Boolean esControlado;  // Indica si es controlado por IA
-
+    private Boolean esControlado; // Indica si es controlado por IA
 
     public BaseCharacter(String name) {
         this(name, DefaultAttributes.ATTACK);
@@ -69,31 +62,30 @@ public class BaseCharacter implements CombatCharacter, MapObject {
         this(name, baseAttack, loadDefaultAvatar());
     }
 
-    
     public BaseCharacter(String name, Double baseAttack, Image baseAvatar) {
         this.name = name;
         this.baseAttack = baseAttack;
         this.manaPoints = DefaultAttributes.MANA_POINTS; // Valor por defecto para los puntos de maná
         this.maxManaPoints = DefaultAttributes.MAX_MANA_POINTS; // Valor por defecto
         this.hpPotions = 0; // Inicialmente no tiene pociones de salud
-        
+
         this.states = new StatesList(this); // Inicializa el estado del personaje
         this.currentState = states.getIdleState(); // Estado inicial
-        
+
         this.weapon = null;
         this.helmet = null;
-        
+
         this.maxHealthPoints = DefaultAttributes.HEALTH;
         this.healthPoints = this.maxHealthPoints;
 
-        //        this.items = new ArrayList<Item>();
-        //        this.efectos = new ArrayList<Item>();
-        
+        // this.items = new ArrayList<Item>();
+        // this.efectos = new ArrayList<Item>();
+
         this.id = ++BaseCharacter.contadorPersonajes;
-        
+
         this.baseAvatar = baseAvatar;
         this.characterImage = new BaseCharacterImage(baseAvatar);
-        
+
         this.esControlado = false; // Por defecto, el personaje no es controlado por IA
     }
 
@@ -106,12 +98,12 @@ public class BaseCharacter implements CombatCharacter, MapObject {
             return new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
         }
     }
-    
+
     // Método privado para actualizar la imagen decorada
     private void updateCharacterImage() {
         // Empieza siempre desde la imagen base
         this.characterImage = new BaseCharacterImage(this.baseAvatar);
-        
+
         // Aplica el decorador de casco si existe
         if (this.helmet != null && this.helmet.getAvatar() != null) {
             this.characterImage = new HelmetDecorator(this.characterImage, this.helmet.getAvatar());
@@ -301,7 +293,8 @@ public class BaseCharacter implements CombatCharacter, MapObject {
 
     /**
      * Attack with a specific strategy
-     * @param target The character to attack
+     * 
+     * @param target   The character to attack
      * @param strategy The strategy to use for this attack
      */
     @Override
@@ -375,11 +368,13 @@ public class BaseCharacter implements CombatCharacter, MapObject {
     }
 
     // Image
-    public void setImage(String path){
-        try {this.baseAvatar = ImageIO.read(new File(path)); }
-        catch (IOException e) {
+    public void setImage(String path) {
+        try {
+            this.baseAvatar = ImageIO.read(new File(path));
+        } catch (IOException e) {
             loadDefaultAvatar();
         }
+        updateCharacterImage();
     }
 
     public void increaseManaPoints(Integer manaRecovered) {

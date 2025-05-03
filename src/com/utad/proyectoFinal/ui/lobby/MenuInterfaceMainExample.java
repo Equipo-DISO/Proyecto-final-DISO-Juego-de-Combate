@@ -28,6 +28,9 @@ public class MenuInterfaceMainExample {
         LinkedList<Bot> bots = interfaceMain.getBotList();
         BaseCharacter player = interfaceMain.getPlayerCharacter();
 
+        player.equipWeapon(new com.utad.proyectoFinal.characterSystem.tools.BaseWeapon(com.utad.proyectoFinal.characterSystem.tools.WeaponType.SWORD));
+        player.equipHelmet(new com.utad.proyectoFinal.characterSystem.tools.BaseHelmet(com.utad.proyectoFinal.characterSystem.tools.HelmetType.NORMAL_HELMET));
+
         
         MapGenerator instance = MapGenerator.getInstance(1100, 0, 6, bots.size() + 1, bots, player);
         instance.displayMap();
