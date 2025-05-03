@@ -56,8 +56,6 @@ public class MapGenerator extends JPanel
         this.listener = new MapListener(this, this.tiles);
         this.addMouseListener(this.listener);
         this.addMouseMotionListener(this.listener);
-
-        pathFindingTesting();
     }
 
     public void displayMap()
