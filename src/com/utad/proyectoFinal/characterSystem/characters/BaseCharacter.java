@@ -34,9 +34,6 @@ public class BaseCharacter implements CombatCharacter, MapObject {
     private Integer healthPoints;
     private Integer maxHealthPoints;
     private Double baseAttack;
-    private Double baseDefense;
-    private Double baseCounterAttackChance;
-    private Double baseCounterAttackDamage;
     private Integer manaPoints;
     private Integer maxManaPoints;
     private Integer hpPotions; // Cantidad de pociones de salud
@@ -90,9 +87,6 @@ public class BaseCharacter implements CombatCharacter, MapObject {
     public BaseCharacter(String name, Double baseAttack, Double baseDefense, BufferedImage baseAvatar) {
         this.name = name;
         this.baseAttack = baseAttack;
-        this.baseDefense = baseDefense;
-        this.baseCounterAttackChance = DefaultAttributes.COUNTERATTACK_PROBABILITY; // Valor por defecto para el ataque de contraataque
-        this.baseCounterAttackDamage = DefaultAttributes.COUNTERATTACK_DAMAGE; // Valor por defecto para el multiplicador de contraataque
         this.manaPoints = DefaultAttributes.MANA_POINTS; // Valor por defecto para los puntos de maná
         this.maxManaPoints = DefaultAttributes.MAX_MANA_POINTS; // Valor por defecto
         this.hpPotions = 0; // Inicialmente no tiene pociones de salud
@@ -266,10 +260,6 @@ public class BaseCharacter implements CombatCharacter, MapObject {
 
     public Double getBaseAttack() {
         return baseAttack;
-    }
-
-    public Double getBaseDefense() {
-        return baseDefense;
     }
 
     public Integer getId() {
