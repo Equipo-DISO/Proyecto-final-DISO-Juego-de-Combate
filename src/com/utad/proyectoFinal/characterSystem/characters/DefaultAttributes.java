@@ -6,19 +6,11 @@ public final class DefaultAttributes {
 
     // Offensive attributes
     public static final Double ATTACK = 5.0;
-    public static final Double COUNTERATTACK_DAMAGE = 50.0;
-
-    // Defensive attributes
-    public static final Double DEFENSE = 0.0;
-
-    // Action probabilities
-    public static final Double COUNTERATTACK_PROBABILITY = 10.0;
 
     // Upgrade attributes
     public static final Integer POTION_HEAL_AMOUNT = 50;
     public static final Integer UPGRADE_HEALTH_AMOUNT = 25;
     public static final Integer UPGRADE_MANA_AMOUNT = 20;
-
 
     // Mana attributes
     public static final Integer MANA_POINTS = 50;

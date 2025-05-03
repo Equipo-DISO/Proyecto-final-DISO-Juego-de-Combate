@@ -4,6 +4,7 @@ import com.utad.proyectoFinal.mapa.MapObject;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -48,10 +49,6 @@ public class BaseWeapon implements MapObject {
         return criticalDamage;
     }
 
-    public Double calculateCriticalDamage(){ //cómputo del crítico + daño base
-        return this.getDamage() * this.getCriticalDamage();
-    }
-
     public WeaponType getType() {
         return type;
     }
@@ -60,44 +57,20 @@ public class BaseWeapon implements MapObject {
         return durability;
     }
 
-    public void decreaseDurability(){
-        this.durability--;
-    }
-
     public void decreaseDurability(int i) {
         this.durability -= i;
     }
 
-    // --- Metodo para obtener el Avatar ---
+    // --- Metodo para fumar ---
     public BufferedImage getAvatar() {
         BufferedImage avatar = null;
 
         try {
             // Remove the leading slash if present
             String path = this.imagePath;
-            if (path.startsWith("/")) {
-                path = path.substring(1);
-            }
-            
-            File file = new File(path);
-            if (file.exists()) {
-                avatar = ImageIO.read(file);
-            } else {
-                System.err.println("Weapon image file not found: " + path);
-                // Try alternate path with a generic sword image
-                file = new File("Files/img/sword-placeholder.png");
-                if (file.exists()) {
-                    avatar = ImageIO.read(file);
-                } else {
-                    System.err.println("Weapon placeholder image not found. Trying generic placeholder.");
-                    file = new File("Files/img/Helmet-placeholder.png");
-                    if (file.exists()) {
-                        avatar = ImageIO.read(file);
-                    } else {
-                        throw new IOException("No placeholder images found");
-                    }
-                }
-            }
+
+            throw new IOException("No placeholder images found");
+
         } catch (IOException e) {
             System.err.println("Error loading weapon image: " + e.getMessage());
             e.printStackTrace();
@@ -110,7 +83,7 @@ public class BaseWeapon implements MapObject {
     }
 
     @Override
-    public BufferedImage getBufferedImage() {
-        return null;
+    public Image getImage() {
+        return SimplifiedImage.generateImage(getAvatar());
     }
 }

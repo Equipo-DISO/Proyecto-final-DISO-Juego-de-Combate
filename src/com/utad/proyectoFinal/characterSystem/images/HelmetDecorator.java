@@ -4,29 +4,36 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class HelmetDecorator extends EquipmentDecorator {
-    private BufferedImage helmet;
+    private Image helmet;
     
     // Constantes para el posicionamiento relativo del casco
     private static final double HEAD_RELATIVE_Y = -0.28; // Ajuste vertical para la posición de la cabeza
     private static final double HELMET_WIDTH_RATIO = 0.95; // El casco ocupará el 95% del ancho del personaje
     
-    public HelmetDecorator(CharacterImage decoratedImage, BufferedImage helmetAvatar) {
+    public HelmetDecorator(CharacterImage decoratedImage, Image helmetAvatar) {
         super(decoratedImage);
         this.helmet = helmetAvatar;
     }
 
     @Override
-    public BufferedImage getCompleteImage() {
-        BufferedImage baseImage = decoratedImage.getCompleteImage();
+    public Image getCompleteImage() {
+        Image baseImage = decoratedImage.getCompleteImage();
         if (helmet == null) {
             return baseImage;
         }
-        int characterWidth = baseImage.getWidth();
-        int characterHeight = baseImage.getHeight();
+        
+        // Get dimensions
+        int characterWidth = baseImage.getWidth(null);
+        int characterHeight = baseImage.getHeight(null);
+        int originalHelmetWidth = helmet.getWidth(null);
+        int originalHelmetHeight = helmet.getHeight(null);
+        
+        // Handle potential null dimensions (if image not fully loaded)
+        if (characterWidth <= 0 || characterHeight <= 0 || 
+            originalHelmetWidth <= 0 || originalHelmetHeight <= 0) {
+            return baseImage;
+        }
 
-        // Original helmet dimensions
-        int originalHelmetWidth = helmet.getWidth();
-        int originalHelmetHeight = helmet.getHeight();
         // Scaled helmet size
         int newHelmetWidth = (int)(characterWidth * HELMET_WIDTH_RATIO);
         double scaleFactor = (double)newHelmetWidth / originalHelmetWidth;

@@ -6,7 +6,7 @@ import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
 import com.utad.proyectoFinal.mapa.GenericTile;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 
 /**
  * Defines the public interface for characters in the combat system.
@@ -45,8 +45,8 @@ public interface CombatCharacter {
     String getCurrentStateName();
 
     /**
-     * Returns the complete BufferedImage with all decorations applied
-     * @return a complete BufferedImage of the character with all decorations
+     * Returns the complete Image with all decorations applied
+     * @return a complete Image of the character with all decorations
      */
-    BufferedImage getCompleteImage();
+    Image getCompleteImage();
 }

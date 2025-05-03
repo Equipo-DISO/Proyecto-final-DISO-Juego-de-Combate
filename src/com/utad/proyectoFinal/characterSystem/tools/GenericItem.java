@@ -2,6 +2,7 @@ package com.utad.proyectoFinal.characterSystem.tools;
 
 import com.utad.proyectoFinal.mapa.MapObject;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class GenericItem implements MapObject {
@@ -14,8 +15,9 @@ public class GenericItem implements MapObject {
     public GenericItemType getType() {
         return type;
     }
+
     @Override
-    public BufferedImage getBufferedImage() {
+    public Image getImage() {
         return null;
     }
 }

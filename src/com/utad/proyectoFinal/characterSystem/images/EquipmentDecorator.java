@@ -1,6 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.images;
 
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 
 public abstract class EquipmentDecorator implements CharacterImage {
     protected CharacterImage decoratedImage;
@@ -10,7 +10,7 @@ public abstract class EquipmentDecorator implements CharacterImage {
     }
     
     @Override
-    public BufferedImage getCompleteImage() {
+    public Image getCompleteImage() {
         // By default, get the decorated image's complete image
         return decoratedImage.getCompleteImage();
     }
@@ -30,11 +30,11 @@ public abstract class EquipmentDecorator implements CharacterImage {
     }
     
     /**
-     * Returns the original BufferedImage from the base image
+     * Returns the original Image from the base image
      * Useful for accessing the dimensions of the original image
-     * @return The original BufferedImage without decorations
+     * @return The original Image without decorations
      */
-    public BufferedImage getOriginalBufferedImage() {
+    public Image getOriginalImage() {
         CharacterImage baseImage = getBaseImage();
         
         // Get the complete image from the base image

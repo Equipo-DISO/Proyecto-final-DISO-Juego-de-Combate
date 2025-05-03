@@ -4,22 +4,28 @@ import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 
+import java.awt.image.BufferedImage;
+
 public class Bot extends BaseCharacter {
 
     private static final String BOTNAME = "B.O.T";
     private static final Double ATTACK = 10.00;
-    private static final Double DEFENSE = 10.0;
     private BotActionType botActionType;
     private BotAI botAi;
 
     private MapGenerator map;
+
     public Bot() {
-        this(BOTNAME, ATTACK, DEFENSE);
-        botActionType = BotActionType.NONE;
+        this(BOTNAME);
     }
 
-    public Bot(String name, Double baseAttack, Double baseDefense) {
-        super(name, baseAttack, baseDefense);
+    public Bot(String name) {
+        this(name, ATTACK);
+    }
+
+    public Bot(String name, Double baseAttack) {
+        super(name, baseAttack);
+        botActionType = BotActionType.NONE;
     }
 
     public void BotMove() {
@@ -39,11 +45,6 @@ public class Bot extends BaseCharacter {
     return botAi;
 }
 
-    public BaseHelmet getCurrentHelmet() {
-        return getHelmet();
-    }
-
-
     public MapGenerator getMap(){
         return this.map;
     }
@@ -59,4 +60,6 @@ public class Bot extends BaseCharacter {
     public void setBotActionType(BotActionType botActionType) {
         this.botActionType = botActionType;
     }
+
+
 }

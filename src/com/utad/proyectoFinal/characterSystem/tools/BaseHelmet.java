@@ -2,8 +2,10 @@ package com.utad.proyectoFinal.characterSystem.tools;
 
 
 import com.utad.proyectoFinal.mapa.MapObject;
+import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -60,27 +62,13 @@ public class BaseHelmet implements MapObject {
         try {
             // Remove the leading slash if present
             String path = this.imagePath;
-            if (path.startsWith("/")) {
-                path = path.substring(1);
-            }
-            
-            File file = new File(path);
-            if (file.exists()) {
-                avatar = ImageIO.read(file);
-            } else {
-                System.err.println("Helmet image file not found: " + path);
-                // Try alternate path
-                file = new File("Files/img/Helmet-placeholder.png");
-                if (file.exists()) {
-                    avatar = ImageIO.read(file);
-                } else {
-                    throw new IOException("Helmet image file not found at alternate path: Files/img/Helmet-placeholder.png");
-                }
-            }
+
+            throw new IOException("No placeholder images found");
+
         } catch (IOException e) {
-            System.err.println("Error loading helmet image: " + e.getMessage());
+            System.err.println("Error loading weapon image: " + e.getMessage());
             e.printStackTrace();
-            
+
             // Create a simple placeholder image
             avatar = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
         }
@@ -89,7 +77,7 @@ public class BaseHelmet implements MapObject {
     }
 
     @Override
-    public BufferedImage getBufferedImage() {
-        return null;
+    public Image getImage() {
+        return SimplifiedImage.generateImage(getAvatar());
     }
 }

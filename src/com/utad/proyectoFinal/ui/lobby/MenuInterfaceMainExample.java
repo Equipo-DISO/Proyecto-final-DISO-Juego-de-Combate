@@ -1,8 +1,11 @@
 package com.utad.proyectoFinal.ui.lobby;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 
 public class MenuInterfaceMainExample {
@@ -12,12 +15,8 @@ public class MenuInterfaceMainExample {
         interfaceMain.waitTillClose();
 
         List<String> data = interfaceMain.getData();
-
-        MapGenerator instance = MapGenerator.getInstance(1100, 0, 6, 4);
-        instance.displayMap();
-
         
-        
+
         // Primer elemento de la lista es el jugador humano
         // Los siguientes elementos son los bots
         for (String element : data) {
@@ -25,5 +24,12 @@ public class MenuInterfaceMainExample {
             else if(data.indexOf(element) == 1) System.out.println("Nombre del Jugador: " + element + "\nLista de Bots: ");
             else System.out.println("#" + (data.indexOf(element) - 1) + ": " + element);
         }
+
+        LinkedList<Bot> bots = interfaceMain.getBotList();
+        BaseCharacter player = interfaceMain.getPlayerCharacter();
+
+        
+        MapGenerator instance = MapGenerator.getInstance(1100, 0, 6, bots.size() + 1);
+        instance.displayMap();
     }
 }

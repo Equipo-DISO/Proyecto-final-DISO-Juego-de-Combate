@@ -10,6 +10,8 @@ import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
 import com.utad.proyectoFinal.characterSystem.images.*; // Importa los decoradores
 import com.utad.proyectoFinal.mapa.GenericTile;
+import com.utad.proyectoFinal.mapa.MapObject;
+import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,7 +19,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
-public class BaseCharacter implements CombatCharacter{
+public class BaseCharacter implements CombatCharacter, MapObject {
 
 
     // Contador de personajes (usado para asignar un ID único a cada personaje)
@@ -32,9 +34,6 @@ public class BaseCharacter implements CombatCharacter{
     private Integer healthPoints;
     private Integer maxHealthPoints;
     private Double baseAttack;
-    private Double baseDefense;
-    private Double baseCounterAttackChance;
-    private Double baseCounterAttackDamage;
     private Integer manaPoints;
     private Integer maxManaPoints;
     private Integer hpPotions; // Cantidad de pociones de salud
@@ -61,7 +60,7 @@ public class BaseCharacter implements CombatCharacter{
 
     // Sistema de decoradores de imagen
     protected CharacterImage characterImage;
-    protected final BufferedImage baseAvatar; // Guarda la imagen base original
+    protected Image baseAvatar; // Guarda la imagen base original
 
 
     // Atributos de posicionamiento
@@ -71,11 +70,48 @@ public class BaseCharacter implements CombatCharacter{
     // Comportamiento
     private Boolean esControlado;  // Indica si es controlado por IA
 
-    public BaseCharacter(String name, Double baseAttack, Double baseDefense) {
-        this(name, baseAttack, baseDefense, loadDefaultAvatar());
+
+    public BaseCharacter(String name) {
+        this(name, DefaultAttributes.ATTACK);
     }
 
-    private static BufferedImage loadDefaultAvatar() {
+    public BaseCharacter(String name, Double baseAttack) {
+        this(name, baseAttack, loadDefaultAvatar());
+    }
+
+    
+    public BaseCharacter(String name, Double baseAttack, Image baseAvatar) {
+        this.name = name;
+        this.baseAttack = baseAttack;
+        this.manaPoints = DefaultAttributes.MANA_POINTS; // Valor por defecto para los puntos de maná
+        this.maxManaPoints = DefaultAttributes.MAX_MANA_POINTS; // Valor por defecto
+        this.hpPotions = 0; // Inicialmente no tiene pociones de salud
+        
+        this.states = new StatesList(this); // Inicializa el estado del personaje
+        this.currentState = states.getIdleState(); // Estado inicial
+        
+        this.weapon = null;
+        this.helmet = null;
+        
+        this.maxHealthPoints = DefaultAttributes.HEALTH;
+        this.healthPoints = this.maxHealthPoints;
+
+        //        this.items = new ArrayList<Item>();
+        //        this.efectos = new ArrayList<Item>();
+        
+        this.id = ++BaseCharacter.contadorPersonajes;
+        
+        this.baseAvatar = baseAvatar;
+        this.characterImage = new BaseCharacterImage(baseAvatar);
+        
+        // Todo: Implement -> re-add after Tile class is created
+        //this.ubicacionActual = null;
+        //this.destinoObjetivo = null;
+        
+        this.esControlado = false; // Por defecto, el personaje no es controlado por IA
+    }
+
+    private static Image loadDefaultAvatar() {
         try {
             return ImageIO.read(new File("Files/img/GreenGuy.png"));
         } catch (IOException e) {
@@ -84,46 +120,12 @@ public class BaseCharacter implements CombatCharacter{
             return new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
         }
     }
-
-    public BaseCharacter(String name, Double baseAttack, Double baseDefense, BufferedImage baseAvatar) {
-        this.name = name;
-        this.baseAttack = baseAttack;
-        this.baseDefense = baseDefense;
-        this.baseCounterAttackChance = DefaultAttributes.COUNTERATTACK_PROBABILITY; // Valor por defecto para el ataque de contraataque
-        this.baseCounterAttackDamage = DefaultAttributes.COUNTERATTACK_DAMAGE; // Valor por defecto para el multiplicador de contraataque
-        this.manaPoints = DefaultAttributes.MANA_POINTS; // Valor por defecto para los puntos de maná
-        this.maxManaPoints = DefaultAttributes.MAX_MANA_POINTS; // Valor por defecto
-        this.hpPotions = 0; // Inicialmente no tiene pociones de salud
-
-        this.states = new StatesList(this); // Inicializa el estado del personaje
-        this.currentState = states.getIdleState(); // Estado inicial
-
-        this.weapon = null;
-        this.helmet = null;
-
-        this.maxHealthPoints = DefaultAttributes.HEALTH;
-        this.healthPoints = this.maxHealthPoints;
-
-//        this.items = new ArrayList<Item>();
-//        this.efectos = new ArrayList<Item>();
-
-        this.id = ++BaseCharacter.contadorPersonajes;
-
-        this.baseAvatar = baseAvatar;
-        this.characterImage = new BaseCharacterImage(baseAvatar);
-
-        // Todo: Implement -> re-add after Tile class is created
-        //this.ubicacionActual = null;
-        //this.destinoObjetivo = null;
-
-        this.esControlado = false; // Por defecto, el personaje no es controlado por IA
-    }
-
+    
     // Método privado para actualizar la imagen decorada
     private void updateCharacterImage() {
         // Empieza siempre desde la imagen base
         this.characterImage = new BaseCharacterImage(this.baseAvatar);
-
+        
         // Aplica el decorador de casco si existe
         if (this.helmet != null && this.helmet.getAvatar() != null) {
             this.characterImage = new HelmetDecorator(this.characterImage, this.helmet.getAvatar());
@@ -168,9 +170,6 @@ public class BaseCharacter implements CombatCharacter{
         this.weapon = weapon;
         updateCharacterImage(); // Reconstruye la imagen decorada
     }
-
-
-
 
     public boolean isAlive() {
         return this.healthPoints > 0;
@@ -264,10 +263,6 @@ public class BaseCharacter implements CombatCharacter{
 
     public Double getBaseAttack() {
         return baseAttack;
-    }
-
-    public Double getBaseDefense() {
-        return baseDefense;
     }
 
     public Integer getId() {
@@ -376,8 +371,23 @@ public class BaseCharacter implements CombatCharacter{
     }
 
     @Override
-    public BufferedImage getCompleteImage() {
-        // Devuelve la imagen decorada completa
-        return characterImage.getCompleteImage();
+    public Image getCompleteImage() {
+        if (characterImage != null) {
+            return characterImage.getCompleteImage();
+        }
+        return null;
+    }
+
+    @Override
+    public Image getImage() {
+        return getCompleteImage();
+    }
+
+    // Image
+    public void setImage(String path){
+        try {this.baseAvatar = ImageIO.read(new File(path)); }
+        catch (IOException e) {
+            loadDefaultAvatar();
+        }
     }
 }
