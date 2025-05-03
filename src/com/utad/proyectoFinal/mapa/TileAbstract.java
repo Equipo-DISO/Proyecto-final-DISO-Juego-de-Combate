@@ -5,8 +5,6 @@ import java.awt.image.BufferedImage;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 
-import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-
 
 public abstract class TileAbstract 
 {

@@ -1,11 +1,15 @@
 package com.utad.proyectoFinal.mapa;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -159,7 +163,14 @@ public class MapGenerator extends JPanel
         renderBridges(g2d);
     }
 
-    
+    private BufferedImage loadImage(String path) throws IOException 
+    {
+        File file = new File(path);
+        if (!file.exists()) {
+            throw new IOException("File not found: " + path);
+        }
+        return ImageIO.read(file);
+    }
 
     private void drawPendingScreen(Graphics2D g2d)
     {
@@ -216,8 +227,14 @@ public class MapGenerator extends JPanel
         g2d.setColor(Color.DARK_GRAY); 
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
-       //g2d.drawImage(new SimplifiedImage("Files/img/player.png").generateImage(30, 30), 200, 200, boxWidth, boxHeight, null);
-       createText(g2d, boxX + 55, boxY + 45, "nig/15", 20f);
+        try {
+            g2d.drawImage(loadImage("Files/img/PeopleIcon.png"), boxX + 12, boxY + 20, 30, 30, null);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        
+      
+       createText(g2d, boxX + 50, boxY + 40, "nig/15", 20f);
     }
 
     private void createText(Graphics2D g2d, Integer posX, Integer posY, String msg, Float fontSize)
