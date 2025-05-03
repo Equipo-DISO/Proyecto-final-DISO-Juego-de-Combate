@@ -54,9 +54,8 @@ public class SimplifiedImage {
         return this.generateImage(width, height);
     }
     public Image generateImage(Integer reescalatedWidth, Integer reescalatedHeight) {
-
         ImageIcon iconoJugador = new ImageIcon(path);
-        return iconoJugador.getImage().getScaledInstance(reescalatedWidth, reescalatedHeight, Image.SCALE_SMOOTH);
+        return iconoJugador.getImage().getScaledInstance(reescalatedWidth, reescalatedHeight, Image.SCALE_AREA_AVERAGING);
     }
 
     // convert BufferedImage to Image (static)
@@ -64,7 +63,7 @@ public class SimplifiedImage {
         return generateImage(image, image.getWidth(), image.getHeight());
     }
     public static Image generateImage(BufferedImage image, Integer reescalatedWidth, Integer reescalatedHeight) {
-        return image.getScaledInstance(reescalatedWidth, reescalatedHeight, Image.SCALE_SMOOTH);
+        return image.getScaledInstance(reescalatedWidth, reescalatedHeight, Image.SCALE_AREA_AVERAGING);
     }
 
     public ImageIcon generateImageIcon() {

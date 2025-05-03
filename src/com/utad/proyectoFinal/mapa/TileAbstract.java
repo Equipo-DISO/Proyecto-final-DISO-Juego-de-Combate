@@ -71,8 +71,12 @@ public abstract class TileAbstract
        {
             if (this.specialImage != null)
             {
-                // He cambiado el tamaño de la imagen porque creo que se ve mejor. Matesanz
-                graphics2d.drawImage(this.specialImage, imageX-10, imageY-30, TileAbstract.IMAGE_WIDTH+20, TileAbstract.IMAGE_HEIGHT+20, null);
+                // Add rendering hints for better quality
+                graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                graphics2d.drawImage(this.specialImage, imageX, imageY, TileAbstract.IMAGE_WIDTH, TileAbstract.IMAGE_HEIGHT, null);
             }
 	   } 
        catch (Exception e) 
