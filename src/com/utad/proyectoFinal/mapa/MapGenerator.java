@@ -161,14 +161,6 @@ public class MapGenerator extends JPanel
         renderBridges(g2d);
     }
 
-    private BufferedImage loadImage(String path) throws IOException 
-    {
-        File file = new File(path);
-        if (!file.exists()) {
-            throw new IOException("File not found: " + path);
-        }
-        return ImageIO.read(file);
-    }
 
     private void drawPendingScreen(Graphics2D g2d)
     {
