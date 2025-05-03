@@ -88,9 +88,6 @@ public abstract class BaseState implements CharacterState {
         } else {
             // Aplicar reducción por casco usando Calculator
             finalDamage = Calculator.getInstance().calculateHelmetReduction(character, finalDamage);
-
-            // Aplicar reducción por defensa base del personaje
-            finalDamage = finalDamage - (finalDamage * character.getBaseDefense()/100.0);
         }
 
         int actualDamage = (int) finalDamage;

@@ -63,19 +63,19 @@ public class CriticalHitAndDurabilityTest extends JFrame {
             Image defenderImage = loadImage("Files/img/RedGuy.png");
             
             // Create characters
-            attacker = new TestCharacter("Attacker", 20.0, 10.0, attackerImage);
-            defender = new TestCharacter("Defender", 15.0, 20.0, defenderImage);
+            attacker = new TestCharacter("Attacker", 20.0, attackerImage);
+            defender = new TestCharacter("Defender", 15.0, defenderImage);
 
             // Initialize to idle state
             attacker.setIdleState();
             defender.setIdleState();
 
             // Equip weapon and helmet using character methods
-            BaseWeapon sword = new BaseWeapon(WeaponType.STICK);
+            BaseWeapon sword = new BaseWeapon(WeaponType.SWORD);
             BaseHelmet helmet = new BaseHelmet(HelmetType.DEMON_HELMET);
             
-            attacker.setWeapon(sword);
-            defender.setHelmet(helmet);
+            attacker.equipWeapon(sword);
+            defender.equipHelmet(helmet);
             
             setupUI();
             
@@ -217,7 +217,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
                  " - Damage: " + attacker.getWeapon().getDamage() + 
                  " - Critical Chance: " + (attacker.getWeapon().getCriticalChance() * 100) + "%" +
                  " - Critical Multiplier: " + attacker.getWeapon().getCriticalDamage() + "x");
-        logEvent("Defender: " + defender.getName() + " - Base Defense: " + defender.getBaseDefense());
+        logEvent("Defender: " + defender.getName() + " - Base Defense: 0.0");
         logEvent("Helmet: " + defender.getHelmet().getName() + 
                  " - Defense: " + defender.getHelmet().getDefense() + 
                  " - Durability: " + defender.getHelmet().getDurability());
@@ -262,7 +262,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         JPanel statsPanel = new JPanel(new GridLayout(4, 1));
         
         String attackOrDefense = isAttacker ? "Attack: " : "Defense: ";
-        double value = isAttacker ? character.getBaseAttack() : character.getBaseDefense();
+        double value = isAttacker ? character.getBaseAttack() : 0.0;
         
         JLabel attackDefLabel = new JLabel(attackOrDefense + value);
         JLabel healthLabel = new JLabel("Health: " + character.getHealthPoints() + "/" + character.getMaxHealthPoints());
@@ -307,18 +307,15 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         totalHits++;
         if (willBeCritical) criticalHits++;
         
-        // Execute attack using character methods rather than direct calculation
+        // Execute attack using state system and strategy pattern
         if (attackType.equals("Light")) {
-            attacker.attack(defender, new LightAttackStrategy()); // Use character attack method
+            attacker.attack(defender, new LightAttackStrategy());
         } else {
-            attacker.attack(defender, new HeavyAttackStrategy()); // Use character heavy attack method (if available)
-            // If heavyAttack method doesn't exist, fall back to attack with multiplier
+            attacker.attack(defender, new HeavyAttackStrategy());
         }
         
         // Calculate how much damage was done
         int damageDealt = initialHealth - defender.getHealthPoints();
-        
-        // Decrease weapon durability through character method
         
         // Update weapon durability bar
         updateWeaponDurabilityBar();
@@ -327,14 +324,38 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         updateHelmetDurabilityBar();
         
         // Check if weapon breaks
-        if (attacker.getWeapon() != null && attacker.getWeapon().getDurability() <= 0) {
-            logEvent(attacker.getName() + "'s " + attacker.getWeapon().getName() + " broke from use!");
+        if (attacker.getWeapon() == null) {
+            logEvent(attacker.getName() + "'s weapon broke from use!");
             attacker.setWeapon(null);
             weaponStatusLabel.setText("Weapon: BROKEN");
             
-            // Repaint attacker character panel to update visual representation
+            // Explicitly render character after weapon breaks
             if (attackerRenderPanel != null) {
+                attackerRenderPanel.getGraphics().clearRect(0, 0, attackerRenderPanel.getWidth(), attackerRenderPanel.getHeight());
+                int x = (getWidth() - 82) / 2;
+                int y = (getHeight() - 100) / 2;
+                attacker.render((Graphics2D)attackerRenderPanel.getGraphics(), 
+                                x, 
+                                y);
                 attackerRenderPanel.repaint();
+            }
+        }
+        
+        // Check if helmet breaks
+        if (defender.getHelmet() == null) {
+            logEvent(defender.getName() + "'s helmet broke from damage!");
+            defender.setHelmet(null);
+            helmetStatusLabel.setText("Helmet: BROKEN");
+            
+            // Explicitly render character after helmet breaks
+            if (defenderRenderPanel != null) {
+                defenderRenderPanel.getGraphics().clearRect(0, 0, defenderRenderPanel.getWidth(), defenderRenderPanel.getHeight());
+                int x = (getWidth() - 82) / 2;
+                int y = (getHeight() - 100) / 2;    
+                defender.render((Graphics2D)defenderRenderPanel.getGraphics(), 
+                                x, 
+                                y);
+                defenderRenderPanel.repaint();
             }
         }
         
@@ -396,48 +417,70 @@ public class CriticalHitAndDurabilityTest extends JFrame {
     }
     
     private void resetTest() {
-        // Reset character health and equipment
-        attacker = new TestCharacter("Attacker", 20.0, 10.0);
-        defender = new TestCharacter("Defender", 15.0, 20.0);
-        
-        // Ensure testing mode is active
-        TestUtils.setTestingMode(true);
-        
-        // Set characters to initial idle state
-        attacker.setIdleState();
-        defender.setIdleState();
-        
-        // Equip weapon and helmet using character methods
-        BaseWeapon sword = new BaseWeapon(WeaponType.SWORD);
-        BaseHelmet helmet = new BaseHelmet(HelmetType.DEMON_HELMET);
-        
-        attacker.setWeapon(sword);
-        defender.setHelmet(helmet);
-        
-        // Reset statistics
-        totalHits = 0;
-        criticalHits = 0;
-        
-        // Update UI elements
-        updateHealthBars();
-        updateWeaponDurabilityBar();
-        updateHelmetDurabilityBar();
-        updateCriticalHitStats();
-        
-        weaponStatusLabel.setText("Weapon: " + attacker.getWeapon().getName() + " (OK)");
-        helmetStatusLabel.setText("Helmet: " + defender.getHelmet().getName() + " (OK)");
-        
-        // Log reset
-        logEvent("------------------------------------------");
-        logEvent("Test reset - characters and equipment restored");
-        logEvent("------------------------------------------");
-        
-        // Repaint character panels
-        if (attackerRenderPanel != null) {
-            attackerRenderPanel.repaint();
-        }
-        if (defenderRenderPanel != null) {
-            defenderRenderPanel.repaint();
+        try {
+            // Load character images again
+            Image defenderImage = loadImage("Files/img/RedGuy.png");
+            
+            // Reset character health and equipment
+            defender = new TestCharacter("Defender", 15.0, defenderImage);
+            
+            // Ensure testing mode is active
+            TestUtils.setTestingMode(true);
+            
+            // Set characters to initial idle state
+            attacker.setIdleState();
+            defender.setIdleState();
+            
+            // Equip weapon and helmet using character methods
+            BaseWeapon sword = new BaseWeapon(WeaponType.SWORD);
+            BaseHelmet helmet = new BaseHelmet(HelmetType.DEMON_HELMET);
+            
+            attacker.equipWeapon(sword);
+            defender.equipHelmet(helmet);
+            
+            // Reset statistics
+            totalHits = 0;
+            criticalHits = 0;
+            
+            // Update UI elements
+            updateHealthBars();
+            updateWeaponDurabilityBar();
+            updateHelmetDurabilityBar();
+            updateCriticalHitStats();
+            
+            weaponStatusLabel.setText("Weapon: " + attacker.getWeapon().getName() + " (OK)");
+            helmetStatusLabel.setText("Helmet: " + defender.getHelmet().getName() + " (OK)");
+            
+            // Log reset
+            logEvent("------------------------------------------");
+            logEvent("Test reset - characters and equipment restored");
+            logEvent("Current states: Attacker: " + attacker.getCurrentStateName() + 
+                    ", Defender: " + defender.getCurrentStateName());
+            logEvent("------------------------------------------");
+            
+            // Simple UI refresh - just repaint the render panels
+            if (attackerRenderPanel != null) {
+                attackerRenderPanel.getGraphics().clearRect(0, 0, attackerRenderPanel.getWidth(), attackerRenderPanel.getHeight());
+                int x = (getWidth() - 82) / 2;
+                int y = (getHeight() - 100) / 2;
+                attacker.render((Graphics2D)attackerRenderPanel.getGraphics(), 
+                                x, 
+                                y);
+                attackerRenderPanel.repaint();
+            }
+            if (defenderRenderPanel != null) {
+                defenderRenderPanel.getGraphics().clearRect(0, 0, defenderRenderPanel.getWidth(), defenderRenderPanel.getHeight());
+                int x = (getWidth() - 82) / 2;  
+                int y = (getHeight() - 100) / 2;
+                defender.render((Graphics2D)defenderRenderPanel.getGraphics(), 
+                                x, 
+                                y);
+                defenderRenderPanel.repaint();
+            }
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            logEvent("Error during reset: " + e.getMessage());
         }
     }
     

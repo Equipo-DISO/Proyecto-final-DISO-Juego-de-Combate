@@ -9,41 +9,26 @@ import java.awt.Image;
  * A concrete implementation of BaseCharacter for testing purposes.
  */
 public class TestCharacter extends BaseCharacter {
-    
-    private Double baseDefense;
 
     /**
-     * Creates a test character with the specified name, attack, and defense.
+     * Creates a test character with the specified name and attack.
      * 
      * @param name The character's name
      * @param baseAttack The character's base attack value
-     * @param baseDefense The character's base defense value
      */
-    public TestCharacter(String name, Double baseAttack, Double baseDefense) {
+    public TestCharacter(String name, Double baseAttack) {
         super(name, baseAttack);
-        this.baseDefense = baseDefense;
     }
 
     /**
-     * Creates a test character with the specified name, attack, defense, and avatar.
+     * Creates a test character with the specified name, attack, and avatar.
      * 
      * @param name The character's name
      * @param baseAttack The character's base attack value
-     * @param baseDefense The character's base defense value
      * @param avatar The character's custom avatar
      */
-    public TestCharacter(String name, Double baseAttack, Double baseDefense, Image avatar) {
+    public TestCharacter(String name, Double baseAttack, Image avatar) {
         super(name, baseAttack, avatar);
-        this.baseDefense = baseDefense;
-    }
-
-    /**
-     * Gets the character's base defense value.
-     * 
-     * @return The character's base defense value
-     */
-    public Double getBaseDefense() {
-        return baseDefense;
     }
 
     public void render(Graphics2D g, int x, int y) {

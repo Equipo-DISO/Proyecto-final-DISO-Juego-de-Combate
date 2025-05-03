@@ -53,6 +53,7 @@ public class WeaponDecorator extends EquipmentDecorator {
         int resultHeight = maxY - minY;
         
         // Create result canvas that fits both base and weapon
+        // Using BufferedImage internally but returning as Image
         BufferedImage result = new BufferedImage(resultWidth, resultHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = result.createGraphics();
         // Draw base image with offset
@@ -60,6 +61,8 @@ public class WeaponDecorator extends EquipmentDecorator {
         // Draw weapon overlay with offset
         g.drawImage(weapon, weaponX - minX, weaponY - minY, newWeaponWidth, newWeaponHeight, null);
         g.dispose();
+        
+        // Return as Image type
         return result;
     }
 }

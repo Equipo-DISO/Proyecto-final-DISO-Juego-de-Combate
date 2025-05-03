@@ -37,7 +37,7 @@ public class EquipmentTest {
         characterPanel.setBackground(Color.WHITE);
         
         // Load character image
-        BufferedImage characterImage = loadImage("Files/img/GreenGuy.png");
+        Image characterImage = loadImage("Files/img/GreenGuy.png");
         if (characterImage == null) {
             System.out.println("Failed to load character image. Creating blank image.");
             characterImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
@@ -47,7 +47,6 @@ public class EquipmentTest {
         final TestCharacter character = new TestCharacter(
             "Equipment Tester", 
             DefaultAttributes.ATTACK, 
-            DefaultAttributes.DEFENSE,
             characterImage
         );
         
@@ -58,7 +57,7 @@ public class EquipmentTest {
         
         final JLabel nameLabel = new JLabel("Name: " + character.getName());
         final JLabel attackLabel = new JLabel(ATTACK + character.getBaseAttack());
-        final JLabel defenseLabel = new JLabel(DEFENSE + character.getBaseDefense());
+        final JLabel defenseLabel = new JLabel(DEFENSE + "0.0"); // Default defense value
         final JLabel weaponLabel = new JLabel("Weapon: None");
         final JLabel helmetLabel = new JLabel("Helmet: None");
         JLabel spaceLabel = new JLabel("");
@@ -121,8 +120,9 @@ public class EquipmentTest {
         addHelmetBtn.addActionListener(e -> {
             character.setHelmet(helmet);
             helmetLabel.setText("Helmet: " + helmet.getName());
-            defenseLabel.setText(DEFENSE +
-                (character.getBaseDefense() + (character.getHelmet() != null ? character.getHelmet().getDefense() : 0)));
+            // Update defense label with helmet defense value
+            defenseLabel.setText(DEFENSE + 
+                (character.getHelmet() != null ? character.getHelmet().getDefense() : 0.0));
             renderPanel.repaint();
             System.out.println("Added helmet: " + helmet.getName());
         });
@@ -131,7 +131,7 @@ public class EquipmentTest {
         removeHelmetBtn.addActionListener(e -> {
             character.setHelmet(null);
             helmetLabel.setText("Helmet: None");
-            defenseLabel.setText(DEFENSE + character.getBaseDefense());
+            defenseLabel.setText(DEFENSE + "0.0"); // Reset to default defense
             renderPanel.repaint();
             System.out.println("Removed helmet");
         });
@@ -154,7 +154,7 @@ public class EquipmentTest {
     /**
      * Utility method to load an image from a file path
      */
-    private static BufferedImage loadImage(String path) {
+    private static Image loadImage(String path) {
         try {
             File file = new File(path);
             if (file.exists()) {

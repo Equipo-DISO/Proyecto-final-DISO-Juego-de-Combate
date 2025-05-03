@@ -1,9 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.tools;
 
-
 import com.utad.proyectoFinal.mapa.MapObject;
-import com.utad.proyectoFinal.ui.SimplifiedImage;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,7 +15,7 @@ public class BaseHelmet implements MapObject {
     private Integer durability;
     private String imagePath;
 
-    //Constructor dependiendo del Tipo de casco
+    // Constructor dependiendo del Tipo de casco
     public BaseHelmet(HelmetType type) {
         this.type = type;
         this.name = type.getName();
@@ -47,7 +44,7 @@ public class BaseHelmet implements MapObject {
         return type;
     }
 
-    public void decreaseDurability(){
+    public void decreaseDurability() {
         this.durability--;
     }
 
@@ -56,14 +53,16 @@ public class BaseHelmet implements MapObject {
     }
 
     // --- Metodo para obtener el Avatar ---
-    public BufferedImage getAvatar() {
-        BufferedImage avatar = null;
+    public Image getAvatar() {
+        Image avatar = null;
 
         try {
-            // Remove the leading slash if present
-            String path = this.imagePath;
-
-            throw new IOException("No placeholder images found");
+            File file = new File(this.imagePath);
+            if (file.exists()) {
+                avatar = ImageIO.read(file);
+            } else {
+                throw new IOException("No placeholder images found");
+            }
 
         } catch (IOException e) {
             System.err.println("Error loading weapon image: " + e.getMessage());
@@ -78,6 +77,6 @@ public class BaseHelmet implements MapObject {
 
     @Override
     public Image getImage() {
-        return SimplifiedImage.generateImage(getAvatar());
+        return getAvatar();
     }
 }

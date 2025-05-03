@@ -51,13 +51,15 @@ public class HelmetDecorator extends EquipmentDecorator {
         int resultWidth = maxX - minX;
         int resultHeight = maxY - minY;
 
-        // Create result canvas accommodating overflow
+        // Create result canvas accommodating overflow (using BufferedImage internally)
         BufferedImage result = new BufferedImage(resultWidth, resultHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = result.createGraphics();
         // Draw base and helmet with offsets
         g.drawImage(baseImage, -minX, -minY, null);
         g.drawImage(helmet, helmetX - minX, helmetY - minY, newHelmetWidth, newHelmetHeight, null);
         g.dispose();
+        
+        // Return as Image (which is what BufferedImage extends)
         return result;
     }
 }

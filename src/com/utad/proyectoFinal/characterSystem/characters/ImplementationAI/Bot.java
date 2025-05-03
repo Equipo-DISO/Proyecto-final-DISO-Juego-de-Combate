@@ -1,10 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
 import com.utad.proyectoFinal.mapa.MapGenerator;
-
-import java.awt.image.BufferedImage;
 
 public class Bot extends BaseCharacter {
 

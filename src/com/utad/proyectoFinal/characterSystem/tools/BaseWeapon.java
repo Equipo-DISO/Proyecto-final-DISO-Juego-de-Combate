@@ -37,7 +37,7 @@ public class BaseWeapon implements MapObject {
         return damage;
     }
 
-    public void setDamage(Double auxDamage){
+    public void setDamage(Double auxDamage) {
         this.damage = auxDamage; // por si asestan golpes críticos
     }
 
@@ -62,19 +62,22 @@ public class BaseWeapon implements MapObject {
     }
 
     // --- Metodo para fumar ---
-    public BufferedImage getAvatar() {
-        BufferedImage avatar = null;
+    public Image getAvatar() {
+        Image avatar = null;
 
         try {
-            // Remove the leading slash if present
-            String path = this.imagePath;
 
-            throw new IOException("No placeholder images found");
+            File file = new File(this.imagePath);
+            if (file.exists()) {
+                avatar = ImageIO.read(file);
+            } else {
+                throw new IOException("No placeholder images found");
+            }
 
         } catch (IOException e) {
             System.err.println("Error loading weapon image: " + e.getMessage());
             e.printStackTrace();
-            
+
             // Create a simple placeholder image
             avatar = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
         }
@@ -84,6 +87,6 @@ public class BaseWeapon implements MapObject {
 
     @Override
     public Image getImage() {
-        return SimplifiedImage.generateImage(getAvatar());
+        return getAvatar();
     }
 }

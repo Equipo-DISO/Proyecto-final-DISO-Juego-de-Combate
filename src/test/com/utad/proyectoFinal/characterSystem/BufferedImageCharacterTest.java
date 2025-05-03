@@ -46,8 +46,7 @@ public class BufferedImageCharacterTest extends JFrame {
             // Initialize character with a character image
             Image characterImage = loadImage("Files/img/GreenGuy.png");
             character = new TestCharacter("Test Warrior", 
-                                           DefaultAttributes.ATTACK, 
-                                           DEFAULT_DEFENSE, 
+                                           DefaultAttributes.ATTACK,
                                            characterImage);
 
 
@@ -88,7 +87,7 @@ public class BufferedImageCharacterTest extends JFrame {
         JLabel attackLabel = new JLabel("Base Attack: " + character.getBaseAttack());
         attackLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        JLabel defenseLabel = new JLabel("Base Defense: " + character.getBaseDefense());
+        JLabel defenseLabel = new JLabel("Base Defense: Depracated");
         defenseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         infoPanel.add(characterInfoLabel);
@@ -192,10 +191,9 @@ public class BufferedImageCharacterTest extends JFrame {
         stats.append("\n");
         
         // Defense stats
-        stats.append("Defense: ").append(character.getBaseDefense());
+        stats.append("Defense: ");
         if (character.getHelmet() != null) {
-            stats.append(" + ").append(character.getHelmet().getDefense())
-                 .append(" = ").append(character.getBaseDefense() + character.getHelmet().getDefense());
+            stats.append(" = ").append(character.getHelmet().getDefense());
         }
         stats.append("\n\n");
         

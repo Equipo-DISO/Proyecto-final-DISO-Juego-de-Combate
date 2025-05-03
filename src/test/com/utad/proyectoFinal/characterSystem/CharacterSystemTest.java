@@ -41,7 +41,7 @@ public class CharacterSystemTest {
         System.out.println("\n=== Testing Attack Values ===");
 
         // Create a character with default attack
-        TestCharacter character = new TestCharacter("TestWarrior", DefaultAttributes.ATTACK, 0.0);
+        TestCharacter character = new TestCharacter("TestWarrior", DefaultAttributes.ATTACK);
         System.out.println("Base attack without weapon: " + character.getBaseAttack());
 
         // Test with different weapons
@@ -67,8 +67,8 @@ public class CharacterSystemTest {
         System.out.println("\n=== Testing Damage Calculation ===");
 
         // Create attacker and defender
-        TestCharacter attacker = new TestCharacter("Attacker", 20.0, 0.0);
-        TestCharacter defender = new TestCharacter("Defender", 0.0, 20.0);
+        TestCharacter attacker = new TestCharacter("Attacker", 20.0);
+        TestCharacter defender = new TestCharacter("Defender", 0.0);
 
         // Set initial health
         int initialHealth = defender.getHealthPoints();
@@ -80,7 +80,7 @@ public class CharacterSystemTest {
 
         // Calculate expected damage
         double baseAttack = attacker.getBaseAttack() + weapon.getDamage();
-        double expectedDamage = baseAttack - (baseAttack * defender.getBaseDefense() / 100.0);
+        double expectedDamage = baseAttack;
         System.out.println("Expected damage: " + expectedDamage);
 
         // Simulate attack
@@ -108,7 +108,6 @@ public class CharacterSystemTest {
 
         // Calculate expected damage with helmet
         double expectedDamageWithHelmet = Math.max(0, baseAttack - helmet.getDefense());
-        expectedDamageWithHelmet = expectedDamageWithHelmet - (expectedDamageWithHelmet * defender.getBaseDefense() / 100.0);
         System.out.println("Expected damage with helmet: " + expectedDamageWithHelmet);
 
         // Simulate attack with helmet
@@ -134,8 +133,8 @@ public class CharacterSystemTest {
         System.out.println("\n=== Testing State Transitions ===");
 
         // Create characters
-        TestCharacter character = new TestCharacter("StateTest", DefaultAttributes.ATTACK, DefaultAttributes.DEFENSE);
-        TestCharacter opponent = new TestCharacter("Opponent", DefaultAttributes.ATTACK, DefaultAttributes.DEFENSE);
+        TestCharacter character = new TestCharacter("StateTest", DefaultAttributes.ATTACK);
+        TestCharacter opponent = new TestCharacter("Opponent", DefaultAttributes.ATTACK);
 
         // Test initial state (should be Idle)
         System.out.println("Initial state: " + character.getCurrentState().getName());
@@ -215,8 +214,8 @@ public class CharacterSystemTest {
         System.out.println("\n=== Testing Attack State Without Auto Transition ===");
 
         // Create characters
-        TestCharacter character = new TestCharacter("StateTest", DefaultAttributes.ATTACK, DefaultAttributes.DEFENSE);
-        TestCharacter opponent = new TestCharacter("Opponent", DefaultAttributes.ATTACK, DefaultAttributes.DEFENSE);
+        TestCharacter character = new TestCharacter("StateTest", DefaultAttributes.ATTACK);
+        TestCharacter opponent = new TestCharacter("Opponent", DefaultAttributes.ATTACK);
 
         // Ensure we're in testing mode
         TestUtils.setTestingMode(true);
@@ -252,8 +251,8 @@ public class CharacterSystemTest {
         System.out.println("\n=== Testing All States Without Auto Transition ===");
 
         // Create characters
-        TestCharacter character = new TestCharacter("StateTest", DefaultAttributes.ATTACK, DefaultAttributes.DEFENSE);
-        TestCharacter opponent = new TestCharacter("Opponent", DefaultAttributes.ATTACK, DefaultAttributes.DEFENSE);
+        TestCharacter character = new TestCharacter("StateTest", DefaultAttributes.ATTACK);
+        TestCharacter opponent = new TestCharacter("Opponent", DefaultAttributes.ATTACK);
 
         // Ensure we're in testing mode
         TestUtils.setTestingMode(true);
