@@ -40,7 +40,7 @@ public class NormalTileFactory extends TileFactory
         {
             tile = (Math.random() < MapGenerator.DEFAULT_OBSTACLE_PROBABILITY ? this.creatileObstacle(x, y, tileId) : this.createTile(x, y, tileId));
             
-            if (Math.random() < MapGenerator.DEFAULT_LOOT_PROBABILITY) 
+            if (Math.random() < MapGenerator.DEFAULT_LOOT_PROBABILITY && tile instanceof GenericTile) 
             {
                 tile.setSpecialImage(new SimplifiedImage("Files/img/Pergamino.png").generateImage());
             }
