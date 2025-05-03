@@ -24,6 +24,7 @@ public class SimplifiedImage {
     public SimplifiedImage(String path) {
         this(path, DEF_WIDTH, DEF_HEIGHT);
     }
+
     public SimplifiedImage(String path, int width, int height) {
         this.path = path;
         this.width = width;
@@ -56,6 +57,14 @@ public class SimplifiedImage {
 
         ImageIcon iconoJugador = new ImageIcon(path);
         return iconoJugador.getImage().getScaledInstance(reescalatedWidth, reescalatedHeight, Image.SCALE_SMOOTH);
+    }
+
+    // convert BufferedImage to Image (static)
+    public static Image generateImage(BufferedImage image) {
+        return generateImage(image, image.getWidth(), image.getHeight());
+    }
+    public static Image generateImage(BufferedImage image, Integer reescalatedWidth, Integer reescalatedHeight) {
+        return image.getScaledInstance(reescalatedWidth, reescalatedHeight, Image.SCALE_SMOOTH);
     }
 
     public ImageIcon generateImageIcon() {
