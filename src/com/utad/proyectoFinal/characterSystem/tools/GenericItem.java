@@ -3,7 +3,6 @@ package com.utad.proyectoFinal.characterSystem.tools;
 import com.utad.proyectoFinal.mapa.MapObject;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class GenericItem implements MapObject {
 

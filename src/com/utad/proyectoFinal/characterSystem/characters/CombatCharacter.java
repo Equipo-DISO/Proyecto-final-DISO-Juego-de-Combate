@@ -5,7 +5,6 @@ import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
 import com.utad.proyectoFinal.mapa.GenericTile;
 
-import java.awt.Graphics2D;
 import java.awt.Image;
 
 /**

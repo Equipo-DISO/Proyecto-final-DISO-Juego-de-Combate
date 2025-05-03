@@ -1,7 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.characters.states.strategies;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.tools.Calculator;
 
 /**
 * Plantilla común para todas las estrategias de ataque.

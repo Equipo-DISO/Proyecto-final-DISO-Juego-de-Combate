@@ -1,7 +1,5 @@
 package test.com.utad.proyectoFinal.characterSystem;
 
-import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
-import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
 import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
@@ -15,7 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;

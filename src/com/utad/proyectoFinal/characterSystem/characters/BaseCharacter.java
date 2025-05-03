@@ -49,20 +49,12 @@ public class BaseCharacter implements CombatCharacter, MapObject {
     protected BaseWeapon weapon;  // Arma equipada
     protected BaseHelmet helmet;  // Casco equipado
 
-    // Inventario y efectos
-    // TODO: Implement inventory system (find best approach/pattern) State maybe?
-    //    private List<Item> inventario;  // Pociones, vendas, botiquines, etc.
-    //    private List<Item> efectosActivos;  // Efectos negativos de las trampas, etc.
-    private Integer capacidadMaximaInventario;
-
-
     // Sistema de decoradores de imagen
     protected CharacterImage characterImage;
     protected Image baseAvatar; // Guarda la imagen base original
 
 
     // Atributos de posicionamiento
-    // TODO: Implement -> Tile
     private GenericTile currentPosition;
 
     // Comportamiento
@@ -101,10 +93,6 @@ public class BaseCharacter implements CombatCharacter, MapObject {
         
         this.baseAvatar = baseAvatar;
         this.characterImage = new BaseCharacterImage(baseAvatar);
-        
-        // Todo: Implement -> re-add after Tile class is created
-        //this.ubicacionActual = null;
-        //this.destinoObjetivo = null;
         
         this.esControlado = false; // Por defecto, el personaje no es controlado por IA
     }
@@ -307,6 +295,9 @@ public class BaseCharacter implements CombatCharacter, MapObject {
         this.currentPosition = currentPosition;
     }
 
+    public Boolean getEsControlado() {
+        return esControlado;
+    }
 
     /**
      * Attack with a specific strategy

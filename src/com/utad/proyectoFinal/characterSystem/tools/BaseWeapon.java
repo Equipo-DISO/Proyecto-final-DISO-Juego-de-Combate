@@ -1,8 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.tools;
 
 import com.utad.proyectoFinal.mapa.MapObject;
-import com.utad.proyectoFinal.ui.SimplifiedImage;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;

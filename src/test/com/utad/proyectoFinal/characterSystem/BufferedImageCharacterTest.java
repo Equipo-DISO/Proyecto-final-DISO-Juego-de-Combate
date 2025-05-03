@@ -25,9 +25,6 @@ import com.utad.proyectoFinal.characterSystem.tools.WeaponType;
  */
 public class BufferedImageCharacterTest extends JFrame {
     
-    // Default defense value for testing
-    private static final Double DEFAULT_DEFENSE = 10.0;
-    
     private TestCharacter character;
     private BaseWeapon sword;
     private BaseHelmet helmet;
