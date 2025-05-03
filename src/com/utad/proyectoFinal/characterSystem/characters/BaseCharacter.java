@@ -3,6 +3,7 @@ package com.utad.proyectoFinal.characterSystem.characters;
 
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
 import com.utad.proyectoFinal.characterSystem.images.BaseCharacterImage;
 import com.utad.proyectoFinal.characterSystem.images.CharacterImage;
 import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
@@ -16,7 +17,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
-public class BaseCharacter {
+public class BaseCharacter implements CombatCharacter{
 
 
     // Contador de personajes (usado para asignar un ID único a cada personaje)
@@ -36,6 +37,7 @@ public class BaseCharacter {
     private Double baseCounterAttackDamage;
     private Integer manaPoints;
     private Integer maxManaPoints;
+    private Integer hpPotions; // Cantidad de pociones de salud
 
 
     // Estados del personaje
@@ -43,7 +45,6 @@ public class BaseCharacter {
     private CharacterState currentState; // Estado actual del personaje
 
     // Atributos de combate
-    private Double retreatChance;
     private Boolean retreatSuccess;
 
 
@@ -59,14 +60,13 @@ public class BaseCharacter {
 
 
     // Sistema de decoradores de imagen
-    private CharacterImage characterImage;
-    private final BufferedImage baseAvatar; // Guarda la imagen base original
+    protected CharacterImage characterImage;
+    protected final BufferedImage baseAvatar; // Guarda la imagen base original
 
 
     // Atributos de posicionamiento
     // TODO: Implement -> Tile
     private GenericTile currentPosition;
-    private GenericTile nextPosition; // Posición objetivo del personaje en el mapa
 
     // Comportamiento
     private Boolean esControlado;  // Indica si es controlado por IA
@@ -93,6 +93,7 @@ public class BaseCharacter {
         this.baseCounterAttackDamage = DefaultAttributes.COUNTERATTACK_DAMAGE; // Valor por defecto para el multiplicador de contraataque
         this.manaPoints = DefaultAttributes.MANA_POINTS; // Valor por defecto para los puntos de maná
         this.maxManaPoints = DefaultAttributes.MAX_MANA_POINTS; // Valor por defecto
+        this.hpPotions = 0; // Inicialmente no tiene pociones de salud
 
         this.states = new StatesList(this); // Inicializa el estado del personaje
         this.currentState = states.getIdleState(); // Estado inicial
@@ -100,7 +101,6 @@ public class BaseCharacter {
         this.weapon = null;
         this.helmet = null;
 
-        this.retreatChance = DefaultAttributes.RETREAT_PROBABILITY;
         this.maxHealthPoints = DefaultAttributes.HEALTH;
         this.healthPoints = this.maxHealthPoints;
 
@@ -146,6 +146,23 @@ public class BaseCharacter {
         return helmet;
     }
 
+    @Override
+    public void addHealthPotion() {
+        this.hpPotions++;
+    }
+
+    @Override
+    public void addManaUpgrade() {
+        this.manaPoints += DefaultAttributes.UPGRADE_MANA_AMOUNT;
+        this.maxManaPoints += DefaultAttributes.UPGRADE_MANA_AMOUNT;
+    }
+
+    @Override
+    public void addHealthUpgrade() {
+        this.healthPoints += DefaultAttributes.UPGRADE_HEALTH_AMOUNT;
+        this.maxHealthPoints += DefaultAttributes.UPGRADE_HEALTH_AMOUNT;
+    }
+
     // Setter para el arma que actualiza el decorador
     public void setWeapon(BaseWeapon weapon) {
         this.weapon = weapon;
@@ -153,12 +170,7 @@ public class BaseCharacter {
     }
 
 
-    // Método para renderizar el personaje con todos sus decoradores
-    public void render(Graphics2D g, int x, int y) {
-        if (characterImage != null) {
-            characterImage.render(g, x, y);
-        }
-    }
+
 
     public boolean isAlive() {
         return this.healthPoints > 0;
@@ -186,10 +198,6 @@ public class BaseCharacter {
 
     public String getName() {
         return this.name;
-    }
-
-    public Double getRetreatChance() {
-        return retreatChance;
     }
 
     public Boolean isRetreatSuccessful() {
@@ -254,18 +262,6 @@ public class BaseCharacter {
         return states;
     }
 
-    public Double getBaseCounterAttackChance() {
-        return baseCounterAttackChance;
-    }
-
-    public void setBaseCounterAttackChance(Double baseCounterAttackChance) {
-        this.baseCounterAttackChance = baseCounterAttackChance;
-    }
-
-    public Double getBaseCounterAttackDamage() {
-        return baseCounterAttackDamage;
-    }
-
     public Double getBaseAttack() {
         return baseAttack;
     }
@@ -281,7 +277,6 @@ public class BaseCharacter {
     public BaseWeapon getWeapon() {
         return weapon;
     }
-
 
     public Integer getManaPoints() {
         return manaPoints;
@@ -317,5 +312,72 @@ public class BaseCharacter {
 
     public void setCurrentPosition(GenericTile currentPosition) {
         this.currentPosition = currentPosition;
+    }
+
+
+    /**
+     * Attack with a specific strategy
+     * @param target The character to attack
+     * @param strategy The strategy to use for this attack
+     */
+    @Override
+    public void attack(CombatCharacter target, AttackStrategy strategy) {
+        if (target instanceof BaseCharacter targetBaseCharacter) {
+            this.currentState.handleAttack(targetBaseCharacter, strategy);
+        } else {
+            System.out.println("El objetivo no es un personaje válido.");
+        }
+    }
+
+    @Override
+    public void retreat(CombatCharacter opponent) {
+        if (opponent instanceof BaseCharacter opponentBaseCharacter) {
+            this.currentState.handleRetreat(opponentBaseCharacter);
+        } else {
+            System.out.println("El oponente no es un personaje válido.");
+        }
+    }
+
+    @Override
+    public void heal() {
+        this.currentState.handleHeal();
+    }
+
+    @Override
+    public void move(GenericTile moveToTile) {
+        currentState.handleMove(moveToTile);
+    }
+
+    @Override
+    public void equipWeapon(BaseWeapon weapon) {
+        this.setWeapon(weapon);
+    }
+
+    @Override
+    public void equipHelmet(BaseHelmet helmet) {
+        this.setHelmet(helmet);
+    }
+
+    @Override
+    public String getCurrentStateName() {
+        if (currentState != null) {
+            return currentState.getClass().getSimpleName();
+        } else {
+            return "No State";
+        }
+    }
+
+    public Integer getHpPotions() {
+        return hpPotions;
+    }
+
+    public void useHpPotion() {
+        hpPotions--;
+    }
+
+    @Override
+    public BufferedImage getCompleteImage() {
+        // Devuelve la imagen decorada completa
+        return characterImage.getCompleteImage();
     }
 }

@@ -1,7 +1,11 @@
 package com.utad.proyectoFinal.characterSystem.images;
 
-import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public interface CharacterImage {
-    void render(Graphics2D g, int x, int y);
+    /**
+     * Returns the complete BufferedImage with all decorations applied
+     * @return a complete BufferedImage of the character with all decorations
+     */
+    BufferedImage getCompleteImage();
 }

@@ -2,6 +2,8 @@ package test.com.utad.proyectoFinal.characterSystem;
 
 import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
 import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
 import com.utad.proyectoFinal.characterSystem.tools.Calculator;
@@ -53,6 +55,9 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         setLayout(new BorderLayout(10, 10));
         
         try {
+            // Set testing mode for all states to prevent automatic transitions
+            TestUtils.setTestingMode(true);
+            
             // Initialize characters with a character image
             BufferedImage attackerImage = loadImage("Files/img/GreenGuy.png");
             BufferedImage defenderImage = loadImage("Files/img/RedGuy.png");
@@ -61,8 +66,12 @@ public class CriticalHitAndDurabilityTest extends JFrame {
             attacker = new TestCharacter("Attacker", 20.0, 10.0, attackerImage);
             defender = new TestCharacter("Defender", 15.0, 20.0, defenderImage);
 
-            // Equip weapon and helmet
-            BaseWeapon sword = new BaseWeapon(WeaponType.TISSUE);
+            // Initialize to idle state
+            attacker.setIdleState();
+            defender.setIdleState();
+
+            // Equip weapon and helmet using character methods
+            BaseWeapon sword = new BaseWeapon(WeaponType.STICK);
             BaseHelmet helmet = new BaseHelmet(HelmetType.DEMON_HELMET);
             
             attacker.setWeapon(sword);
@@ -287,60 +296,38 @@ public class CriticalHitAndDurabilityTest extends JFrame {
             return;
         }
         
-        // Calculate damage using Calculator singleton
-        Calculator calculator = Calculator.getInstance();
+        // Set testing mode to prevent automatic state transitions
+        TestUtils.setTestingMode(true);
         
-        // Track if this will be a critical hit before damage calculation
-        boolean willBeCritical = calculator.isCriticalHit(attacker);
-        
-        // Calculate damage with appropriate multiplier
-        double damage = calculator.calculateAttackDamage(attacker, multiplier);
+        // Store initial damage stats before attack
+        boolean willBeCritical = Calculator.getInstance().isCriticalHit(attacker);
+        int initialHealth = defender.getHealthPoints();
         
         // Record hit statistics
         totalHits++;
         if (willBeCritical) criticalHits++;
         
-        // Apply helmet defense reduction
-        if (defender.getHelmet() != null) {
-            damage = calculator.calculateHelmetReduction(defender, damage);
-            
-            // Decrease helmet durability
-            defender.getHelmet().decreaseDurability();
-            
-            // Update helmet durability bar
-            updateHelmetDurabilityBar();
-            
-            // Check if helmet breaks
-            if (defender.getHelmet().getDurability() <= 0) {
-                logEvent(defender.getName() + "'s " + defender.getHelmet().getName() + " broke from damage!");
-                defender.setHelmet(null);
-                helmetStatusLabel.setText("Helmet: BROKEN");
-                
-                // Repaint defender character panel to update visual representation
-                if (defenderRenderPanel != null) {
-                    defenderRenderPanel.repaint();
-                }
-            }
+        // Execute attack using character methods rather than direct calculation
+        if (attackType.equals("Light")) {
+            attacker.attack(defender, new LightAttackStrategy()); // Use character attack method
+        } else {
+            attacker.attack(defender, new HeavyAttackStrategy()); // Use character heavy attack method (if available)
+            // If heavyAttack method doesn't exist, fall back to attack with multiplier
         }
         
-        // Apply character defense
-        damage = damage - (damage * defender.getBaseDefense() / 100.0);
+        // Calculate how much damage was done
+        int damageDealt = initialHealth - defender.getHealthPoints();
         
-        // Round damage to integer
-        int finalDamage = (int) Math.round(damage);
-        
-        // Apply damage
-        defender.reduceHealth(finalDamage);
-        
-        // Decrease weapon durability
-        int durabilityCost = attackType.equals("Light") ? 1 : 2;
-        attacker.getWeapon().decreaseDurability(durabilityCost);
+        // Decrease weapon durability through character method
         
         // Update weapon durability bar
         updateWeaponDurabilityBar();
+
+        // Update helmet durability bar
+        updateHelmetDurabilityBar();
         
         // Check if weapon breaks
-        if (attacker.getWeapon().getDurability() <= 0) {
+        if (attacker.getWeapon() != null && attacker.getWeapon().getDurability() <= 0) {
             logEvent(attacker.getName() + "'s " + attacker.getWeapon().getName() + " broke from use!");
             attacker.setWeapon(null);
             weaponStatusLabel.setText("Weapon: BROKEN");
@@ -354,7 +341,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         // Log the attack
         String criticalText = willBeCritical ? "CRITICAL! " : "";
         logEvent(attacker.getName() + " performs " + attackType + " Attack: " + criticalText + 
-                 finalDamage + " damage to " + defender.getName());
+                 damageDealt + " damage to " + defender.getName());
         
         // Update health bars
         updateHealthBars();
@@ -369,14 +356,21 @@ public class CriticalHitAndDurabilityTest extends JFrame {
     }
     
     private void performMultipleAttacks(int count) {
+        // Ensure we're in testing mode to prevent auto-transitions
+        TestUtils.setTestingMode(true);
+        
         for (int i = 0; i < count; i++) {
             // Only perform if characters are still alive
             if (attacker.isAlive() && defender.isAlive() && attacker.getWeapon() != null) {
                 // Randomly choose light or heavy attack
-                double multiplier = random.nextBoolean() ? 1.0 : 2.0;
-                String attackType = multiplier == 1.0 ? "Light" : "Heavy";
+                boolean isLightAttack = random.nextBoolean();
+                String attackType = isLightAttack ? "Light" : "Heavy";
                 
-                performAttack(multiplier, attackType);
+                // Reset to idle state before each attack to ensure consistent behavior
+                attacker.setIdleState();
+                
+                // Perform attack
+                performAttack(isLightAttack ? 1.0 : 2.0, attackType);
                 
                 // If weapon broke, stop attacks
                 if (attacker.getWeapon() == null) {
@@ -406,6 +400,14 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         attacker = new TestCharacter("Attacker", 20.0, 10.0);
         defender = new TestCharacter("Defender", 15.0, 20.0);
         
+        // Ensure testing mode is active
+        TestUtils.setTestingMode(true);
+        
+        // Set characters to initial idle state
+        attacker.setIdleState();
+        defender.setIdleState();
+        
+        // Equip weapon and helmet using character methods
         BaseWeapon sword = new BaseWeapon(WeaponType.SWORD);
         BaseHelmet helmet = new BaseHelmet(HelmetType.DEMON_HELMET);
         
