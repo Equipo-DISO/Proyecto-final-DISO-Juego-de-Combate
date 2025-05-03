@@ -2,10 +2,15 @@ package com.utad.proyectoFinal.characterSystem.tools;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 
+import java.util.Random;
+
 public final class Calculator {
 
     // Instanciación en estático
     private static final Calculator INSTANCE = new Calculator();
+    
+    // Random instance for consistent randomization
+    private final Random random = new Random();
 
     private Calculator() { }
 
@@ -31,6 +36,7 @@ public final class Calculator {
 
     /**
      * Calcula el daño de ataque aplicando un multiplicador al daño base.
+     * Ahora incluye la posibilidad de golpes críticos basados en la probabilidad del arma.
      * 
      * @param attacker El personaje que realiza el ataque
      * @param multiplier El multiplicador de daño a aplicar
@@ -38,7 +44,45 @@ public final class Calculator {
      */
     public double calculateAttackDamage(BaseCharacter attacker, double multiplier) {
         double baseDamage = calculateBaseDamage(attacker);
-        return baseDamage * multiplier;
+        double finalDamage = baseDamage * multiplier;
+        
+        // Verificar si el atacante tiene un arma y puede hacer crítico
+        if (attacker.getWeapon() != null && isCriticalHit(attacker)) {
+            // Aplicar daño crítico
+            finalDamage = applyWeaponCriticalDamage(attacker, finalDamage);
+            System.out.printf("¡%s asesta un golpe CRÍTICO con %s!%n", 
+                    attacker.getName(), attacker.getWeapon().getName());
+        }
+        
+        return finalDamage;
+    }
+    
+    /**
+     * Determina si un ataque es crítico basado en la probabilidad crítica del arma.
+     * 
+     * @param attacker El personaje que realiza el ataque
+     * @return true si el ataque es crítico, false en caso contrario
+     */
+    public boolean isCriticalHit(BaseCharacter attacker) {
+        if (attacker.getWeapon() == null) {
+            return false;
+        }
+        
+        // La probabilidad crítica está en rango 0.0-1.0
+        double criticalChance = attacker.getWeapon().getCriticalChance();
+        return random.nextDouble() <= criticalChance;
+    }
+    
+    /**
+     * Aplica el multiplicador de daño crítico del arma al daño base.
+     * 
+     * @param attacker El personaje que realiza el ataque
+     * @param baseDamage El daño base calculado
+     * @return El daño final después de aplicar el crítico
+     */
+    public double applyWeaponCriticalDamage(BaseCharacter attacker, double baseDamage) {
+        double criticalMultiplier = attacker.getWeapon().getCriticalDamage();
+        return baseDamage * criticalMultiplier;
     }
 
     /**
@@ -48,7 +92,7 @@ public final class Calculator {
      * @return true si el ataque tiene éxito, false en caso contrario
      */
     public boolean calculateHitProbability(double baseHitChance) {
-        return Math.random() * 100 <= baseHitChance;
+        return random.nextDouble() * 100 <= baseHitChance;
     }
 
     /**

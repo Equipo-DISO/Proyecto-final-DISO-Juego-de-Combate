@@ -1,4 +1,5 @@
 package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
+import com.utad.proyectoFinal.mapa.MapGenerator;
 
 public class TypeBBotFactory implements BotFactory {
     @Override

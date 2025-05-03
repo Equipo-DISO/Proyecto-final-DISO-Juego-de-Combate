@@ -1,7 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 
 /**
  * Estado que representa cuando el personaje elige curarse.

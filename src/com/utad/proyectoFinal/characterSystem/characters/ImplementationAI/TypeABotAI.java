@@ -21,8 +21,7 @@ public class TypeABotAI extends BotAI {
             return;
         }
 
-        TileGraph graph = bot.getMap().getGraph();
-        List<GenericTile> path = graph.pathFinding(currentTile, targets, bot.getMap().getTiles());
+        List<GenericTile> path = bot.getMap().getPathToObjective(tile, targets);
 
         if(path != null && path.size() > 1){
             bot.setCurrentPosition(path.get(1));
@@ -37,7 +36,7 @@ public class TypeABotAI extends BotAI {
 
     public List<GenericTile> filtrarObjetivos(Bot bot, boolean priorizarItems) {
         List<GenericTile> items = new ArrayList<>();
-        List<GenericTile> enemigos = new ArrayList<>();
+        List<GenericTile> enemigos = new ArrayList<>(); //separar ambas listas permite aplicar lógica de prioridad después
 
         for (TileAbstract tile : bot.getMap().getTiles()) {
             if (!(tile instanceof GenericTile)) continue;

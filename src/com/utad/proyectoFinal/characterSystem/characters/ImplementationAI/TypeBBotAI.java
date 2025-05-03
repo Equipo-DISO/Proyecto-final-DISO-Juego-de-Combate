@@ -1,6 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
 
 import com.utad.proyectoFinal.mapa.GenericTile;
+import java.util.*;
 
 public class TypeBBotAI extends BotAI {
 
@@ -8,6 +9,11 @@ public class TypeBBotAI extends BotAI {
     public void analyzeSituation(Bot bot) {
         //same para Type B bot
         this.targets = filtrarObjetivos(bot, false);
+    }
+
+    @Override
+    protected void decideNextMove(GenericTile tile, Bot bot) {
+
     }
 
     @Override
@@ -31,7 +37,7 @@ public class TypeBBotAI extends BotAI {
         //same para Type B bot
     }
 
-    public List<GenericTile> filtrarObjetivos(Bot bot, boolean priorizarItems) {
+    /*public List<GenericTile> filtrarObjetivos(Bot bot, boolean priorizarItems) {
         List<GenericTile> items = new ArrayList<>();
         List<GenericTile> enemigos = new ArrayList<>();
 
@@ -56,6 +62,7 @@ public class TypeBBotAI extends BotAI {
         }
 
         return result;
-    }
+        }
+     */
 
 }

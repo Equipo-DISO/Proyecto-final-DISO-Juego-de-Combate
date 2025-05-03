@@ -3,11 +3,18 @@ package com.utad.proyectoFinal.characterSystem.characters;
 
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
+import com.utad.proyectoFinal.characterSystem.images.BaseCharacterImage;
+import com.utad.proyectoFinal.characterSystem.images.CharacterImage;
 import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
+import com.utad.proyectoFinal.characterSystem.images.*; // Importa los decoradores
 import com.utad.proyectoFinal.mapa.GenericTile;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 
 public class BaseCharacter {
 
@@ -40,17 +47,20 @@ public class BaseCharacter {
 
 
     // Equipamiento del personaje
-    private BaseWeapon weapon;  // Arma equipada
-    private BaseHelmet helmet;  // Casco equipado
+    protected BaseWeapon weapon;  // Arma equipada
+    protected BaseHelmet helmet;  // Casco equipado
 
     // Inventario y efectos
     // TODO: Implement inventory system (find best approach/pattern) State maybe?
     //    private List<Item> inventario;  // Pociones, vendas, botiquines, etc.
     //    private List<Item> efectosActivos;  // Efectos negativos de las trampas, etc.
     private Integer capacidadMaximaInventario;
+    
 
-    // Atributos de representación gráfica
-    private BufferedImage imagen;
+    // Sistema de decoradores de imagen
+    private CharacterImage characterImage;
+    private final BufferedImage baseAvatar; // Guarda la imagen base original
+
 
     // Atributos de posicionamiento
     // TODO: Implement -> Tile
@@ -60,9 +70,22 @@ public class BaseCharacter {
 
     // Comportamiento
     private Boolean esControlado;  // Indica si es controlado por IA
-
-    /* Constructor (Solo uno, los hijos se encargan de los Defaults) */
-    public BaseCharacter(String name, Double baseAttack, Double baseDefense /*, Arma arma, Escudo escudo*/) {
+    
+    public BaseCharacter(String name, Double baseAttack, Double baseDefense) {
+        this(name, baseAttack, baseDefense, loadDefaultAvatar());
+    }
+    
+    private static BufferedImage loadDefaultAvatar() {
+        try {
+            return ImageIO.read(new File("Files/img/GreenGuy.png"));
+        } catch (IOException e) {
+            System.err.println("Error loading default avatar: " + e.getMessage());
+            // Return a small blank image as fallback
+            return new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
+        }
+    }
+    
+    public BaseCharacter(String name, Double baseAttack, Double baseDefense, BufferedImage baseAvatar) {
         this.name = name;
         this.baseAttack = baseAttack;
         this.baseDefense = baseDefense;
@@ -85,7 +108,10 @@ public class BaseCharacter {
 //        this.efectos = new ArrayList<Item>();
 
         this.id = ++BaseCharacter.contadorPersonajes;
-        this.imagen = null; // TODO: Placeholder, to be set in the future
+
+        this.baseAvatar = baseAvatar;
+        this.characterImage = new BaseCharacterImage(baseAvatar);
+        
         // Todo: Implement -> re-add after Tile class is created
         //this.ubicacionActual = null;
         //this.destinoObjetivo = null;
@@ -93,6 +119,46 @@ public class BaseCharacter {
         this.esControlado = false; // Por defecto, el personaje no es controlado por IA
     }
 
+    // Método privado para actualizar la imagen decorada
+    private void updateCharacterImage() {
+        // Empieza siempre desde la imagen base
+        this.characterImage = new BaseCharacterImage(this.baseAvatar);
+
+        // Aplica el decorador de casco si existe
+        if (this.helmet != null && this.helmet.getAvatar() != null) {
+            this.characterImage = new HelmetDecorator(this.characterImage, this.helmet.getAvatar());
+        }
+
+        // Aplica el decorador de arma si existe
+        if (this.weapon != null && this.weapon.getAvatar() != null) {
+            this.characterImage = new WeaponDecorator(this.characterImage, this.weapon.getAvatar());
+        }
+    }
+
+    // Setter para el casco que actualiza el decorador
+    public void setHelmet(BaseHelmet helmet) {
+        this.helmet = helmet;
+        updateCharacterImage(); // Reconstruye la imagen decorada
+    }
+
+    // Getter para el casco
+    public BaseHelmet getHelmet() {
+        return helmet;
+    }
+
+    // Setter para el arma que actualiza el decorador
+    public void setWeapon(BaseWeapon weapon) {
+        this.weapon = weapon;
+        updateCharacterImage(); // Reconstruye la imagen decorada
+    }
+
+
+    // Método para renderizar el personaje con todos sus decoradores
+    public void render(Graphics2D g, int x, int y) {
+        if (characterImage != null) {
+            characterImage.render(g, x, y);
+        }
+    }
 
     public boolean isAlive() {
         return this.healthPoints > 0;
@@ -139,7 +205,7 @@ public class BaseCharacter {
         this.currentState = newState;
     }
 
-    // “setXState” por delegación
+    // "setXState" por delegación
     public void setIdleState() {
         transitionTo(states.getIdleState());
     }
@@ -216,9 +282,6 @@ public class BaseCharacter {
         return weapon;
     }
 
-    public void setWeapon(BaseWeapon weapon) {
-        this.weapon = weapon;
-    }
 
     public Integer getManaPoints() {
         return manaPoints;
@@ -230,14 +293,6 @@ public class BaseCharacter {
 
     public void decreaseManaPoints(int amount) {
         this.manaPoints = Math.max(0, manaPoints - amount);
-    }
-
-    public BaseHelmet getHelmet() {
-        return helmet;
-    }
-
-    public void setHelmet(BaseHelmet helmet) {
-        this.helmet = helmet;
     }
 
     public Integer getMaxManaPoints() {
