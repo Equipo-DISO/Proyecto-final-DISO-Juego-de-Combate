@@ -56,8 +56,6 @@ public class MapGenerator extends JPanel
         this.listener = new MapListener(this, this.tiles);
         this.addMouseListener(this.listener);
         this.addMouseMotionListener(this.listener);
-
-        pathFindingTesting();
     }
 
     public void displayMap()
@@ -148,8 +146,6 @@ public class MapGenerator extends JPanel
         this.tiles.forEach(t -> t.drawTile(g2d));
         
         
-        generateDebugLines(g2d);
-      
 
         if (this.disableMap)
         {
@@ -171,32 +167,20 @@ public class MapGenerator extends JPanel
     {
         Composite oldComp = g2d.getComposite();
         Color oldColor   = g2d.getColor();
-        Font  oldFont    = g2d.getFont();
 
-       
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
         g2d.setColor(Color.DARK_GRAY);
         g2d.fillRect(0, 0, super.getWidth(), super.getHeight());
 
-       
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-        g2d.setColor(Color.WHITE);
-
-        Font font = oldFont.deriveFont(Font.BOLD, 48f);
-        g2d.setFont(font);
-
-       
+             
         String text = "ON GOING FIGHT";
         FontMetrics fm = g2d.getFontMetrics();
         int tx = (this.viewportX + super.getWidth() - fm.stringWidth(text)) / 2;
         int ty = (this.viewportY + super.getHeight() - fm.getHeight()) / 2 + fm.getAscent();
-        g2d.drawString(text, tx, ty);
-
+        createText(g2d, tx - 150, ty, text, 50f);
     
         g2d.setComposite(oldComp);
-        g2d.setColor(oldColor);
-        g2d.setFont(oldFont);
-    
+        g2d.setColor(oldColor);  
     }
 
     private void drawPlayerHUD(Graphics2D g2d) 
@@ -218,7 +202,7 @@ public class MapGenerator extends JPanel
         g2d.setColor(Color.DARK_GRAY); 
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
-       createText(g2d, boxX + 20, boxY + 35, "Hold left click to move");
+       createText(g2d, boxX + 20, boxY + 35, "Hold left click to move", 20f);
     }
 
     private void createPlayerCounter(Graphics2D g2d)
@@ -235,16 +219,16 @@ public class MapGenerator extends JPanel
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
        //g2d.drawImage(new SimplifiedImage("Files/img/player.png").generateImage(30, 30), 200, 200, boxWidth, boxHeight, null);
-       createText(g2d, boxX + 55, boxY + 45, "nig/15");
+       createText(g2d, boxX + 55, boxY + 45, "nig/15", 20f);
     }
 
-    private void createText(Graphics2D g2d, Integer posX, Integer posY, String msg)
+    private void createText(Graphics2D g2d, Integer posX, Integer posY, String msg, Float fontSize)
     {
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
         g2d.setColor(Color.WHITE);
         
         Font  oldFont = g2d.getFont();
-        Font font = oldFont.deriveFont(Font.BOLD, 20f);
+        Font font = oldFont.deriveFont(Font.BOLD, fontSize);
         g2d.setFont(font);
         g2d.drawString(msg, posX, posY);
         g2d.setFont(oldFont);
@@ -315,63 +299,6 @@ public class MapGenerator extends JPanel
      * 
      */
 
-    private GenericTile getRandomTile()
-    {
-        TileAbstract t = this.tiles.get((int) (Math.random() * this.tiles.size()));
-
-
-        if (t instanceof GenericTile)
-        {
-            return (GenericTile) t;
-        }
-        else
-        {
-           return getRandomTile();
-        }
-    }
-
-    private void pathFindingTesting()
-    {
-        GenericTile startTile = getRandomTile();
-        GenericTile endTile = getRandomTile();
-        
-
-    
-        List<GenericTile> path = this.graph.pathFindingBFS(startTile, endTile.getTileId(), this.tiles);
-        
-        for (GenericTile tile : path) 
-        {
-            tile.setDebugColor(Color.YELLOW);  
-        }
-        
-        startTile.setDebugColor(Color.GREEN); 
-        endTile.setDebugColor(Color.RED);      
-        
-        updateRendering();
-    }
-
-    private void generateDebugLines(Graphics2D g2d)
-    {
-
-        g2d.setColor(new Color(120, 0, 0));
-        g2d.setStroke(new BasicStroke(1));
-
-        for (Integer i = 0; i < this.tiles.size(); i++)
-        {
-            for (Integer j = i + 1; j < this.tiles.size(); j++)
-            {
-                
-                TileAbstract t1 = this.tiles.get(i);
-                TileAbstract t2 = this.tiles.get(j);
-
-                if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] > 0) 
-                {
-                    g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
-                }
-            }
-        }
-    }
-
     /**
     * @param character Character that desires to move
     * @param objective Destination tile
@@ -422,7 +349,64 @@ public class MapGenerator extends JPanel
     }
 }
 
+// DEBUG
 
+// private GenericTile getRandomTile()
+//     {
+//         TileAbstract t = this.tiles.get((int) (Math.random() * this.tiles.size()));
+
+
+//         if (t instanceof GenericTile)
+//         {
+//             return (GenericTile) t;
+//         }
+//         else
+//         {
+//            return getRandomTile();
+//         }
+//     }
+
+//     private void pathFindingTesting()
+//     {
+//         GenericTile startTile = getRandomTile();
+//         GenericTile endTile = getRandomTile();
+        
+
+    
+//         List<GenericTile> path = this.graph.pathFindingBFS(startTile, endTile.getTileId(), this.tiles);
+        
+//         for (GenericTile tile : path) 
+//         {
+//             tile.setDebugColor(Color.YELLOW);  
+//         }
+        
+//         startTile.setDebugColor(Color.GREEN); 
+//         endTile.setDebugColor(Color.RED);      
+        
+//         updateRendering();
+//     }
+
+//     private void generateDebugLines(Graphics2D g2d)
+//     {
+
+//         g2d.setColor(new Color(120, 0, 0));
+//         g2d.setStroke(new BasicStroke(1));
+
+//         for (Integer i = 0; i < this.tiles.size(); i++)
+//         {
+//             for (Integer j = i + 1; j < this.tiles.size(); j++)
+//             {
+                
+//                 TileAbstract t1 = this.tiles.get(i);
+//                 TileAbstract t2 = this.tiles.get(j);
+
+//                 if (this.graph.getAdjacencyMatrix()[t1.getTileId()][t2.getTileId()] > 0) 
+//                 {
+//                     g2d.drawLine(t1.getPosX(), t1.getPosY(), t2.getPosX(), t2.getPosY());
+//                 }
+//             }
+//         }
+//     }
 
 
 // DEPRECATED
