@@ -23,17 +23,30 @@ public class TypeBBotAI extends BotAI {
     @Override
     public void decideNextMove(GenericTile tile, Bot bot) {
         //same para Type B bot
-        if(targets.size() < 3){
-            //tenemos el enemy al lado, seteamos attacking state
-            //bot.attack()
+        if(targets != null && targets.size() < 3){
+            //si tenemos enemigo cerca me muevo
+            bot.setBotActionType(BotActionType.MOVE);
         }else{
-            //bot.move();
+
         }
     }
 
     @Override
     public void performAction(Bot bot) {
         //same para Type B bot
+        switch(bot.getBotActionType()){
+            case MOVE:
+                //aquí move to
+            case ATTACK:
+                //bot.attack
+            case NONE:
+                System.out.println("Bot is being laz zZz");
+            default:
+                System.out.println("No action injected yet");
+            break;
+        }
+        //reset de actions tras ejecución
+        bot.setBotActionType(BotActionType.MOVE);
     }
 
     /*public List<GenericTile> filtrarObjetivos(Bot bot, boolean priorizarItems) {

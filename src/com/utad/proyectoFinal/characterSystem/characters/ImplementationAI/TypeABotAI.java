@@ -1,31 +1,22 @@
 package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
 
-import com.utad.proyectoFinal.mapa.GenericTile;
+import com.utad.proyectoFinal.mapa.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import com.utad.proyectoFinal.mapa.TileGraph;
-import com.utad.proyectoFinal.mapa.TileAbstract;
 
 public class TypeABotAI extends BotAI {
 
     @Override
     public void analyzeSituation(Bot bot) {
         //lógica para analizar si movernos a objeto o atacar (path)
-        this.targets = filtrarObjetivos(bot, true);
+        this.targets = MapGenerator.getInstance(0,0, 0, 0).getPathToObjective(bot.getCurrentPosition(), new ClosestLootStrategy());
     }
 
     @Override
     public void decideNextMove(GenericTile tile, Bot bot) {
-        //movernos o atacar (decisión)
-        if(targets == null || targets.isEmpty()) {
-            return;
-        }
+        //si el oponente está cerca huimos
 
-        List<GenericTile> path = bot.getMap().getPathToObjective(tile, targets);
-
-        if(path != null && path.size() > 1){
-            bot.setCurrentPosition(path.get(1));
-        }
     }
 
     @Override

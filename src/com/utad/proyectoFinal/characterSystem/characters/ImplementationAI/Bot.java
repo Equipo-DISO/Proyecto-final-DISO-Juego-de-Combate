@@ -9,13 +9,13 @@ public class Bot extends BaseCharacter {
     private static final String BOTNAME = "B.O.T";
     private static final Double ATTACK = 10.00;
     private static final Double DEFENSE = 10.0;
-
+    private BotActionType botActionType;
     private BotAI botAi;
 
     private MapGenerator map;
     public Bot() {
         this(BOTNAME, ATTACK, DEFENSE);
-
+        botActionType = BotActionType.NONE;
     }
 
     public Bot(String name, Double baseAttack, Double baseDefense) {
@@ -50,5 +50,13 @@ public class Bot extends BaseCharacter {
 
     public void setMap(MapGenerator map){
         this.map = map;
+    }
+
+    public BotActionType getBotActionType() {
+        return botActionType;
+    }
+
+    public void setBotActionType(BotActionType botActionType) {
+        this.botActionType = botActionType;
     }
 }

@@ -1,12 +1,14 @@
 package com.utad.proyectoFinal.characterSystem.tools;
 
 
+import com.utad.proyectoFinal.mapa.MapObject;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class BaseHelmet {
+public class BaseHelmet implements MapObject {
 
     private String name;
     private Double defense;
@@ -84,5 +86,10 @@ public class BaseHelmet {
         }
 
         return avatar;
+    }
+
+    @Override
+    public BufferedImage getBufferedImage() {
+        return null;
     }
 }
