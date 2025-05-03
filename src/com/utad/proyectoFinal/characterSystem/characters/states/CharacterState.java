@@ -1,6 +1,8 @@
 package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
+import com.utad.proyectoFinal.mapa.GenericTile;
 
 /**
  * Interfaz que define las transiciones de estado para las acciones de un personaje
@@ -9,9 +11,10 @@ public interface CharacterState {
     /**
      * Ejecuta una acción de ataque y maneja la transición de estado
      *
-     * @param opponent El oponente que recibe el ataque
+     * @param opponent       El oponente que recibe el ataque
+     * @param attackStrategy
      */
-    void handleAttack(BaseCharacter opponent);
+    void handleAttack(BaseCharacter opponent, AttackStrategy attackStrategy);
 
     /**
      * Ejecuta una acción de retirada y maneja la transición de estado
@@ -23,9 +26,9 @@ public interface CharacterState {
     /**
      * Ejecuta una acción de movimiento y maneja la transición de estado
      *
-     * @param toBeReplacedByTileClass Destino del movimiento
+     * @param moveToTile Destino del movimiento
      */
-    void handleMove(Object toBeReplacedByTileClass);
+    void handleMove(GenericTile moveToTile);
 
     /**
      * Actualiza el estado al final del turno
@@ -38,6 +41,11 @@ public interface CharacterState {
      * @param damage La cantidad de daño recibido
      */
     void handleReceiveAttack(Double damage);
+
+    /**
+     * Gestiona el comportamiento al curarse
+     */
+    void handleHeal();
 
     /**
      * Obtiene el nombre del estado

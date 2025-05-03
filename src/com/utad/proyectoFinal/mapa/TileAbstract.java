@@ -5,7 +5,6 @@ import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 
-
 public abstract class TileAbstract 
 {
 

@@ -2,11 +2,11 @@ package com.utad.proyectoFinal.characterSystem.tools;
 
 public enum WeaponType {
     // Define weapon types with their attributes
-    STICK("Tissue", 2.0, 0.05, 1.05, 2, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG),
-    KNIFE("Stick", 5.0, 0.10, 1.10, 3, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG),
-    DAGGER("Dagger", 10.0, 0.20, 1.20, 4, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG),
-    SWORD("Sword", 20.0, 0.10, 1.50,5, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG),
-    SPEAR("Spear", 15.0, 0.15, 1.30, 6, Constants.FILES_IMG_WEAPON_PLACEHOLDER_PNG);
+    STICK("Stick", 2.0, 0.05, 1.05, 2, "Files/img/StickChibi.png"),
+    KNIFE("Stick", 5.0, 0.10, 1.10, 3, "Files/img/KnifeChibi.png"),
+    SWORD("Sword", 10.0, 0.20, 1.20, 4, "Files/img/SwordChibi.png"),
+    AXE("Axe", 15.0, 0.25, 1.30, 5, "Files/img/AxeChibi.png"),
+    SPEAR("Spear", 15.0, 0.15, 1.30, 6, "Files/img/SpearChibi.png"),;
 
     private final String name;
     private final Double damage;
@@ -48,7 +48,4 @@ public enum WeaponType {
         return imagePath;
     }
 
-    private static class Constants {
-        public static final String FILES_IMG_WEAPON_PLACEHOLDER_PNG = "/Files/img/Weapon-placeholder.png";
-    }
 }

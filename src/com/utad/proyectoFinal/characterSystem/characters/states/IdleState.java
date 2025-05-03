@@ -2,6 +2,8 @@ package com.utad.proyectoFinal.characterSystem.characters.states;
 
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
+import com.utad.proyectoFinal.mapa.GenericTile;
 
 public class IdleState extends BaseState {
 
@@ -10,14 +12,14 @@ public class IdleState extends BaseState {
     }
 
     @Override
-    public void handleAttack(BaseCharacter opponent) {
+    public void handleAttack(BaseCharacter opponent, AttackStrategy attackStrategy) {
         // Comprobar si el personaje tiene suficiente maná para atacar
         if (checkAndTransitionToTiredIfNeeded()) {
             System.out.printf("%s tiene poca energía y no puede atacar.%n", character.getName());
         } else {
             // Cambiar al estado de ataque
             character.transitionTo(character.getStates().getAttackingState());
-            character.getCurrentState().handleAttack(opponent);
+            character.getCurrentState().handleAttack(opponent, attackStrategy);
         }
     }
 
@@ -30,19 +32,20 @@ public class IdleState extends BaseState {
     }
 
     @Override
-    public void handleMove(Object tile) {
+    public void handleMove(GenericTile moveToTile) {
         // Cambiar al estado de movimiento en el mapa
         character.transitionTo(character.getStates().getMovingOnMapState());
-        character.getCurrentState().handleMove(tile);
+        character.getCurrentState().handleMove(moveToTile);
     }
 
     /**
      * Método para manejar la curación
      */
+    @Override
     public void handleHeal() {
         // Cambiar al estado de curación
         character.transitionTo(character.getStates().getHealState());
-        ((HealState) character.getCurrentState()).heal();
+        ((HealState) character.getCurrentState()).handleHeal();
     }
 
     /**

@@ -2,6 +2,7 @@ package test.com.utad.proyectoFinal.characterSystem;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -30,5 +31,12 @@ public class TestCharacter extends BaseCharacter {
      */
     public TestCharacter(String name, Double baseAttack, Double baseDefense, BufferedImage avatar) {
         super(name, baseAttack, baseDefense, avatar);
+    }
+
+
+    public void render(Graphics2D g, int x, int y) {
+        if (characterImage != null) {
+            g.drawImage(getCompleteImage(), x, y, null);
+        }
     }
 }

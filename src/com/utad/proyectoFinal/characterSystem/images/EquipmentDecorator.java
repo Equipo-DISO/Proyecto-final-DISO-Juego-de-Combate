@@ -8,6 +8,12 @@ public abstract class EquipmentDecorator implements CharacterImage {
     protected EquipmentDecorator(CharacterImage decoratedImage) {
         this.decoratedImage = decoratedImage;
     }
+    
+    @Override
+    public BufferedImage getCompleteImage() {
+        // By default, get the decorated image's complete image
+        return decoratedImage.getCompleteImage();
+    }
 
     /**
      * Returns the base CharacterImage, unwrapping all decorators
@@ -31,12 +37,7 @@ public abstract class EquipmentDecorator implements CharacterImage {
     public BufferedImage getOriginalBufferedImage() {
         CharacterImage baseImage = getBaseImage();
         
-        // If the base image is a BaseCharacterImage, we can cast and get its BufferedImage
-        if (baseImage instanceof BaseCharacterImage) {
-            return ((BaseCharacterImage) baseImage).getBufferedImage();
-        }
-        
-        // If not, we return a default image or null
-        return null;
+        // Get the complete image from the base image
+        return baseImage.getCompleteImage();
     }
 }

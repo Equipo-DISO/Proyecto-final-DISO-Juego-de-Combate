@@ -2,10 +2,7 @@ package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
-import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
-import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
-
-import java.util.Scanner;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.*;
 
 public class AttackingState extends BaseState {
 
@@ -15,9 +12,27 @@ public class AttackingState extends BaseState {
         super(character);
     }
 
-    @Override
-    public void handleAttack(BaseCharacter opponent) {
+
+    
+    /**
+     * Handle attack with a specified strategy
+     * @param opponent The target character to attack
+     * @param attackStrategy The strategy to use for this attack
+     */
+    public void handleAttack(BaseCharacter opponent, AttackStrategy attackStrategy) {
+        currentStrategy = attackStrategy;
+
+        // TODO: delete after testing
         selectStrategy();
+
+        executeAttack(opponent);
+    }
+    
+    /**
+     * Execute the current attack strategy
+     * @param opponent The target character to attack
+     */
+    private void executeAttack(BaseCharacter opponent) {
         if (currentStrategy != null) {
             currentStrategy.execute(character, opponent);
             updateState();
@@ -31,14 +46,6 @@ public class AttackingState extends BaseState {
             currentStrategy = new LightAttackStrategy();
             return;
         }
-
-        // Normal user input for non-testing mode
-        System.out.printf("%n%s: elige tipo de ataque (1) Ligero (2) Pesado ▶ ",
-                character.getName());
-        int option = new Scanner(System.in).nextInt();
-        currentStrategy = option == 2
-                ? new HeavyAttackStrategy()
-                : new LightAttackStrategy();
     }
 
     @Override
@@ -52,6 +59,22 @@ public class AttackingState extends BaseState {
                 character.transitionTo(character.getStates().getIdleState()); // volver a Idle si tiene suficiente maná
             }
         }
+    }
+    
+    /**
+     * Get the current attack strategy
+     * @return The current attack strategy
+     */
+    public AttackStrategy getCurrentStrategy() {
+        return currentStrategy;
+    }
+    
+    /**
+     * Set a specific attack strategy
+     * @param strategy The attack strategy to set
+     */
+    public void setStrategy(AttackStrategy strategy) {
+        this.currentStrategy = strategy;
     }
 
     @Override

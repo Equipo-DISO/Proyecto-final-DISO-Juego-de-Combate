@@ -16,7 +16,8 @@ public class RetreatingState extends BaseState {
         boolean retirada = false;
 
         // Calcular la probabilidad de retirada
-        double probabilidadRetirada = character.getRetreatChance();
+        double probabilidadRetirada = (((double) character.getManaPoints() / character.getMaxManaPoints())
+                / ((double) opponent.getManaPoints() / opponent.getMaxManaPoints()) / 2) * 100;
         if (Math.random() * 100 <= probabilidadRetirada) {
             retirada = true;
             System.out.printf("%s ha conseguido retirarse con éxito.%n", character.getName());

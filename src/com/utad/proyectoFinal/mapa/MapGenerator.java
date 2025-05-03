@@ -1,11 +1,15 @@
 package com.utad.proyectoFinal.mapa;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -157,7 +161,6 @@ public class MapGenerator extends JPanel
         renderBridges(g2d);
     }
 
-    
 
     private void drawPendingScreen(Graphics2D g2d)
     {
