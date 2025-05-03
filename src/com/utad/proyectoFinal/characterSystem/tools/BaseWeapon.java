@@ -1,5 +1,10 @@
 package com.utad.proyectoFinal.characterSystem.tools;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 public class BaseWeapon {
 
     private String name;
@@ -8,6 +13,7 @@ public class BaseWeapon {
     private Double criticalDamage; // daño adicional al asestar un golpe crítico -> %
     private Integer durability;
     private WeaponType type;
+    private String imagePath;
 
     public BaseWeapon(WeaponType type) {
         this.type = type;
@@ -16,6 +22,7 @@ public class BaseWeapon {
         this.criticalChance = type.getCriticalChance();
         this.criticalDamage = type.getCriticalDamage();
         this.durability = type.getDurability();
+        this.imagePath = type.getImagePath();
     }
 
     public String getName() {
@@ -56,5 +63,46 @@ public class BaseWeapon {
 
     public void decreaseDurability(int i) {
         this.durability -= i;
+    }
+
+    // --- Metodo para obtener el Avatar ---
+    public BufferedImage getAvatar() {
+        BufferedImage avatar = null;
+
+        try {
+            // Remove the leading slash if present
+            String path = this.imagePath;
+            if (path.startsWith("/")) {
+                path = path.substring(1);
+            }
+            
+            File file = new File(path);
+            if (file.exists()) {
+                avatar = ImageIO.read(file);
+            } else {
+                System.err.println("Weapon image file not found: " + path);
+                // Try alternate path with a generic sword image
+                file = new File("Files/img/sword-placeholder.png");
+                if (file.exists()) {
+                    avatar = ImageIO.read(file);
+                } else {
+                    System.err.println("Weapon placeholder image not found. Trying generic placeholder.");
+                    file = new File("Files/img/Helmet-placeholder.png");
+                    if (file.exists()) {
+                        avatar = ImageIO.read(file);
+                    } else {
+                        throw new IOException("No placeholder images found");
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading weapon image: " + e.getMessage());
+            e.printStackTrace();
+            
+            // Create a simple placeholder image
+            avatar = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
+        }
+
+        return avatar;
     }
 }
