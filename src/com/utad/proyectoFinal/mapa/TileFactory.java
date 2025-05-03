@@ -2,13 +2,13 @@ package com.utad.proyectoFinal.mapa;
 
 public abstract class TileFactory 
 {    
-    protected Integer numberOfTiles;
+    protected Integer totalNumberOfTiles;
     protected Integer numberOfSpawns;
 
 
     public TileFactory(Integer tiles, Integer spawns)
     {
-        this.numberOfTiles = tiles;
+        this.totalNumberOfTiles = tiles;
         this.numberOfSpawns = spawns;
     }
 

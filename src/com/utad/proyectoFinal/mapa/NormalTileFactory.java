@@ -25,13 +25,28 @@ public class NormalTileFactory extends TileFactory
     @Override
     public TileAbstract generateRandomTile(Integer x, Integer y, Integer tileId) 
     {
-        TileAbstract tile = (Math.random() < MapGenerator.DEFAULT_OBSTACLE_PROBABILITY ? this.creatileObstacle(x, y, tileId) : this.createTile(x, y, tileId));
-
-        if (Math.random() < MapGenerator.DEFAULT_LOOT_PROBABILITY)
+        // TODO: hay que meter las factorias y los players aqui
+        TileAbstract tile;
+    
+        Double spawnProbability = (double) super.numberOfSpawns / super.totalNumberOfTiles ;
+        
+        if (Math.random() < spawnProbability && super.numberOfSpawns > 0) 
         {
-            tile.setSpecialImage(new SimplifiedImage("Files/img/Pergamino.png").generateImage());
+            tile = this.createTile(x, y, tileId);
+            tile.setSpecialImage(new SimplifiedImage("Files/img/PinkGuy.png").generateImage());
+            super.numberOfSpawns--;
+        } 
+        else 
+        {
+            tile = (Math.random() < MapGenerator.DEFAULT_OBSTACLE_PROBABILITY ? this.creatileObstacle(x, y, tileId) : this.createTile(x, y, tileId));
+            
+            if (Math.random() < MapGenerator.DEFAULT_LOOT_PROBABILITY) 
+            {
+                tile.setSpecialImage(new SimplifiedImage("Files/img/Pergamino.png").generateImage());
+            }
         }
-
+        
+        super.totalNumberOfTiles--;
         return tile;
     }
 }

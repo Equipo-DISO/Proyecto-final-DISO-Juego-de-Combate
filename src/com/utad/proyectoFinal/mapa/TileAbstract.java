@@ -2,7 +2,7 @@ package com.utad.proyectoFinal.mapa;
 
 import java.awt.*;
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.ui.SimplifiedImage;
+
 
 
 public abstract class TileAbstract 
@@ -94,7 +94,7 @@ public abstract class TileAbstract
     public boolean isOcupied() { return this.ocupiedObject != null; }
 
     public boolean isOcupiedByCharacter() { return isOcupied() && this.ocupiedObject instanceof BaseCharacter; }
-    public boolean isOcupiedByLoot() { return isOcupied() && this.ocupiedObject instanceof BaseCharacter; }
+    public boolean isOcupiedByLoot() { return isOcupied() && this.ocupiedObject instanceof MapObject; }
     
     public void setHovered(boolean isHovered) { this.isHovered = isHovered; }
     public void setOcupiedObject(Object ocupiedObject) 
