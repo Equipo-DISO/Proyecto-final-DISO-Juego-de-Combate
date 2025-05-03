@@ -29,7 +29,7 @@ public class MenuInterfaceMainExample {
         BaseCharacter player = interfaceMain.getPlayerCharacter();
 
         
-        MapGenerator instance = MapGenerator.getInstance(1100, 0, 6, bots.size() + 1);
+        MapGenerator instance = MapGenerator.getInstance(1100, 0, 6, bots.size() + 1, bots, player);
         instance.displayMap();
     }
 }

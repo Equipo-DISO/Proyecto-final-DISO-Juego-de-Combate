@@ -4,12 +4,14 @@ package com.utad.proyectoFinal.mapa;
 import javax.swing.*;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 
 
 public class MapGenerator extends JPanel 
@@ -35,14 +37,17 @@ public class MapGenerator extends JPanel
 
     private TileGraph graph;
 
-    //private List<BaseCharacter> players;
+    
+    private BaseCharacter player;
 
-    private MapGenerator(Integer x, Integer y, Integer size, Integer spawns) 
+    private MapGenerator(Integer x, Integer y, Integer size, Integer spawns, LinkedList<Bot> bots, BaseCharacter player) 
     {
         super();
         this.gridSize = size;
 
-        this.factory = new NormalTileFactory(calculateTotalTiles(), spawns);
+        this.player = player;
+
+        this.factory = new NormalTileFactory(calculateTotalTiles(), spawns, bots, player);
         this.graph = new TileGraph(calculateTotalTiles());
 
         this.screenX = x;
@@ -70,11 +75,11 @@ public class MapGenerator extends JPanel
         frame.setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
     }
 
-    public static MapGenerator getInstance(Integer screenX, Integer screenY, Integer size, Integer spawns)
+    public static MapGenerator getInstance(Integer screenX, Integer screenY, Integer size, Integer spawns, LinkedList<Bot> bots, BaseCharacter player)
     {
         if (MapGenerator.instance == null)
         {
-            MapGenerator.instance = new MapGenerator(screenX, screenY, size, spawns);
+            MapGenerator.instance = new MapGenerator(screenX, screenY, size, spawns, bots, player);
         }
 
         return MapGenerator.instance;

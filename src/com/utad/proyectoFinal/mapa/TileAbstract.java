@@ -94,7 +94,7 @@ public abstract class TileAbstract
     public boolean isOcupied() { return this.ocupiedObject != null; }
 
     public boolean isOcupiedByCharacter() { return isOcupied() && this.ocupiedObject instanceof BaseCharacter; }
-    public boolean isOcupiedByLoot() { return isOcupied() && this.ocupiedObject instanceof MapObject; }
+    public boolean isOcupiedByLoot() { return isOcupied() && this.ocupiedObject instanceof MapObject && !isOcupiedByCharacter(); }
     
     public void setHovered(boolean isHovered) { this.isHovered = isHovered; }
     public void setOcupiedObject(Object ocupiedObject) 

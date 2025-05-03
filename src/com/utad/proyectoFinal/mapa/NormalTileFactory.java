@@ -1,13 +1,17 @@
 package com.utad.proyectoFinal.mapa;
 
+import java.util.LinkedList;
+
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 public class NormalTileFactory extends TileFactory
 {
 
-    public NormalTileFactory(Integer tiles, Integer spawns) 
+    public NormalTileFactory(Integer tiles, Integer spawns, LinkedList<Bot> bots, BaseCharacter player) 
     {
-        super(tiles, spawns);
+        super(tiles, spawns, bots, player);
     }
 
     @Override
@@ -25,7 +29,7 @@ public class NormalTileFactory extends TileFactory
     @Override
     public TileAbstract generateRandomTile(Integer x, Integer y, Integer tileId) 
     {
-        // TODO: hay que meter las factorias y los players aqui
+        // TODO: hay que meter las factorias
         TileAbstract tile;
     
         Double spawnProbability = (double) super.numberOfSpawns / super.totalNumberOfTiles ;
@@ -33,7 +37,17 @@ public class NormalTileFactory extends TileFactory
         if (Math.random() < spawnProbability && super.numberOfSpawns > 0) 
         {
             tile = this.createTile(x, y, tileId);
-            tile.setSpecialImage(new SimplifiedImage("Files/img/PinkGuy.png").generateImage());
+
+            
+            if (super.bots.size() < 1)
+            {
+                tile.setOcupiedObject(super.player);
+            }
+            else
+            {
+                tile.setOcupiedObject(super.bots.pop());
+            }
+           
             super.numberOfSpawns--;
         } 
         else 
