@@ -9,8 +9,9 @@ import com.utad.proyectoFinal.mapa.GenericTile;
  */
 public class MovingOnMapState extends BaseState {
 
-    // Ya no hay coste de maná para moverse
 
+    public static final Integer MANA_RECOVERED = 5;
+    
     public MovingOnMapState(BaseCharacter character) {
         super(character);
     }
@@ -32,16 +33,11 @@ public class MovingOnMapState extends BaseState {
         // Lógica de movimiento (a implementar cuando se tenga la clase Tile)
         System.out.printf("%s se ha movido a una nueva posición.%n", character.getName());
 
-        // Si hay un enemigo en la casilla, atacar
-        boolean enemyInTile = false; // TODO: Implementar cuando se tenga la clase Tile
-        if (enemyInTile) {
-            System.out.printf("%s ha encontrado un enemigo en la casilla.%n", character.getName());
-            // Cambiar al estado de ataque
-            character.transitionTo(character.getStates().getAttackingState());
-        } else {
-            // Actualizar estado
-            updateState();
-        }
+        // Recuperar maná al moverse
+        character.increaseManaPoints(MANA_RECOVERED);
+        character.setCurrentPosition(moveToTile);
+        // Actualizar estado
+        updateState();
     }
 
     @Override

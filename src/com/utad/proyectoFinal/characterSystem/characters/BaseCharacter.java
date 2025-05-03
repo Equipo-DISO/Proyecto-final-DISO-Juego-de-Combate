@@ -381,4 +381,8 @@ public class BaseCharacter implements CombatCharacter, MapObject {
             loadDefaultAvatar();
         }
     }
+
+    public void increaseManaPoints(Integer manaRecovered) {
+        this.manaPoints = Math.min(this.manaPoints + manaRecovered, this.maxManaPoints);
+    }
 }
