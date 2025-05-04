@@ -57,11 +57,20 @@ public class SpecialMapUiGenerator implements PushModelObserver
              
         String text = "ON GOING FIGHT";
         FontMetrics fm = g2d.getFontMetrics();
-        int tx = (this.viewPortX + this.screenSizeX - fm.stringWidth(text)) / 2;
-        int ty = (this.viewPortY + this.screenSizeY - fm.getHeight()) / 2 + fm.getAscent();
-        createText(g2d, tx - 150, ty, text, 50f);
-    
-        System.out.println(this.viewPortX + " " + this.viewPortY);
+        float fontSize = 50f;
+        g2d.setFont(g2d.getFont().deriveFont(fontSize));
+        
+      
+        Integer centerX = this.viewPortX + (this.screenSizeX / 2);
+        Integer centerY = this.viewPortY + (this.screenSizeY / 2);
+        
+        
+        Integer textWidth = fm.stringWidth(text);
+        Integer textHeight = fm.getHeight();
+        Integer tx = centerX - (textWidth / 2);
+        Integer ty = centerY - (textHeight / 2) + fm.getAscent();
+        
+        createText(g2d, tx - 150, ty, text, fontSize);
 
         g2d.setComposite(oldComp);
         g2d.setColor(oldColor);  
