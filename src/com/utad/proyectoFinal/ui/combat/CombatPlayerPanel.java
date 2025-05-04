@@ -39,23 +39,27 @@ public class CombatPlayerPanel extends JPanel{
     private JLabel mpBar = new JLabel();
 
     public CombatPlayerPanel(CombatCharacter character, int alignment) {
-        this(alignment, character.getName(), new SimplifiedImage(character.getBaseImagePath(), 92, 110),
-        character.getHealthPoints(), character.getMaxHealthPoints(), character.getManaPoints(), character.getMaxManaPoints(),
-        0, character.getWeapon().getImagePath(), character.getHelmet().getImagePath(), "Files/img/Pocion.png");
-    }
-    public CombatPlayerPanel(int alignment, String name, SimplifiedImage simplifiedImage, int hp, int hpMax, int mp, int mpMax,
-                                int nPotions, String... inventoryImages) {
 
         this.alignment = alignment;
-        this.name = name;
-        this.simplifiedImage = simplifiedImage;
-        this.hp = hp;
-        this.mp = mp;
-        this.hpMax = hpMax;
-        this.mpMax = mpMax;
-        if (alignment == JLabel.LEFT) this.nPotions = nPotions;
+
+        this.name = character.getName();
+        this.simplifiedImage = new SimplifiedImage(character.getBaseImagePath(), 92, 110);
+        this.hp = character.getHealthPoints();
+        this.mp = character.getManaPoints();
+        this.hpMax = character.getMaxHealthPoints();
+        this.mpMax = character.getMaxManaPoints();
+
+        if (alignment == JLabel.LEFT) this.nPotions = character.getHpPotions();
         else this.nPotions = 0;
-        getInventoryImages(inventoryImages);
+
+        String helmetPath = null;
+        String weaponPath = null;
+        String potionPath = "Files/img/pocion.png";
+
+        if (character.getWeapon() != null) weaponPath = character.getWeapon().getImagePath();
+        if (character.getWeapon() != null) weaponPath = character.getWeapon().getImagePath();
+
+        getInventoryImages(helmetPath, weaponPath, potionPath);
 
 
         setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
