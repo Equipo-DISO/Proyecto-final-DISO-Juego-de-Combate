@@ -3,6 +3,7 @@ package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
+import com.utad.proyectoFinal.ui.combat.Action;
 import com.utad.proyectoFinal.mapa.GenericTile;
 
 public class IdleState extends BaseState {
@@ -15,7 +16,11 @@ public class IdleState extends BaseState {
     public void handleAttack(BaseCharacter opponent, AttackStrategy attackStrategy) {
         // Comprobar si el personaje tiene suficiente maná para atacar
         if (checkAndTransitionToTiredIfNeeded()) {
-            System.out.printf("%s tiene poca energía y no puede atacar.%n", character.getName());
+            StringBuilder message = new StringBuilder(String.format("%s tiene poca energía y no puede atacar.%n", character.getName()));
+            System.out.printf(message.toString());
+            if (character.getFeedLogger() != null) {
+                character.getFeedLogger().addFeedLine(message.toString(), Action.BREAK);
+            }
         } else {
             // Cambiar al estado de ataque
             character.transitionTo(character.getStates().getAttackingState());

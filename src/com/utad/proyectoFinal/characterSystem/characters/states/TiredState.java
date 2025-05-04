@@ -2,6 +2,7 @@ package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
+import com.utad.proyectoFinal.ui.combat.Action;
 
 /**
  * Estado que representa cuando el personaje tiene energía baja y no puede atacar.
@@ -16,8 +17,12 @@ public class TiredState extends BaseState {
 
     @Override
     public void handleAttack(BaseCharacter opponent, AttackStrategy attackStrategy) {
-        System.out.printf("%s está demasiado cansado para atacar. Necesita recuperar energía.%n",
-                character.getName());
+        StringBuilder message = new StringBuilder(String.format("%s está demasiado cansado para atacar. Necesita recuperar energía.%n",
+                character.getName()));
+        System.out.printf(message.toString());
+        if (character.getFeedLogger() != null) {
+            character.getFeedLogger().addFeedLine(message.toString(), Action.BREAK);
+        }
     }
 
     @Override

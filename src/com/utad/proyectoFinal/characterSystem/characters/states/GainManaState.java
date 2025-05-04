@@ -3,6 +3,7 @@ package com.utad.proyectoFinal.characterSystem.characters.states;
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
+import com.utad.proyectoFinal.ui.combat.Action;
 
 /**
  * Estado que representa cuando el personaje gana energía.
@@ -37,8 +38,12 @@ public class GainManaState extends BaseState {
         int newMana = Math.min(currentMana + MANA_GAIN_AMOUNT, DefaultAttributes.MAX_MANA_POINTS);
         character.setManaPoints(newMana);
 
-        System.out.printf("%s ha recuperado %d puntos de energía.%n",
-                character.getName(), newMana - currentMana);
+        StringBuilder message = new StringBuilder(String.format("%s ha recuperado %d puntos de energía.%n",
+                character.getName(), newMana - currentMana));
+        System.out.printf(message.toString());
+        if (character.getFeedLogger() != null) {
+            character.getFeedLogger().addFeedLine(message.toString(), Action.CONCENTRATE);
+        }
 
         // Actualizar estado
         updateState();

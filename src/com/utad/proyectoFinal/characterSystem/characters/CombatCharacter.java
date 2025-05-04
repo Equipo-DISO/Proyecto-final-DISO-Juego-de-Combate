@@ -4,6 +4,7 @@ import com.utad.proyectoFinal.characterSystem.characters.states.strategies.Attac
 import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
 import com.utad.proyectoFinal.mapa.GenericTile;
+import com.utad.proyectoFinal.ui.combat.CombatInterface;
 
 import java.awt.Image;
 
@@ -54,4 +55,7 @@ public interface CombatCharacter {
     // Paths
     String getBaseImagePath();
     void setBaseImagePath(String baseImagePath);
+
+    // Feed Logger
+    void setFeedLogger(CombatInterface combatInterface);
 }

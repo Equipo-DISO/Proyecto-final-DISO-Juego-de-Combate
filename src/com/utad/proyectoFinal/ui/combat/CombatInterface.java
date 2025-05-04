@@ -131,11 +131,9 @@ public class CombatInterface extends JFrame implements Interface {
 
         switch (type) {
             case 0:
-                feedLine.setNewLine("Ataque Liguero", Action.ATACK);
                 player.attack(enemy, new LightAttackStrategy());
                 break;
             case 1:
-                feedLine.setNewLine("Ataque Potente", Action.ATACK);
                 player.attack(enemy, new HeavyAttackStrategy());
                 break;
             case 2:
@@ -143,11 +141,9 @@ public class CombatInterface extends JFrame implements Interface {
                 player.heal();
                 break;
             case 3:
-                feedLine.setNewLine("Concentrarse", Action.CONCENTRATE);
                 player.gainMana();
                 break;
             case 4:
-                feedLine.setNewLine("Huir", Action.RUN);
                 if (player.retreat(enemy)) {
                     feedLine.setNewLine("Retirado", Action.RUN);
                 }   

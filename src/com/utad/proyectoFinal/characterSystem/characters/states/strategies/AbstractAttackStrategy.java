@@ -1,6 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.characters.states.strategies;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.ui.combat.Action;
 
 /**
 * Plantilla común para todas las estrategias de ataque.
@@ -25,8 +26,12 @@ public abstract class AbstractAttackStrategy implements AttackStrategy {
         int manaCost = calculateManaCost();
         if (attacker.getManaPoints() < manaCost) {
             // TODO: Esto debería deshabilitar el ataque en la UI y lanzar un mensaje
-            System.out.printf("%s intenta %s pero no tiene suficiente maná (%d requerido).%n",
-                    attacker.getName(), name, manaCost);
+            StringBuilder message = new StringBuilder(String.format("%s intenta %s pero no tiene suficiente maná (%d requerido).%n",
+                    attacker.getName(), name, manaCost));
+            System.out.printf(message.toString());
+            if (attacker.getFeedLogger() != null) {
+                attacker.getFeedLogger().addFeedLine(message.toString(), Action.BREAK);
+            }
             return;
         }
 
@@ -48,8 +53,12 @@ public abstract class AbstractAttackStrategy implements AttackStrategy {
 
     protected void applyHit(BaseCharacter attacker, BaseCharacter target, double damage) {
         target.getCurrentState().handleReceiveAttack(damage);
-        System.out.printf("%s ejecuta %s y causa %.0f de daño a %s.%n",
-                attacker.getName(), name, damage, target.getName());
+        StringBuilder message = new StringBuilder(String.format("%s ejecuta %s y causa %.0f de daño a %s.%n",
+                attacker.getName(), name, damage, target.getName()));
+        System.out.printf(message.toString());
+        if (attacker.getFeedLogger() != null) {
+            attacker.getFeedLogger().addFeedLine(message.toString(), Action.ATACK);
+        }
 
         // Ataque con éxito -> reducir durabilidad del arma
         if (attacker.getWeapon() != null) {
@@ -60,14 +69,22 @@ public abstract class AbstractAttackStrategy implements AttackStrategy {
 
     private void handleWeaponBreak(BaseCharacter attacker) {
         if (attacker.getWeapon() != null && attacker.getWeapon().getDurability() <= 0) {
-            System.out.printf("%s ha roto su arma.%n", attacker.getName());
+            StringBuilder message = new StringBuilder(String.format("%s ha roto su arma.%n", attacker.getName()));
+            System.out.printf(message.toString());
+            if (attacker.getFeedLogger() != null) {
+                attacker.getFeedLogger().addFeedLine(message.toString(), Action.BREAK);
+            }
             attacker.setWeapon(null);
         }
     }
 
     protected void applyMiss(BaseCharacter attacker, BaseCharacter target) {
-        System.out.printf("%s falla su %s contra %s.%n",
-                attacker.getName(), name, target.getName());
+        StringBuilder message = new StringBuilder(String.format("%s falla su %s contra %s.%n",
+                attacker.getName(), name, target.getName()));
+        System.out.printf(message.toString());
+        if (attacker.getFeedLogger() != null) {
+            attacker.getFeedLogger().addFeedLine(message.toString(), Action.BREAK);
+        }
     }
 
     /* -------------------- Métodos a implementar por hijos ------------------ */

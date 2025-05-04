@@ -9,6 +9,7 @@ import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapObject;
 import com.utad.proyectoFinal.mapa.RenderParameters;
+import com.utad.proyectoFinal.ui.combat.CombatInterface;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -37,6 +38,9 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
 
     // Atributos de posicionamiento
     protected GenericTile currentPosition;
+
+    // Atributos de feed
+    protected CombatInterface combatInterface;
 
     // Comportamiento
     protected Boolean esControlado; // Indica si es controlado por IA
@@ -263,6 +267,8 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         return states;
     }
 
+    
+
     // ------- Getters y setters de atributos simples -------
 
     public String getName() {
@@ -347,6 +353,16 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         } else {
             return "No State";
         }
+    }
+
+    @Override
+    public void setFeedLogger(CombatInterface combatInterface) {
+        this.combatInterface = combatInterface;
+    }   
+
+    // Getter for combatInterface
+    public CombatInterface getFeedLogger() {
+        return this.combatInterface;
     }
 
     // ------- Observer pattern management methods -------
