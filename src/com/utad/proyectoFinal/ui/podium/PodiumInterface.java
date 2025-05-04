@@ -20,10 +20,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.plaf.SeparatorUI;
 
+import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 import com.utad.proyectoFinal.ui.combat.Action;
 
-public class PodiumInterface extends JFrame{
+public class PodiumInterface extends JFrame implements Interface{
 
     public PodiumInterface(Integer playersLeft, Integer playersTotal, String killer){
         this(playersLeft, playersTotal, killer, new LinkedList<String>());
@@ -207,6 +208,30 @@ public class PodiumInterface extends JFrame{
                 System.out.println("Acción no válida");
                 break;
         }
+    }
+    @Override
+    public void showInterface() {
+        setVisible(true);
+    }
+    @Override
+    public void hideInterface() {
+        setVisible(false);
+    }
+    @Override
+    public void waitTillClose() {
+        while (isVisible()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    @Override
+    public Object getData() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getData'");
     }
 
     /*
