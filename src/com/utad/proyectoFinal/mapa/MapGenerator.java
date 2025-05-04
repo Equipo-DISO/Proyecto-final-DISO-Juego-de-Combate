@@ -250,9 +250,6 @@ public class MapGenerator extends JPanel
                 CombatInterface combatInterface = new CombatInterface("Juego de Combate", 1000, 500);
                 combatInterface.showInterface();
             }
-
-           
-
         }
         else if (objective.isOcupiedByLoot())
         {

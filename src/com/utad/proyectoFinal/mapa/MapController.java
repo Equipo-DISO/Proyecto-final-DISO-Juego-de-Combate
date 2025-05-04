@@ -37,10 +37,7 @@ public class MapController implements PushModelObserver
         createMouseMovementTip(g2d);
         createPlayerCounter(g2d);
 
-        if (MapController.DISABLE_MAP) 
-        { 
-            drawPendingScreen(g2d); 
-        }
+        if (MapController.DISABLE_MAP) { drawPendingScreen(g2d); }
     }
 
     public static void setDisableMap(boolean b) { MapController.DISABLE_MAP = b; }
