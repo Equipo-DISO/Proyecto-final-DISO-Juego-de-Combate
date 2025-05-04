@@ -33,6 +33,7 @@ public interface CombatCharacter {
     void equipHelmet(BaseHelmet helmet);
     BaseWeapon getWeapon();
     BaseHelmet getHelmet();
+    Integer getHpPotions();
 
     // Upgrades
     void addHealthPotion();

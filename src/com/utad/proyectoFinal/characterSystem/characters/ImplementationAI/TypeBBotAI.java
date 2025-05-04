@@ -1,16 +1,10 @@
-package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
+package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
-import com.utad.proyectoFinal.characterSystem.characters.states.AttackingState;
-import com.utad.proyectoFinal.characterSystem.characters.states.MovingOnMapState;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapGenerator;
-import com.utad.proyectoFinal.mapa.TileGraph;
 import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
-import com.utad.proyectoFinal.mapa.ClosestLootStrategy;
-
-import java.util.*;
 
 public class TypeBBotAI extends BotAI {
 

@@ -1,4 +1,4 @@
-package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
+package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
 import com.utad.proyectoFinal.mapa.GenericTile;
 
