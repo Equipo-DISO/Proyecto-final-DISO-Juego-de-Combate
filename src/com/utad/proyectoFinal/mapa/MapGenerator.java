@@ -52,20 +52,20 @@ public class MapGenerator extends JPanel
 
         this.player = player;
 
-
-        this.factory = new NormalTileFactory(calculateTotalTiles(), spawns, bots, player);
-        this.graph = new TileGraph(calculateTotalTiles());
-
         this.screenX = x;
         this.screenY = y;
-        this.tiles = createHexGrid();
-        this.disableMap = false;
-
         this.viewportX = 0;
         this.viewportY = 0;
 
         this.uiGenerator = new SpecialMapUiGenerator(this.screenX, this.screenY, this.viewportX, this.viewportY, spawns);
+        this.factory = new NormalTileFactory(calculateTotalTiles(), spawns, bots, player, this.uiGenerator);
+        this.graph = new TileGraph(calculateTotalTiles());
 
+        
+        this.tiles = createHexGrid();
+        this.disableMap = false;
+
+        
         this.listener = new MapListener(this, this.tiles);
         this.addMouseListener(this.listener);
         this.addMouseMotionListener(this.listener);
@@ -248,7 +248,6 @@ public class MapGenerator extends JPanel
         }
         else if (objective.isOcupiedByLoot())
         {
-            
             MapObject loot = objective.getOcupiedObject();
             objective.setOcupiedObject(null);
             // TODO: trabaja tonto character.addLoot??

@@ -2,9 +2,11 @@ package com.utad.proyectoFinal.mapa;
 
 import java.awt.*;
 
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.gameManagement.PushModelObserver;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 
-public class SpecialMapUiGenerator 
+public class SpecialMapUiGenerator implements PushModelObserver
 {
 
     private Integer screenSizeX;
@@ -14,7 +16,7 @@ public class SpecialMapUiGenerator
     private Integer viewPortY;
 
     private Integer currentStandingPlayers;
-    private Integer generatedPlayers;
+    private final Integer generatedPlayers;
 
     public SpecialMapUiGenerator(Integer screenSizeX, Integer screenSizeY, Integer viewPortX, Integer viewPortY, Integer spawns)
     {
@@ -112,6 +114,12 @@ public class SpecialMapUiGenerator
         g2d.setFont(font);
         g2d.drawString(msg, posX, posY);
         g2d.setFont(oldFont);
+    }
+
+    @Override
+    public void characterHasDied(BaseCharacter character) 
+    {
+        this.currentStandingPlayers--;
     }
 
 }

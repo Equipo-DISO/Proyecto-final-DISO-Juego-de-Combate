@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
 import com.utad.proyectoFinal.characterSystem.tools.RandomItemFactory;
+import com.utad.proyectoFinal.gameManagement.PushModelObserver;
 
 
 public class NormalTileFactory extends TileFactory
@@ -13,9 +14,9 @@ public class NormalTileFactory extends TileFactory
 
     private RandomItemFactory itemFactory;
 
-    public NormalTileFactory(Integer tiles, Integer spawns, LinkedList<Bot> bots, BaseCharacter player) 
+    public NormalTileFactory(Integer tiles, Integer spawns, LinkedList<Bot> bots, BaseCharacter player, PushModelObserver obs) 
     {
-        super(tiles, spawns, bots, player);
+        super(tiles, spawns, bots, player, obs);
         this.itemFactory = new RandomItemFactory();
     }
 
@@ -48,10 +49,13 @@ public class NormalTileFactory extends TileFactory
             {
                 tile.setOcupiedObject(super.player);
                 super.player.setCurrentPosition((GenericTile) tile);
+                super.player.addObserver(super.obs);
             }
             else
             {
-                tile.setOcupiedObject(super.bots.pop());
+                BaseCharacter bot = super.bots.pop();
+                tile.setOcupiedObject(bot);
+                bot.addObserver(super.obs);
             }
            
             super.numberOfSpawns--;
