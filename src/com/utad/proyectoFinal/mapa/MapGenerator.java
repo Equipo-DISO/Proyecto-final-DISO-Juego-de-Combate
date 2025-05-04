@@ -229,7 +229,7 @@ public class MapGenerator extends JPanel
     * @param character Character that desires to move
     * @param objective Destination tile
     */
-    public void moveToTile(BaseCharacter character, GenericTile objective)
+    public void executeActionOnMove(BaseCharacter character, GenericTile objective)
     {
         if (character.getCurrentPosition().equals(objective)) { return; }
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
