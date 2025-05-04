@@ -141,11 +141,7 @@ public class MapGenerator extends JPanel
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         
-        // Add global rendering hints
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
+
         super.setBackground(new Color(90, 182, 180)); // agua
 
         g2d.translate(-this.viewportX, -this.viewportY);
