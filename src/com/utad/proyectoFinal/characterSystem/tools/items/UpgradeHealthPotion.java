@@ -30,7 +30,7 @@ public class UpgradeHealthPotion extends GenericItem {
     @Override
     public Image getImage() {
         try {
-            return ImageIO.read(new File("Files/img/items/Pergamino.png"));
+            return ImageIO.read(new File("Files/img/Pergamino.png"));
         } catch (IOException e) {
             System.err.println("Error loading upgrade health potion image: " + e.getMessage());
             // Return a small blank image as fallback

@@ -39,7 +39,7 @@ public class Chest implements MapObject {
     @Override
     public Image getImage() {
         try {
-            return ImageIO.read(new File("Files/img/items/Pergamino.png"));
+            return ImageIO.read(new File("Files/img/Cofre.png"));
         } catch (IOException e) {
             System.err.println("Error loading upgrade mana potion image: " + e.getMessage());
             // Return a small blank image as fallback
