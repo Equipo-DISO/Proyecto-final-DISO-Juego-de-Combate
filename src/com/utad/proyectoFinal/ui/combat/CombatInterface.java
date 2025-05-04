@@ -16,9 +16,6 @@ import java.util.List;
 
 public class CombatInterface extends JFrame implements Interface {
     private JLabel nombreLabel;
-    private SimplifiedImage playerSimplifiedImage = new SimplifiedImage(InterfacePath.PLAYER.getPath(InterfacePath.ColorEnum.GREEN), 92, 110);
-    private JLabel playerImage = playerSimplifiedImage.generateJLabel(InterfacePath.PLAYER.getDefWidth(), InterfacePath.PLAYER.getDefHeight());
-    private JPanel listaBotsPanel;
 
     private ArrayList<JPanel> bots = new ArrayList<>();
     private String playerImagePath = InterfacePath.PLAYER.getPath(InterfacePath.ColorEnum.GREEN);
@@ -45,12 +42,12 @@ public class CombatInterface extends JFrame implements Interface {
         setLayout(new BorderLayout());
 
         // Player
-        JPanel playerPanel = new CombatPlayerPanel(JLabel.LEFT, player.getName(), new SimplifiedImage(player.getBaseImagePath()),
+        JPanel playerPanel = new CombatPlayerPanel(JLabel.LEFT, player.getName(), new SimplifiedImage(player.getBaseImagePath(), 92, 110),
             player.getHealthPoints(), player.getMaxHealthPoints(), player.getManaPoints(), player.getMaxManaPoints());
         add(playerPanel, BorderLayout.WEST);
 
         // Enemy
-        JPanel enemyPanel = new CombatPlayerPanel(JLabel.LEFT, enemy.getName(), new SimplifiedImage(enemy.getBaseImagePath()),
+        JPanel enemyPanel = new CombatPlayerPanel(JLabel.LEFT, enemy.getName(), new SimplifiedImage(enemy.getBaseImagePath(), 92, 110),
             enemy.getHealthPoints(), enemy.getMaxHealthPoints(), enemy.getManaPoints(), enemy.getMaxManaPoints());
         add(enemyPanel, BorderLayout.EAST);
 
