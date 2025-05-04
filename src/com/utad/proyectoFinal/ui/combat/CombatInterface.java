@@ -126,6 +126,8 @@ public class CombatInterface extends JFrame implements Interface {
     private void action(int type){
 
         CombatFeedLine feedLine = new CombatFeedLine("");
+        player.setFeedLogger(this);
+        enemy.setFeedLogger(this);
 
         switch (type) {
             case 0:
