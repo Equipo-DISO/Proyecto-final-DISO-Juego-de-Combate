@@ -247,7 +247,7 @@ public class MapGenerator extends JPanel
             {
                 MapController.setDisableMap(true);
 
-                CombatInterface combatInterface = new CombatInterface("Juego de Combate", 1000, 500);
+                CombatInterface combatInterface = new CombatInterface((CombatCharacter) character, (CombatCharacter) enemyCharacter);
                 combatInterface.showInterface();
             }
         }
