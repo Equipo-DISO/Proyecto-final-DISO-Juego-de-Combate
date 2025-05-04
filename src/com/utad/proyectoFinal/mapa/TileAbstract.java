@@ -2,6 +2,7 @@ package com.utad.proyectoFinal.mapa;
 
 import java.awt.*;
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
 
 
 
@@ -71,12 +72,22 @@ public abstract class TileAbstract
        {
             if (this.specialImage != null)
             {
-                float scaleFactor = (float)TileAbstract.IMAGE_HEIGHT / (float)this.specialImage.getHeight(null);
-                int scaledWidth = (int)(this.specialImage.getWidth(null) * scaleFactor);
-                int scaledHeight = TileAbstract.IMAGE_HEIGHT;
+                Float scaleFactor = (float)TileAbstract.IMAGE_HEIGHT / (float)this.specialImage.getHeight(null);
+                Integer scaledWidth = (int)(this.specialImage.getWidth(null) * scaleFactor);
+                Integer scaledHeight = TileAbstract.IMAGE_HEIGHT;
 
-
-                graphics2d.drawImage(this.specialImage, imageX, imageY, scaledWidth, scaledHeight, null);
+                if (this.ocupiedObject instanceof BaseHelmet)
+                {
+                    graphics2d.drawImage(this.specialImage, imageX - 10, imageY, (int)(scaledWidth * 0.8), (int)(scaledHeight * 0.8), null);
+                }
+                else if (this.ocupiedObject instanceof BaseCharacter)
+                {
+                    graphics2d.drawImage(this.specialImage, imageX - 10, imageY - 25, (int)(scaledWidth * 1.2), (int)(scaledHeight * 1.2), null);
+                }
+                else
+                {
+                    graphics2d.drawImage(this.specialImage, imageX, imageY, scaledWidth, scaledHeight, null);
+                }
             }
 	   } 
        catch (Exception e) 
