@@ -193,11 +193,8 @@ public class CombatPlayerPanel extends JPanel{
     }
     
     protected void setInventory() {
-        while (true){
-            try{ inventoryPanel.remove(0); }
-            catch (Exception e){ break; }
-        }
-
+        inventoryPanel.removeAll();
+        
         for (int i = 0; i < this.inventory.size(); i++) {
             if (this.inventory.get(i) == null) this.inventory.remove(i);
         }
