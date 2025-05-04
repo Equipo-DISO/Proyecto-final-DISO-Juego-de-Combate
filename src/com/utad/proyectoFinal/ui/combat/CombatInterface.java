@@ -42,13 +42,11 @@ public class CombatInterface extends JFrame implements Interface {
         setLayout(new BorderLayout());
 
         // Player
-        JPanel playerPanel = new CombatPlayerPanel(JLabel.LEFT, player.getName(), new SimplifiedImage(player.getBaseImagePath(), 92, 110),
-            player.getHealthPoints(), player.getMaxHealthPoints(), player.getManaPoints(), player.getMaxManaPoints());
+        JPanel playerPanel = new CombatPlayerPanel(player, JLabel.LEFT);
         add(playerPanel, BorderLayout.WEST);
 
         // Enemy
-        JPanel enemyPanel = new CombatPlayerPanel(JLabel.LEFT, enemy.getName(), new SimplifiedImage(enemy.getBaseImagePath(), 92, 110),
-            enemy.getHealthPoints(), enemy.getMaxHealthPoints(), enemy.getManaPoints(), enemy.getMaxManaPoints());
+        JPanel enemyPanel = new CombatPlayerPanel(enemy, JLabel.RIGHT);
         add(enemyPanel, BorderLayout.EAST);
 
         // Feed

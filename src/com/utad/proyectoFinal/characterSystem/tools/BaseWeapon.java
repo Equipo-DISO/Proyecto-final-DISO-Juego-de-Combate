@@ -87,4 +87,8 @@ public class BaseWeapon implements MapObject {
     public Image getImage() {
         return getAvatar();
     }
+
+    public String getImagePath() {
+        return imagePath;
+    }
 }
