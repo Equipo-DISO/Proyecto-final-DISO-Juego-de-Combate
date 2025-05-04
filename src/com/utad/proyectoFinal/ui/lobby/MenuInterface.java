@@ -246,7 +246,10 @@ public class MenuInterface extends JFrame implements Interface {
                 path = InterfacePath.PLAYER.getPath(InterfacePath.colorsList[j++]);
             }
 
-            Bot bot = new Bot(((JLabel) bots.get(i).getComponent(1)).getText());
+            String botName = ((JLabel) bots.get(i).getComponent(1)).getText();
+            if (botName.toLowerCase().contains("nig")) path = path.replace(".png", "Dark.png");
+
+            Bot bot = new Bot(botName);
             bot.setImage(path);
             bot.setBaseImagePath(path);
             botList.add(bot);
@@ -256,7 +259,11 @@ public class MenuInterface extends JFrame implements Interface {
     }
 
     public BaseCharacter getPlayerCharacter() {
-        BaseCharacter player = new BaseCharacter(nombreLabel.getText());
+
+        String name = nombreLabel.getText();
+            if (name.toLowerCase().contains("nig")) playerImagePath = playerImagePath.replace(".png", "Dark.png");
+
+        BaseCharacter player = new BaseCharacter(name);
         player.setImage(playerImagePath);
         player.setBaseImagePath(playerImagePath);
         return player;
