@@ -41,6 +41,8 @@ public class MenuInterface extends JFrame implements Interface {
         
         setSize(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        
         setLayout(new BorderLayout());
 
         // Panel superior con imagen y nombre
