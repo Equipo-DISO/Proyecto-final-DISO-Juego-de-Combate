@@ -253,6 +253,7 @@ public class MapGenerator extends JPanel
             if (!character.getEsControlado() || !enemyCharacter.getEsControlado())
             {
                 MapController.setDisableMap(true);
+                updateRendering(); // java te puto odio
 
                 CombatInterface combatInterface = new CombatInterface((CombatCharacter) character, (CombatCharacter) enemyCharacter);
                 combatInterface.showInterface();
