@@ -8,6 +8,8 @@ import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapObject;
+import com.utad.proyectoFinal.mapa.RenderParameters;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -372,5 +374,11 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
     @Override
     public String getBaseImagePath() {
         return this.visualizer.getBaseImagePath();
+    }
+
+    @Override
+    public RenderParameters getRenderParameters() 
+    {
+        return new RenderParameters(-10, -25, 1.2, 1.2);
     }
 }
