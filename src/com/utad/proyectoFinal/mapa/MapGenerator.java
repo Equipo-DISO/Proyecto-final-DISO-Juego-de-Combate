@@ -4,8 +4,10 @@ package com.utad.proyectoFinal.mapa;
 import javax.swing.*;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
+import com.utad.proyectoFinal.ui.combat.CombatInterface;
 
 import java.awt.*;
 import java.util.List;
@@ -241,10 +243,17 @@ public class MapGenerator extends JPanel
         //TODO logica de cambio de movidas ocupadas en los tiles
         if (objective.isOcupiedByCharacter())
         {
-            MapObject obj = objective.getOcupiedObject();
-            //llamar a la interfaz de mario
+            BaseCharacter enemyCharacter = (BaseCharacter) objective.getOcupiedObject();
 
-            this.disableMap = true;
+            if (!character.getEsControlado() || !enemyCharacter.getEsControlado())
+            {
+                this.disableMap = true;
+
+                CombatInterface combatInterface = new CombatInterface("Juego de Combate", 1000, 500);
+                combatInterface.showInterface();
+            }
+
+           
 
         }
         else if (objective.isOcupiedByLoot())
