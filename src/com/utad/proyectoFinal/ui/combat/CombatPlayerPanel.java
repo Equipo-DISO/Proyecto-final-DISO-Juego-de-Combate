@@ -21,21 +21,24 @@ public class CombatPlayerPanel extends JPanel{
     private static final Integer ITEMSIZE = 35;
     
     private int alignment = JLabel.LEFT;
+    private CombatCharacter character;
     private String name;
     private SimplifiedImage simplifiedImage;
     private List<SimplifiedImage> inventory = new ArrayList();
-
+    
     private int hp;
     private int hpMax;
     private int mp;
     private int mpMax;
     private int nPotions;
-
+    
+    private JPanel inventoryPanel;
     private JLabel hpBar = new JLabel();
     private JLabel mpBar = new JLabel();
 
     public CombatPlayerPanel(CombatCharacter character, int alignment) {
 
+        this.character = character;
         this.alignment = alignment;
 
         this.name = character.getName();
@@ -45,30 +48,20 @@ public class CombatPlayerPanel extends JPanel{
         this.hpMax = character.getMaxHealthPoints();
         this.mpMax = character.getMaxManaPoints();
 
-        if (alignment == JLabel.LEFT) this.nPotions = character.getHpPotions();
+        if (this.alignment == JLabel.LEFT) this.nPotions = character.getHpPotions();
         else this.nPotions = 0;
-
-        String helmetPath = null;
-        String weaponPath = null;
-        String potionPath = null;
-
-        if (character.getHelmet() != null) helmetPath = character.getHelmet().getImagePath();
-        if (character.getWeapon() != null) weaponPath = character.getWeapon().getImagePath();
-        if (this.nPotions > 0) potionPath = "Files/img/pocion.png";
-
-        getInventoryImages(helmetPath, weaponPath, potionPath);
+        getInventoryImages();
 
 
         setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         setMinimumSize(new Dimension(230, 500));
         setPreferredSize(new Dimension(230, 500));
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        //setBackground(java.awt.Color.LIGHT_GRAY);
 
         // Name
         JLabel nameLabel = new JLabel(name);
         nameLabel.setPreferredSize(new Dimension(200, 30));
-        nameLabel.setHorizontalAlignment(alignment);
+        nameLabel.setHorizontalAlignment(this.alignment);
         nameLabel.setFont(nameLabel.getFont().deriveFont(20f));
         add(nameLabel);
 
@@ -85,34 +78,11 @@ public class CombatPlayerPanel extends JPanel{
         imagePanel.setPreferredSize(new Dimension(82, 115));
         imagePanel.setBorder(new LineBorder(Color.BLACK, 4));
 
-        JPanel inventoryPanel = new JPanel();
-        if (alignment == JLabel.LEFT) inventoryPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 1));
-        else inventoryPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 3, 1));
-
-        inventoryPanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 2, 2, 1, true));
-        inventoryPanel.setPreferredSize(new Dimension(82, 115));
-
-        int i = 0;
-        for (SimplifiedImage img : inventory) {
-            JPanel itemPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-            JLabel item = img.generateJLabel();
-
-            itemPanel.setPreferredSize(new Dimension(ITEMSIZE, ITEMSIZE));
-            itemPanel.setMinimumSize(new Dimension(ITEMSIZE, ITEMSIZE));
-            itemPanel.setMaximumSize(new Dimension(ITEMSIZE, ITEMSIZE));
-            itemPanel.add(item);
-            
-            if (alignment == JLabel.RIGHT && i % 2 != 0){
-                inventoryPanel.add(itemPanel, i - 1);
-            }
-            else inventoryPanel.add(itemPanel);
-
-            i++;
-        }
+        setInventory();
 
         playerPanel.add(imagePanel);
         playerPanel.add(inventoryPanel);
-        if (alignment == JLabel.RIGHT) playerPanel.add(imagePanel);
+        if (this.alignment == JLabel.RIGHT) playerPanel.add(imagePanel);
 
         add(playerPanel);
 
@@ -127,7 +97,7 @@ public class CombatPlayerPanel extends JPanel{
         hpLabelPanel.add(hpLabel, BorderLayout.EAST);
 
         JPanel hpBarPanel;
-        if (alignment == JLabel.LEFT) hpBarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        if (this.alignment == JLabel.LEFT) hpBarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         else hpBarPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         
         hpBarPanel.setPreferredSize(new Dimension(204, 10));
@@ -154,7 +124,7 @@ public class CombatPlayerPanel extends JPanel{
         mpLabelPanel.add(mpLabel, BorderLayout.EAST);
 
         JPanel mpBarPanel;
-        if (alignment == JLabel.LEFT) mpBarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        if (this.alignment == JLabel.LEFT) mpBarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         else mpBarPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 
         mpBarPanel.setPreferredSize(new Dimension(204, 10));
@@ -178,30 +148,68 @@ public class CombatPlayerPanel extends JPanel{
         this.hp = hp;
         this.mp = mp;
         hpBar.repaint();
-
+        
         updateSliders();
     }
-
+    
     private void updateSliders(){
         int hpPercentage = (int) ((float) hp / (float) hpMax * 100);
         int mpPercentage = (int) ((float) mp / (float) mpMax * 100);
-
+        
         hpBar.setPreferredSize(new Dimension(200 * hpPercentage / 100, 12));
         mpBar.setPreferredSize(new Dimension(200 * mpPercentage / 100, 12));
     }
-
-    private void getInventoryImages(String... inventoryImages) {
+    
+    protected void getInventoryImages() {
+        
+        String helmetPath = null;
+        String weaponPath = null;
+        String potionPath = null;
+        
+        if (this.character.getHelmet() != null) helmetPath = this.character.getHelmet().getImagePath();
+        if (this.character.getWeapon() != null) weaponPath = this.character.getWeapon().getImagePath();
+        if (this.nPotions > 0) potionPath = "Files/img/pocion.png";
+        
         this.inventory = new ArrayList<>();
-
+        String inventoryImages[] = {helmetPath, weaponPath, potionPath};
         for (String imagePath : inventoryImages) {
             if (imagePath != null && !imagePath.isEmpty()) {
                 if (imagePath.contains("Weapon")) imagePath = imagePath.replace("Weapon", "Chibi");
                 else if (imagePath.contains("Helmet")) imagePath = imagePath.replace("Helmet", "HelmetInventory");
                 
                 this.inventory.add(new SimplifiedImage(imagePath, ITEMSIZE, ITEMSIZE));
+                System.out.println("Item");
             }
         }
     }
+    
+    protected void setInventory() {
+        inventoryPanel = new JPanel();
+        if (this.alignment == JLabel.LEFT) inventoryPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 1));
+        else inventoryPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 3, 1));
+
+        inventoryPanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 2, 2, 1, true));
+        inventoryPanel.setPreferredSize(new Dimension(82, 115));
+
+        int i = 0;
+        for (SimplifiedImage img : inventory) {
+            JPanel itemPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+            JLabel item = img.generateJLabel();
+
+            itemPanel.setPreferredSize(new Dimension(ITEMSIZE, ITEMSIZE));
+            itemPanel.setMinimumSize(new Dimension(ITEMSIZE, ITEMSIZE));
+            itemPanel.setMaximumSize(new Dimension(ITEMSIZE, ITEMSIZE));
+            itemPanel.add(item);
+            
+            if (this.alignment == JLabel.RIGHT && i % 2 != 0){
+                inventoryPanel.add(itemPanel, i - 1);
+            }
+            else inventoryPanel.add(itemPanel);
+
+            i++;
+        }
+    }
+
 
     /*
     TESTING

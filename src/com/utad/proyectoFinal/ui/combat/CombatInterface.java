@@ -28,6 +28,9 @@ public class CombatInterface extends JFrame implements Interface {
 
     private CombatCharacter player;
     private CombatCharacter enemy;
+
+    private CombatPlayerPanel playerPanel;
+    private CombatPlayerPanel enemyPanel;
     
     public CombatInterface(CombatCharacter player, CombatCharacter enemy){
         this(player, enemy, "Juego de Combate - Pelea en curso");
@@ -50,11 +53,11 @@ public class CombatInterface extends JFrame implements Interface {
         setLayout(new BorderLayout());
 
         // Player
-        JPanel playerPanel = new CombatPlayerPanel(player, JLabel.LEFT);
+        playerPanel = new CombatPlayerPanel(player, JLabel.LEFT);
         add(playerPanel, BorderLayout.WEST);
 
         // Enemy
-        JPanel enemyPanel = new CombatPlayerPanel(enemy, JLabel.RIGHT);
+        enemyPanel = new CombatPlayerPanel(enemy, JLabel.RIGHT);
         add(enemyPanel, BorderLayout.EAST);
 
         // Feed
@@ -132,6 +135,7 @@ public class CombatInterface extends JFrame implements Interface {
             case 1:
                 feedLine.setNewLine("Ataque Potente", Action.ATACK);
                 player.attack(enemy, new HeavyAttackStrategy());
+                player.equipWeapon(null);
                 break;
             case 2:
                 feedLine.setNewLine("Curarse (" + player.getHpPotions() + ")", Action.HEAL);
@@ -151,11 +155,27 @@ public class CombatInterface extends JFrame implements Interface {
                 System.out.println("Error");
         }
 
+        updatePanels();
+
         feedPanel.add(feedLine);
         feedPanel.revalidate();
         feedPanel.repaint();
 
         feedUpdated = true;
+    }
+
+    public void updatePanels(){
+        playerPanel.getInventoryImages();
+        playerPanel.setInventory();
+        playerPanel.revalidate();
+        playerPanel.repaint();
+        
+        enemyPanel.getInventoryImages();
+        enemyPanel.setInventory();
+        enemyPanel.revalidate();
+        enemyPanel.repaint();
+
+        playerPanel.updateValues(player.getHealthPoints(), player.getManaPoints());
     }
 
     // FEED FUNCTIONS 
