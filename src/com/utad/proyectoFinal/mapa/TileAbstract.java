@@ -2,13 +2,9 @@ package com.utad.proyectoFinal.mapa;
 
 import java.awt.*;
 
-import javax.swing.ImageIcon;
+
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
-import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
-import com.utad.proyectoFinal.ui.SimplifiedImage;
-
 
 
 public abstract class TileAbstract 

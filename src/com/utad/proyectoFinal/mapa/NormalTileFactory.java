@@ -35,7 +35,6 @@ public class NormalTileFactory extends TileFactory
     @Override
     public TileAbstract generateRandomTile(Integer x, Integer y, Integer tileId) 
     {
-        // TODO: hay que meter las factorias
         TileAbstract tile;
     
         Double spawnProbability = (double) super.numberOfSpawns / super.totalNumberOfTiles ;
