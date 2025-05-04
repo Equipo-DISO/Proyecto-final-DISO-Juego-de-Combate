@@ -373,7 +373,9 @@ public class MapGenerator extends JPanel
     public BaseCharacter getPlayer() { return this.player; }
 
     public void pathFindingDebug(List<GenericTile> path)
-    {        
+    {   
+        removePathFindingDebug();     
+
         for (GenericTile tile : path) 
         {
             tile.setDebugColor(Color.YELLOW);  
@@ -385,6 +387,18 @@ public class MapGenerator extends JPanel
         updateRendering();
     }
    
+    public void removePathFindingDebug()
+    {
+        for (TileAbstract tile : this.tiles) 
+        {
+            if (tile instanceof GenericTile)
+            {
+                GenericTile t = (GenericTile) tile;
+                t.setDebugColor(GenericTile.DEFAULT_COLOR); 
+            }
+             
+        }
+    }
 }
 
 // DEBUG

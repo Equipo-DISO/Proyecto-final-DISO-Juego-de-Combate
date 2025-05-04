@@ -67,6 +67,7 @@ public class MapListener extends MouseAdapter
             if (t.contains(p.x, p.y)) 
             {
                 this.map.moveToTile(this.map.getPlayer(), (GenericTile) t);
+                this.map.pathFindingDebug(this.map.getPathToObjective(this.map.getPlayer().getCurrentPosition(), new ClosestEnemyStrategy()));
                 //System.out.println("Has clicado la tile en: " + t.getTileId());
                 break;
             }

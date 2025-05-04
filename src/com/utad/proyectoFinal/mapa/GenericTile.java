@@ -7,11 +7,14 @@ public class GenericTile extends TileAbstract
 {
 
     public static final Integer DEFAULT_FACE_DEPTH = 35;
-    public Color color = new Color(135, 190, 88);
+    public static final Color DEFAULT_COLOR = new Color(135, 190, 88);
+
+    public Color color;
 
     public GenericTile(Integer x, Integer y, Integer id) 
     {
         super(x, y, id);
+        this.color = GenericTile.DEFAULT_COLOR;
     }
 
     @Override

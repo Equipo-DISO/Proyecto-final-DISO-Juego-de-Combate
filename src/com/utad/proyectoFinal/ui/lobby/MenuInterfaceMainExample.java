@@ -7,6 +7,7 @@ import java.util.List;
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
 import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
+import com.utad.proyectoFinal.mapa.ClosestLootStrategy;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 
 public class MenuInterfaceMainExample {
@@ -35,7 +36,5 @@ public class MenuInterfaceMainExample {
         
         MapGenerator instance = MapGenerator.getInstance(1100, 0, 6, bots.size() + 1, bots, player);
         instance.displayMap();
-
-        instance.pathFindingDebug(instance.getPathToObjective(player.getCurrentPosition(), new ClosestEnemyStrategy()));
     }
 }
