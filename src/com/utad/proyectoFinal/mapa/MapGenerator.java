@@ -333,13 +333,10 @@ public class MapGenerator extends JPanel
             objective.setOcupiedObject(null);
             // TODO: trabaja tonto character.addLoot??
 
-            character.getCurrentPosition().setOcupiedObject(null);
             character.move(objective);
         }
         else
         {
-            character.getCurrentPosition().setOcupiedObject(null);
-            objective.setOcupiedObject(character);
             character.move(objective);
         }
     }
