@@ -4,7 +4,7 @@ import com.utad.proyectoFinal.mapa.MapObject;
 
 import java.awt.*;
 
-public class GenericItem implements MapObject {
+public class GenericItem implements MapObject, Consumible {
 
     private GenericItemType type;
 

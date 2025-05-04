@@ -240,6 +240,8 @@ public class MapGenerator extends JPanel
         //TODO logica de cambio de movidas ocupadas en los tiles
         if (objective.isOcupiedByCharacter())
         {
+            MapObject obj = objective.getOcupiedObject();
+            //llamar a la interfaz de mario
 
         }
         else if (objective.isOcupiedByLoot())
