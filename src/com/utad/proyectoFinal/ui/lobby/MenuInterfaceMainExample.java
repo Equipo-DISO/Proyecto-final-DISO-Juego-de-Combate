@@ -31,8 +31,8 @@ public class MenuInterfaceMainExample {
         LinkedList<Bot> bots = interfaceMain.getBotList();
         BaseCharacter player = interfaceMain.getPlayerCharacter();
 
-        player.equipWeapon(new BaseWeapon(WeaponType.SPEAR));
-        player.equipHelmet(new BaseHelmet(HelmetType.DEMON_HELMET));
+        // player.equipWeapon(new BaseWeapon(WeaponType.SPEAR));
+        // player.equipHelmet(new BaseHelmet(HelmetType.DEMON_HELMET));
 
         
         MapGenerator instance = MapGenerator.getInstance(1500, 0, 6, bots.size() + 1, bots, player);

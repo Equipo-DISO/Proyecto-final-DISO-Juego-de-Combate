@@ -6,6 +6,7 @@ import javax.swing.*;
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
+import com.utad.proyectoFinal.characterSystem.tools.items.Consumable;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 import com.utad.proyectoFinal.ui.combat.CombatInterface;
 
@@ -234,7 +235,7 @@ public class MapGenerator extends JPanel
         if (character.getCurrentPosition().equals(objective)) { return; }
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
         
-        //TODO logica de cambio de movidas ocupadas en los tiles
+       
         if (objective.isOcupiedByCharacter())
         {
             BaseCharacter enemyCharacter = (BaseCharacter) objective.getOcupiedObject();
@@ -249,10 +250,9 @@ public class MapGenerator extends JPanel
         }
         else if (objective.isOcupiedByLoot())
         {
-            MapObject loot = objective.getOcupiedObject();
+            Consumable loot = (Consumable) objective.getOcupiedObject();
             objective.setOcupiedObject(null);
-            // TODO: trabaja tonto character.addLoot??
-
+            loot.consume(character);
             character.move(objective);
         }
         else

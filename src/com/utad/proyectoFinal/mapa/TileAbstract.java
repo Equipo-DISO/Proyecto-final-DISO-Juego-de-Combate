@@ -71,7 +71,12 @@ public abstract class TileAbstract
        {
             if (this.specialImage != null)
             {
-                graphics2d.drawImage(this.specialImage, imageX, imageY, TileAbstract.IMAGE_WIDTH, TileAbstract.IMAGE_HEIGHT, null);
+                float scaleFactor = (float)TileAbstract.IMAGE_HEIGHT / (float)this.specialImage.getHeight(null);
+                int scaledWidth = (int)(this.specialImage.getWidth(null) * scaleFactor);
+                int scaledHeight = TileAbstract.IMAGE_HEIGHT;
+
+
+                graphics2d.drawImage(this.specialImage, imageX, imageY, scaledWidth, scaledHeight, null);
             }
 	   } 
        catch (Exception e) 
