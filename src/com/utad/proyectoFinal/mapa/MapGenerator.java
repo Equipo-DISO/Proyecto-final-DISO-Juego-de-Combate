@@ -371,6 +371,18 @@ public class MapGenerator extends JPanel
     public Integer calculateTotalTiles() { return 1 + 3 * this.gridSize * (this.gridSize + 1); }
     public BaseCharacter getPlayer() { return this.player; }
 
+    public void pathFindingDebug(List<GenericTile> path)
+    {        
+        for (GenericTile tile : path) 
+        {
+            tile.setDebugColor(Color.YELLOW);  
+        }
+        
+        path.get(0).setDebugColor(Color.GREEN); 
+        path.get(path.size() - 1).setDebugColor(Color.RED);      
+        
+        updateRendering();
+    }
    
 }
 
@@ -391,25 +403,7 @@ public class MapGenerator extends JPanel
 //         }
 //     }
 
-//     private void pathFindingTesting()
-//     {
-//         GenericTile startTile = getRandomTile();
-//         GenericTile endTile = getRandomTile();
-        
 
-    
-//         List<GenericTile> path = this.graph.pathFindingBFS(startTile, endTile.getTileId(), this.tiles);
-        
-//         for (GenericTile tile : path) 
-//         {
-//             tile.setDebugColor(Color.YELLOW);  
-//         }
-        
-//         startTile.setDebugColor(Color.GREEN); 
-//         endTile.setDebugColor(Color.RED);      
-        
-//         updateRendering();
-//     }
 
 //     private void generateDebugLines(Graphics2D g2d)
 //     {
