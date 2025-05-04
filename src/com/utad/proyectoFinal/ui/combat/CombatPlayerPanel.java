@@ -4,29 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Flow;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.*;
 import javax.swing.JSeparator;
 
 import com.utad.proyectoFinal.ui.SimplifiedImage;
-import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
-import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
-import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
-import com.utad.proyectoFinal.characterSystem.tools.HelmetType;
-import com.utad.proyectoFinal.characterSystem.tools.WeaponType;
-import com.utad.proyectoFinal.ui.InterfacePath;
 
 public class CombatPlayerPanel extends JPanel{
     private static final Integer ITEMSIZE = 35;

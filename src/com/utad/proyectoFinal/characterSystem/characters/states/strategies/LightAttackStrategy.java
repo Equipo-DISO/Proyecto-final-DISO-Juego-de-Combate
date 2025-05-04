@@ -1,7 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.characters.states.strategies;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.tools.Calculator;
+import com.utad.proyectoFinal.gameManagement.Calculator;
 
 public class LightAttackStrategy extends AbstractAttackStrategy {
 

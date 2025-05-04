@@ -1,7 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.images;
 
-import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
-import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
 import java.awt.Image;
 
 public abstract class EquipmentDecorator implements CharacterImage {

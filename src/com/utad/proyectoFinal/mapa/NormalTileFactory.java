@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
-import com.utad.proyectoFinal.characterSystem.tools.RandomItemFactory;
+import com.utad.proyectoFinal.characterSystem.tools.factory.RandomItemFactory;
 import com.utad.proyectoFinal.gameManagement.PushModelObserver;
 
 

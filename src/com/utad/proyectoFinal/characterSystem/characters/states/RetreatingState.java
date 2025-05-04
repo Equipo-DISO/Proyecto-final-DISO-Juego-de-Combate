@@ -1,7 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.tools.Calculator;
+import com.utad.proyectoFinal.gameManagement.Calculator;
 
 // P(ret) = (MPr_p / MPr_e) / 2 * 100
 public class RetreatingState extends BaseState {

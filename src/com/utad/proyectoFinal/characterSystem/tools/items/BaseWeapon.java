@@ -1,4 +1,4 @@
-package com.utad.proyectoFinal.characterSystem.tools;
+package com.utad.proyectoFinal.characterSystem.tools.items;
 
 import com.utad.proyectoFinal.mapa.MapObject;
 import javax.imageio.ImageIO;

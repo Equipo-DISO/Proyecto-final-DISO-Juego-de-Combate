@@ -1,4 +1,4 @@
-package com.utad.proyectoFinal.characterSystem.tools;
+package com.utad.proyectoFinal.characterSystem.tools.factory;
 
 import com.utad.proyectoFinal.mapa.MapObject;
 

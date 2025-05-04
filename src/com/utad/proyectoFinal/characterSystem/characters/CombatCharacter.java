@@ -1,8 +1,8 @@
 package com.utad.proyectoFinal.characterSystem.characters;
 
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
-import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
-import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
 import com.utad.proyectoFinal.mapa.GenericTile;
 
 import java.awt.Image;

@@ -5,6 +5,10 @@ import java.util.List;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
+import com.utad.proyectoFinal.characterSystem.tools.items.HelmetType;
+import com.utad.proyectoFinal.characterSystem.tools.items.WeaponType;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 
 public class MenuInterfaceMainExample {
@@ -27,8 +31,8 @@ public class MenuInterfaceMainExample {
         LinkedList<Bot> bots = interfaceMain.getBotList();
         BaseCharacter player = interfaceMain.getPlayerCharacter();
 
-        player.equipWeapon(new com.utad.proyectoFinal.characterSystem.tools.BaseWeapon(com.utad.proyectoFinal.characterSystem.tools.WeaponType.SPEAR));
-        player.equipHelmet(new com.utad.proyectoFinal.characterSystem.tools.BaseHelmet(com.utad.proyectoFinal.characterSystem.tools.HelmetType.DEMON_HELMET));
+        player.equipWeapon(new BaseWeapon(WeaponType.SPEAR));
+        player.equipHelmet(new BaseHelmet(HelmetType.DEMON_HELMET));
 
         
         MapGenerator instance = MapGenerator.getInstance(1500, 0, 6, bots.size() + 1, bots, player);

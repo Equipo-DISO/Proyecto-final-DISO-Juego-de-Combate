@@ -2,7 +2,7 @@ package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
-import com.utad.proyectoFinal.characterSystem.tools.Calculator;
+import com.utad.proyectoFinal.gameManagement.Calculator;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import test.com.utad.proyectoFinal.characterSystem.TestUtils;
 
