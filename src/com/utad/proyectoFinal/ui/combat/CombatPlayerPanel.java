@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Flow;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,10 +22,14 @@ import javax.swing.JSeparator;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
+import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
+import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
+import com.utad.proyectoFinal.characterSystem.tools.HelmetType;
+import com.utad.proyectoFinal.characterSystem.tools.WeaponType;
 import com.utad.proyectoFinal.ui.InterfacePath;
 
 public class CombatPlayerPanel extends JPanel{
-    private static final Integer ITEMSIZE = 30;
+    private static final Integer ITEMSIZE = 35;
     
     private int alignment = JLabel.LEFT;
     private String name;
@@ -56,10 +61,11 @@ public class CombatPlayerPanel extends JPanel{
 
         String helmetPath = null;
         String weaponPath = null;
-        String potionPath = "Files/img/pocion.png";
+        String potionPath = null;
 
+        if (character.getHelmet() != null) helmetPath = character.getHelmet().getImagePath();
         if (character.getWeapon() != null) weaponPath = character.getWeapon().getImagePath();
-        if (character.getWeapon() != null) weaponPath = character.getWeapon().getImagePath();
+        if (this.nPotions > 0) potionPath = "Files/img/pocion.png";
 
         getInventoryImages(helmetPath, weaponPath, potionPath);
 
@@ -90,14 +96,29 @@ public class CombatPlayerPanel extends JPanel{
         imagePanel.setPreferredSize(new Dimension(82, 115));
         imagePanel.setBorder(new LineBorder(Color.BLACK, 4));
 
-        JPanel inventoryPanel = new JPanel(new GridLayout(6, 2));
+        JPanel inventoryPanel = new JPanel();
+        if (alignment == JLabel.LEFT) inventoryPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 1));
+        else inventoryPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 3, 1));
+
         inventoryPanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 2, 2, 1, true));
         inventoryPanel.setPreferredSize(new Dimension(82, 115));
 
+        int i = 0;
         for (SimplifiedImage img : inventory) {
+            JPanel itemPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
             JLabel item = img.generateJLabel();
-            item.setPreferredSize(new Dimension(ITEMSIZE, ITEMSIZE));
-            inventoryPanel.add(item);
+
+            itemPanel.setPreferredSize(new Dimension(ITEMSIZE, ITEMSIZE));
+            itemPanel.setMinimumSize(new Dimension(ITEMSIZE, ITEMSIZE));
+            itemPanel.setMaximumSize(new Dimension(ITEMSIZE, ITEMSIZE));
+            itemPanel.add(item);
+            
+            if (alignment == JLabel.RIGHT && i % 2 != 0){
+                inventoryPanel.add(itemPanel, i - 1);
+            }
+            else inventoryPanel.add(itemPanel);
+
+            i++;
         }
 
         playerPanel.add(imagePanel);
@@ -188,9 +209,23 @@ public class CombatPlayerPanel extends JPanel{
                 if (imagePath.contains("Weapon")) imagePath = imagePath.replace("Weapon", "Chibi");
                 else if (imagePath.contains("Helmet")) imagePath = imagePath.replace("Helmet", "HelmetInventory");
                 
-                if (!imagePath.contains("Pocion") || this.nPotions > 0)
                 this.inventory.add(new SimplifiedImage(imagePath, ITEMSIZE, ITEMSIZE));
             }
         }
     }
+
+    /*
+    TESTING
+
+    public static void main(String[] args) {
+        // Test the CombatPlayerPanel class
+        BaseCharacter character = new BaseCharacter("Test Character");
+        
+        character.setHelmet(new BaseHelmet(HelmetType.NORMAL_HELMET));
+        character.setWeapon(new BaseWeapon(WeaponType.SPEAR));
+
+        CombatInterface combatInterface = new CombatInterface(character, character);
+        combatInterface.showInterface();
+    }
+    */
 }

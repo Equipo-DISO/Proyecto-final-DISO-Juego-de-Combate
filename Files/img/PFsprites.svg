@@ -27,9 +27,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="px"
-     inkscape:zoom="0.5"
-     inkscape:cx="-241"
-     inkscape:cy="997"
+     inkscape:zoom="4"
+     inkscape:cx="398.625"
+     inkscape:cy="561.375"
      inkscape:window-width="1920"
      inkscape:window-height="1057"
      inkscape:window-x="-8"
@@ -1936,7 +1936,7 @@
     <g
        id="g7"
        inkscape:label="Cofre"
-       transform="translate(915.64202)">
+       transform="translate(1003.3233)">
       <path
          id="rect4"
          style="fill:#483728;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round"
@@ -1968,7 +1968,7 @@
     <g
        id="g7-6"
        inkscape:label="Tomb"
-       transform="translate(213.95509,-0.26668998)"
+       transform="translate(301.63633,-0.26668998)"
        style="display:inline"
        inkscape:export-filename=".\tomb.png"
        inkscape:export-xdpi="159.35081"
@@ -1985,12 +1985,12 @@
          sodipodi:nodetypes="csscssc" />
       <path
          id="path31"
-         style="fill:#8a8d8e;fill-rule:evenodd;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;fill-opacity:1"
+         style="fill:#8a8d8e;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
          d="m 133.79491,549.38125 c 0,17.32793 -14.04707,31.375 -31.375,31.375 -7.342043,0 -14.095067,-2.52189 -19.440094,-6.74668 -0.862261,-0.68155 1.249621,-2.65741 -0.285917,-4.23665 -1.765084,-1.81532 -5.598109,-1.69213 -6.941352,-3.85348 -2.984201,-4.80175 -4.70764,-10.4687 -4.70764,-16.53819 0,-17.32794 14.047068,-31.375 31.375003,-31.375 17.32793,0 31.375,14.04707 31.375,31.375 z"
          sodipodi:nodetypes="ssssssss" />
       <path
          style="fill:#8a8d8e;fill-opacity:1;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
-         d="m 75.33997,566.21728 c 0,0 13.805039,3.22691 4.9823,8.62959 -7.556575,4.62734 -9.13655,6.5732 -9.13655,6.5732 l 50.51175,0"
+         d="m 75.33997,566.21728 c 0,0 13.805039,3.22691 4.9823,8.62959 -7.556575,4.62734 -9.13655,6.5732 -9.13655,6.5732 h 50.51175"
          id="path32"
          sodipodi:nodetypes="cscc" />
       <path
@@ -2045,22 +2045,22 @@
          y="609.26392"
          ry="1.6396698" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
          d="m 55.44477,616.0838 h 65.00164"
          id="path43" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
          d="M 55.4455,620.33395 H 84.62735"
          id="path44" />
       <path
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:none"
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
          d="m 143.61655,626.33228 h -26.176"
          id="path45" />
     </g>
     <g
        id="g30"
        inkscape:label="Pocion HP"
-       transform="translate(-127.64253,-32.722944)">
+       transform="translate(-39.96129,-32.722944)">
       <path
          style="fill:#d89339;fill-opacity:1;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
          d="m 822.58955,539.29211 -14.2558,17.79549 c -0.27922,0.0358 -0.2577,0.44755 0.1296,1.31651 l 15.08963,38.59504 c 0.36084,0.85048 1.40468,0.62585 1.40468,0.62585 l 21.91916,4.63865 c 0.6174,0.17113 0.89367,-0.10192 0.5469,-0.60544 l -24.08237,-62.22903 c 0.0584,-0.35307 -0.42869,-0.45392 -0.7518,-0.13707 z"
@@ -2090,7 +2090,7 @@
     <g
        id="g34"
        inkscape:label="Pergamino"
-       transform="translate(449.34145,-125.05251)"
+       transform="translate(537.02269,-125.05251)"
        inkscape:export-filename="items.png"
        inkscape:export-xdpi="159.35081"
        inkscape:export-ydpi="159.35081">

@@ -23,6 +23,9 @@ public class CombatInterface extends JFrame implements Interface {
     JPanel feedPanel = new JPanel();
     private JScrollPane scrollPane;
     private boolean feedUpdated = false;
+
+    private CombatCharacter player;
+    private CombatCharacter enemy;
     
     public CombatInterface(CombatCharacter player, CombatCharacter enemy){
         this(player, enemy, "Juego de Combate - Pelea en curso");
@@ -31,6 +34,9 @@ public class CombatInterface extends JFrame implements Interface {
         this(player, enemy, title, 1000, 500);
     }
     public CombatInterface(CombatCharacter player, CombatCharacter enemy, String title, Integer width, Integer height){
+
+        this.player = player;
+        this.enemy = enemy;
 
         setTitle(title);
         setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
@@ -68,7 +74,7 @@ public class CombatInterface extends JFrame implements Interface {
         actionsPanel.setBackground(Color.LIGHT_GRAY);
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        String[] actions = {"Ataque Liguero", "Ataque Potente", "Curarse (x)", "Concentrarse", "Huir"};
+        String[] actions = {"Ataque Liguero", "Ataque Potente", "Curarse (" + player.getHpPotions() + ")", "Concentrarse", "Huir"};
         for (int i = 0; i < actions.length; i++) {
             int actionIndex = i;
 
@@ -77,7 +83,11 @@ public class CombatInterface extends JFrame implements Interface {
             actionButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    action(actionIndex + 1);
+                    action(actionIndex);
+
+                    if (actionIndex == 2) {
+                        actionButton.setText("Curarse (" + player.getHpPotions() + ")");
+                    }
                 }
             });
             actionsPanel.add(actionButton);
@@ -113,19 +123,20 @@ public class CombatInterface extends JFrame implements Interface {
         CombatFeedLine feedLine = new CombatFeedLine("");
 
         switch (type) {
-            case 1:
+            case 0:
                 feedLine.setNewLine("Ataque Liguero", Action.ATACK);
                 break;
-            case 2:
+            case 1:
                 feedLine.setNewLine("Ataque Potente", Action.ATACK);
                 break;
-            case 3:
-                feedLine.setNewLine("Curarse (x)", Action.HEAL);
+            case 2:
+                feedLine.setNewLine("Curarse (" + player.getHpPotions() + ")", Action.HEAL);
+
                 break;
-            case 4:
+            case 3:
                 feedLine.setNewLine("Concentrarse", Action.CONCENTRATE);
                 break;
-            case 5:
+            case 4:
                 feedLine.setNewLine("Huir", Action.RUN);
                 break;
             default:
