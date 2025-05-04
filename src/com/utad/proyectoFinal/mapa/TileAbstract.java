@@ -76,6 +76,9 @@ public abstract class TileAbstract
                 Integer scaledWidth = (int)(this.specialImage.getWidth(null) * scaleFactor);
                 Integer scaledHeight = TileAbstract.IMAGE_HEIGHT;
 
+                // yo bro u know what i mean dude
+                // this guys dont know what br br patapim is
+                // this gays arent the real gggsssssss broooo
                 if (this.ocupiedObject instanceof BaseHelmet)
                 {
                     graphics2d.drawImage(this.specialImage, imageX - 10, imageY, (int)(scaledWidth * 0.8), (int)(scaledHeight * 0.8), null);
