@@ -1,8 +1,13 @@
 package com.utad.proyectoFinal.mapa;
 
 import java.awt.*;
+
+import javax.swing.ImageIcon;
+
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
+import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 
 
@@ -87,6 +92,16 @@ public abstract class TileAbstract
                 {
                     graphics2d.drawImage(this.specialImage, imageX - 10, imageY - 25, (int)(scaledWidth * 1.2), (int)(scaledHeight * 1.2), null);
                 }
+                // else if (this.ocupiedObject instanceof BaseWeapon)
+                // {
+                //     BaseWeapon excepcionDeLaPutaRegla = (BaseWeapon) this.ocupiedObject;
+                //     String imagePath = excepcionDeLaPutaRegla.getImagePath().replace("Weapon", "Chibi");
+
+                //     ImageIcon icon = new ImageIcon(imagePath);
+
+                //     this.specialImage = icon.getImage().getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_AREA_AVERAGING);
+                //     graphics2d.drawImage(this.specialImage, imageX, imageY, scaledWidth, scaledHeight, null);
+                // }
                 else
                 {
                     graphics2d.drawImage(this.specialImage, imageX, imageY, scaledWidth, scaledHeight, null);
