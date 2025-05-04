@@ -106,4 +106,17 @@ public final class Calculator {
         // incorporar lógica adicional en el futuro
         return baseCost;
     }
+
+    /**
+     * Calcula la probabilidad de retirada exitosa basada en la relación de puntos de maná.
+     * Formula: P(ret) = (MPr_p / MPr_e) / 2 * 100
+     * 
+     * @param retreatingCharacter El personaje que intenta retirarse
+     * @param opponent El oponente del personaje
+     * @return La probabilidad de retirada (0-100)
+     */
+    public double calculateRetreatProbability(BaseCharacter retreatingCharacter, BaseCharacter opponent) {
+        return (((double) retreatingCharacter.getManaPoints() / retreatingCharacter.getMaxManaPoints())
+                / ((double) opponent.getManaPoints() / opponent.getMaxManaPoints()) / 2) * 100;
+    }
 }

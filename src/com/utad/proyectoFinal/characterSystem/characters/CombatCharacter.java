@@ -24,7 +24,7 @@ public interface CombatCharacter {
     
     // Combat actions
     void attack(CombatCharacter target, AttackStrategy attackStrategy);
-    void retreat(CombatCharacter opponent);
+    boolean retreat(CombatCharacter opponent);
     void heal();
     void move(GenericTile moveToTile);
     
