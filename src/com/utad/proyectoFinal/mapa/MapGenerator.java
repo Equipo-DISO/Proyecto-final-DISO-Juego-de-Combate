@@ -40,8 +40,8 @@ public class MapGenerator extends JPanel
     private FpsDebugger fps;
     
     private BaseCharacter player;
-    private final Integer generatedPlayers;
-    private Integer currentStandingPlayers;
+    private SpecialMapUiGenerator uiGenerator;
+
 
     private MapGenerator(Integer x, Integer y, Integer size, Integer spawns, LinkedList<Bot> bots, BaseCharacter player) 
     {
@@ -51,8 +51,7 @@ public class MapGenerator extends JPanel
         this.fps = new FpsDebugger();
 
         this.player = player;
-        this.generatedPlayers = spawns;
-        this.currentStandingPlayers = spawns;
+
 
         this.factory = new NormalTileFactory(calculateTotalTiles(), spawns, bots, player);
         this.graph = new TileGraph(calculateTotalTiles());
@@ -65,6 +64,8 @@ public class MapGenerator extends JPanel
         this.viewportX = 0;
         this.viewportY = 0;
 
+        this.uiGenerator = new SpecialMapUiGenerator(this.screenX, this.screenY, this.viewportX, this.viewportY, spawns);
+
         this.listener = new MapListener(this, this.tiles);
         this.addMouseListener(this.listener);
         this.addMouseMotionListener(this.listener);
@@ -72,7 +73,7 @@ public class MapGenerator extends JPanel
 
     public void displayMap()
     {
-        JFrame frame = new JFrame("Hexágono 3D Testing");
+        JFrame frame = new JFrame("Juego de Combate");
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1300, 800);
@@ -152,102 +153,21 @@ public class MapGenerator extends JPanel
         super.setBackground(new Color(90, 182, 180)); // agua
 
         g2d.translate(-this.viewportX, -this.viewportY);
+        this.uiGenerator.setDrawInformation(super.getWidth(), super.getHeight(), this.viewportX, this.viewportY);
 
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.tiles.forEach(t -> t.drawTile(g2d));
 
-        if (this.disableMap)
-        {
-            drawPendingScreen(g2d);
-            super.setEnabled(false);
-        }
-        else
-        {
-            super.setEnabled(true);
-        }
 
-        drawPlayerHUD(g2d);
+        this.uiGenerator.drawPlayerHUD(g2d, this.disableMap);
+        super.setEnabled(this.disableMap);
+
         renderBridges(g2d);
-
-        
         this.fps.update();
     }
 
 
-    private void drawPendingScreen(Graphics2D g2d)
-    {
-        Composite oldComp = g2d.getComposite();
-        Color oldColor   = g2d.getColor();
-
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-        g2d.setColor(Color.DARK_GRAY);
-        g2d.fillRect(0, 0, super.getWidth(), super.getHeight());
-
-             
-        String text = "ON GOING FIGHT";
-        FontMetrics fm = g2d.getFontMetrics();
-        int tx = (this.viewportX + super.getWidth() - fm.stringWidth(text)) / 2;
-        int ty = (this.viewportY + super.getHeight() - fm.getHeight()) / 2 + fm.getAscent();
-        createText(g2d, tx - 150, ty, text, 50f);
     
-        g2d.setComposite(oldComp);
-        g2d.setColor(oldColor);  
-    }
-
-    private void drawPlayerHUD(Graphics2D g2d) 
-    {
-        createMouseMovementTip(g2d);
-        createPlayerCounter(g2d);
-    }
-
-    private void createMouseMovementTip(Graphics2D g2d)
-    {
-        Integer boxWidth = 250;
-        Integer boxHeight = 60;
-
-        Integer boxX = (this.viewportX + ((super.getWidth() - boxWidth / 2) / 2));
-        Integer boxY = (this.viewportY + super.getHeight() - boxHeight - 20);
-
-
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-        g2d.setColor(Color.DARK_GRAY); 
-        g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
-
-        
-        
-       createText(g2d, boxX + 20, boxY + 35, "Hold left click to move", 20f);
-       //createText(g2d, boxX + 20, boxY + 35, "FPS " + this.fps.getFPS(), 20f);
-    }
-
-    private void createPlayerCounter(Graphics2D g2d)
-    {
-        Integer boxWidth = 120;
-        Integer boxHeight = 60;
-
-        Integer boxX = this.viewportX + super.getWidth() - boxWidth + 5;
-        Integer boxY = this.viewportY + (-10);
-
-
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-        g2d.setColor(Color.DARK_GRAY); 
-        g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
-
-       g2d.drawImage(new SimplifiedImage("Files/img/PeopleIcon.png").generateBufferedImage(), boxX + 15, boxY + 20, 30, 30, null);
-       createText(g2d, boxX + 60, boxY + 40, this.currentStandingPlayers + "/" + this.generatedPlayers, 20f);
-    }
-
-    private void createText(Graphics2D g2d, Integer posX, Integer posY, String msg, Float fontSize)
-    {
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-        g2d.setColor(Color.WHITE);
-        
-        Font  oldFont = g2d.getFont();
-        Font font = oldFont.deriveFont(Font.BOLD, fontSize);
-        g2d.setFont(font);
-        g2d.drawString(msg, posX, posY);
-        g2d.setFont(oldFont);
-    }
-
     private void renderBridges(Graphics2D g2d) 
     {
         Stroke originalStroke = g2d.getStroke();
@@ -298,12 +218,8 @@ public class MapGenerator extends JPanel
         Double offsetX = ux * TileAbstract.HEXAGON_RADIOUS * 0.9;  
         Double offsetY = uy * TileAbstract.HEXAGON_RADIOUS * 0.55; 
         
-        Integer newX1 = (int) (x1 + offsetX);
-        Integer newY1 = (int) (y1 + offsetY);
-        Integer newX2 = (int) (x2 - offsetX);
-        Integer newY2 = (int) (y2 - offsetY);
 
-        g2d.drawLine(newX1, newY1, newX2, newY2);
+        g2d.drawLine((int) (x1 + offsetX), (int) (y1 + offsetY), (int) (x2 - offsetX), (int) (y2 - offsetY));
     }
 
 
