@@ -1,15 +1,12 @@
 package com.utad.proyectoFinal.ui.lobby;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
-import com.utad.proyectoFinal.mapa.MapGenerator;
+import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
-import com.utad.proyectoFinal.ui.InterfacePath.ColorEnum;
 
 import java.awt.*;
 import java.awt.event.*;

@@ -1,11 +1,8 @@
-package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
+package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
 import com.utad.proyectoFinal.mapa.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TypeABotAI extends BotAI {
 

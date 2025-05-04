@@ -3,7 +3,7 @@ package com.utad.proyectoFinal.mapa;
 import java.util.LinkedList;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
+import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
 import com.utad.proyectoFinal.gameManagement.PushModelObserver;
 
 public abstract class TileFactory 
