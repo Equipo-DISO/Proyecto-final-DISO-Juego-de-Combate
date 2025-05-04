@@ -1,12 +1,12 @@
 package com.utad.proyectoFinal.mapa;
 
 import java.util.LinkedList;
-import java.util.Random;
+
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
 import com.utad.proyectoFinal.characterSystem.tools.RandomItemFactory;
-import com.utad.proyectoFinal.ui.SimplifiedImage;
+
 
 public class NormalTileFactory extends TileFactory
 {
