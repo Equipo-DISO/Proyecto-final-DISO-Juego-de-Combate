@@ -101,20 +101,15 @@ public class BaseCharacter implements CombatCharacter, MapObject {
 
     // Método privado para actualizar la imagen decorada
     private void updateCharacterImage() {
-        // Empieza siempre desde la imagen base
+        // Start with the base image
         this.characterImage = new BaseCharacterImage(this.baseAvatar);
-
-        // Aplica el decorador de casco si existe
-        if (this.helmet != null && this.helmet.getAvatar() != null) {
-            this.characterImage = new HelmetDecorator(this.characterImage, this.helmet.getAvatar());
-        }
-
-        // Aplica el decorador de arma si existe
-        if (this.weapon != null && this.weapon.getAvatar() != null) {
-            this.characterImage = new WeaponDecorator(this.characterImage, this.weapon.getAvatar());
-        }
+        
+        // Apply decorators in a defined order using the factory method
+        // This decouples BaseCharacter from specific decorator implementations
+        this.characterImage = EquipmentDecorator.createFor(this.characterImage, this.helmet);
+        this.characterImage = EquipmentDecorator.createFor(this.characterImage, this.weapon);
     }
-
+    
     // Setter para el casco que actualiza el decorador
     public void setHelmet(BaseHelmet helmet) {
         this.helmet = helmet;

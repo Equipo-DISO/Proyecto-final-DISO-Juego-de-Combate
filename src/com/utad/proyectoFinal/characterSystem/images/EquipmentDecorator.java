@@ -1,5 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.images;
 
+import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
+import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
 import java.awt.Image;
 
 public abstract class EquipmentDecorator implements CharacterImage {
@@ -22,8 +24,8 @@ public abstract class EquipmentDecorator implements CharacterImage {
     public CharacterImage getBaseImage() {
         CharacterImage image = this.decoratedImage;
         
-        while (image instanceof EquipmentDecorator) {
-            image = ((EquipmentDecorator) image).decoratedImage;
+        while (image instanceof EquipmentDecorator decorator) {
+            image = decorator.decoratedImage;
         }
         
         return image;
@@ -39,5 +41,34 @@ public abstract class EquipmentDecorator implements CharacterImage {
         
         // Get the complete image from the base image
         return baseImage.getCompleteImage();
+    }
+    
+    /**
+     * Factory method to create the appropriate equipment decorator
+     * This helps decouple specific decorator implementations
+     * @param base The base image to decorate
+     * @param equipment The equipment to apply (helmet, weapon, etc.)
+     * @return A decorated CharacterImage
+     */
+    public static CharacterImage createFor(CharacterImage base, Object equipment) {
+        if (equipment == null) {
+            return base;
+        }
+        
+        // Handle different equipment types
+        if (equipment instanceof BaseHelmet helmet) {
+            Image avatar = helmet.getAvatar();
+            if (avatar != null) {
+                return new HelmetDecorator(base, avatar);
+            }
+        } else if (equipment instanceof BaseWeapon weapon) {
+            Image avatar = weapon.getAvatar();
+            if (avatar != null) {
+                return new WeaponDecorator(base, avatar);
+            }
+        }
+        
+        // If no decorator could be applied, return the base image
+        return base;
     }
 }
