@@ -20,6 +20,8 @@ public abstract class TileFactory
         this.player = player;
     }
 
+    
+
     public abstract GenericTile createTile(Integer x, Integer y, Integer tileId);
     public abstract ObstacleTile creatileObstacle(Integer x, Integer y, Integer tileId);
 

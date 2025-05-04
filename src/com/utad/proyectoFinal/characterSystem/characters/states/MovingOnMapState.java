@@ -35,7 +35,12 @@ public class MovingOnMapState extends BaseState {
 
         // Recuperar maná al moverse
         character.increaseManaPoints(MANA_RECOVERED);
+
+        // actualizar la posicion
+        character.getCurrentPosition().setOcupiedObject(null); 
         character.setCurrentPosition(moveToTile);
+
+        moveToTile.setOcupiedObject(character);
         // Actualizar estado
         updateState();
     }

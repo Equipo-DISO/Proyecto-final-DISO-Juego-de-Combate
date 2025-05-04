@@ -18,7 +18,7 @@ public class ClosestEnemyStrategy implements PathFindingStrategy
 
         for (TileAbstract t : tiles)
         {
-            if (t instanceof GenericTile && t.isOcupiedByCharacter())
+            if (t instanceof GenericTile && t.isOcupiedByCharacter() && !t.equals(currentPos))
             {
                 Double dist = TileGraph.distanceToTile(currentPos, t);
                 if (dist < closestDistance)

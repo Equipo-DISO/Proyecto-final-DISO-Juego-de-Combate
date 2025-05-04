@@ -16,8 +16,8 @@ import java.util.LinkedList;
 
 public class MapGenerator extends JPanel 
 {
-    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.4d;
-    public static final Double DEFAULT_LOOT_PROBABILITY = 0.25d;
+    public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.45d;
+    public static final Double DEFAULT_LOOT_PROBABILITY = 0.23d;
 
 
     private TileFactory factory;
@@ -37,15 +37,22 @@ public class MapGenerator extends JPanel
 
     private TileGraph graph;
 
+    private FpsDebugger fps;
     
     private BaseCharacter player;
+    private final Integer generatedPlayers;
+    private Integer currentStandingPlayers;
 
     private MapGenerator(Integer x, Integer y, Integer size, Integer spawns, LinkedList<Bot> bots, BaseCharacter player) 
     {
         super();
         this.gridSize = size;
 
+        this.fps = new FpsDebugger();
+
         this.player = player;
+        this.generatedPlayers = spawns;
+        this.currentStandingPlayers = spawns;
 
         this.factory = new NormalTileFactory(calculateTotalTiles(), spawns, bots, player);
         this.graph = new TileGraph(calculateTotalTiles());
@@ -141,11 +148,7 @@ public class MapGenerator extends JPanel
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         
-        // Add global rendering hints
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
+
         super.setBackground(new Color(90, 182, 180)); // agua
 
         g2d.translate(-this.viewportX, -this.viewportY);
@@ -165,6 +168,9 @@ public class MapGenerator extends JPanel
 
         drawPlayerHUD(g2d);
         renderBridges(g2d);
+
+        
+        this.fps.update();
     }
 
 
@@ -207,7 +213,10 @@ public class MapGenerator extends JPanel
         g2d.setColor(Color.DARK_GRAY); 
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
+        
+        
        createText(g2d, boxX + 20, boxY + 35, "Hold left click to move", 20f);
+       //createText(g2d, boxX + 20, boxY + 35, "FPS " + this.fps.getFPS(), 20f);
     }
 
     private void createPlayerCounter(Graphics2D g2d)
@@ -224,7 +233,7 @@ public class MapGenerator extends JPanel
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
        g2d.drawImage(new SimplifiedImage("Files/img/PeopleIcon.png").generateBufferedImage(), boxX + 15, boxY + 20, 30, 30, null);
-       createText(g2d, boxX + 50, boxY + 40, "nig/15", 20f);
+       createText(g2d, boxX + 60, boxY + 40, this.currentStandingPlayers + "/" + this.generatedPlayers, 20f);
     }
 
     private void createText(Graphics2D g2d, Integer posX, Integer posY, String msg, Float fontSize)
@@ -324,13 +333,10 @@ public class MapGenerator extends JPanel
             objective.setOcupiedObject(null);
             // TODO: trabaja tonto character.addLoot??
 
-            character.getCurrentPosition().setOcupiedObject(null);
             character.move(objective);
         }
         else
         {
-            character.getCurrentPosition().setOcupiedObject(null);
-            objective.setOcupiedObject(character);
             character.move(objective);
         }
     }
@@ -366,7 +372,33 @@ public class MapGenerator extends JPanel
     public Integer calculateTotalTiles() { return 1 + 3 * this.gridSize * (this.gridSize + 1); }
     public BaseCharacter getPlayer() { return this.player; }
 
+    public void pathFindingDebug(List<GenericTile> path)
+    {   
+        removePathFindingDebug();     
+
+        for (GenericTile tile : path) 
+        {
+            tile.setDebugColor(Color.YELLOW);  
+        }
+        
+        path.get(0).setDebugColor(Color.GREEN); 
+        path.get(path.size() - 1).setDebugColor(Color.RED);      
+        
+        updateRendering();
+    }
    
+    public void removePathFindingDebug()
+    {
+        for (TileAbstract tile : this.tiles) 
+        {
+            if (tile instanceof GenericTile)
+            {
+                GenericTile t = (GenericTile) tile;
+                t.setDebugColor(GenericTile.DEFAULT_COLOR); 
+            }
+             
+        }
+    }
 }
 
 // DEBUG
@@ -386,25 +418,7 @@ public class MapGenerator extends JPanel
 //         }
 //     }
 
-//     private void pathFindingTesting()
-//     {
-//         GenericTile startTile = getRandomTile();
-//         GenericTile endTile = getRandomTile();
-        
 
-    
-//         List<GenericTile> path = this.graph.pathFindingBFS(startTile, endTile.getTileId(), this.tiles);
-        
-//         for (GenericTile tile : path) 
-//         {
-//             tile.setDebugColor(Color.YELLOW);  
-//         }
-        
-//         startTile.setDebugColor(Color.GREEN); 
-//         endTile.setDebugColor(Color.RED);      
-        
-//         updateRendering();
-//     }
 
 //     private void generateDebugLines(Graphics2D g2d)
 //     {

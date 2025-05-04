@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
+import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
+import com.utad.proyectoFinal.mapa.ClosestLootStrategy;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 
 public class MenuInterfaceMainExample {
