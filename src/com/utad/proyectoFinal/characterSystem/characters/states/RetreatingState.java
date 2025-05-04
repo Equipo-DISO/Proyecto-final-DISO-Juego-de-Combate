@@ -1,6 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.tools.Calculator;
 
 // P(ret) = (MPr_p / MPr_e) / 2 * 100
 public class RetreatingState extends BaseState {
@@ -9,14 +10,12 @@ public class RetreatingState extends BaseState {
         super(character);
     }
 
-    // TODO: Change algorithm to use the new mana system and P(ret) formula
     @Override
     public void handleRetreat(BaseCharacter opponent) {
         boolean retirada = false;
 
-        // Calcular la probabilidad de retirada
-        double probabilidadRetirada = (((double) character.getManaPoints() / character.getMaxManaPoints())
-                / ((double) opponent.getManaPoints() / opponent.getMaxManaPoints()) / 2) * 100;
+        // Usar Calculator para calcular la probabilidad de retirada
+        double probabilidadRetirada = Calculator.getInstance().calculateRetreatProbability(character, opponent);
         if (Math.random() * 100 <= probabilidadRetirada) {
             retirada = true;
             System.out.printf("%s ha conseguido retirarse con éxito.%n", character.getName());

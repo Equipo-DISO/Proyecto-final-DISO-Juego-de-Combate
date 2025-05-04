@@ -78,9 +78,6 @@ public class BaseCharacter implements CombatCharacter, MapObject {
         this.maxHealthPoints = DefaultAttributes.HEALTH;
         this.healthPoints = this.maxHealthPoints;
 
-        // this.items = new ArrayList<Item>();
-        // this.efectos = new ArrayList<Item>();
-
         this.id = ++BaseCharacter.contadorPersonajes;
 
         this.baseAvatar = baseAvatar;
@@ -294,8 +291,7 @@ public class BaseCharacter implements CombatCharacter, MapObject {
      */
     @Override
     public void attack(CombatCharacter target, AttackStrategy strategy) {
-        if (target instanceof BaseCharacter) {
-            BaseCharacter targetBaseCharacter = (BaseCharacter) target;
+        if (target instanceof BaseCharacter targetBaseCharacter) {
             this.currentState.handleAttack(targetBaseCharacter, strategy);
         } else {
             System.out.println("El objetivo no es un personaje válido.");
@@ -303,12 +299,13 @@ public class BaseCharacter implements CombatCharacter, MapObject {
     }
 
     @Override
-    public void retreat(CombatCharacter opponent) {
-        if (opponent instanceof BaseCharacter) {
-            BaseCharacter opponentBaseCharacter = (BaseCharacter) opponent;
+    public boolean retreat(CombatCharacter opponent) {
+        if (opponent instanceof BaseCharacter opponentBaseCharacter) {
             this.currentState.handleRetreat(opponentBaseCharacter);
+            return this.retreatSuccess; // Return the retreat success value
         } else {
             System.out.println("El oponente no es un personaje válido.");
+            return false; // Invalid opponent means retreat fails
         }
     }
 
