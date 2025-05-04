@@ -4,8 +4,10 @@ package com.utad.proyectoFinal.mapa;
 import javax.swing.*;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
+import com.utad.proyectoFinal.ui.combat.CombatInterface;
 
 import java.awt.*;
 import java.util.List;
@@ -29,7 +31,6 @@ public class MapGenerator extends JPanel
 
     private Integer screenX;
     private Integer screenY;
-    private boolean disableMap;
     private Integer gridSize;
 
     private Integer viewportX;
@@ -40,7 +41,7 @@ public class MapGenerator extends JPanel
     private FpsDebugger fps;
     
     private BaseCharacter player;
-    private SpecialMapUiGenerator uiGenerator;
+    private MapController mapController;
 
 
     private MapGenerator(Integer x, Integer y, Integer size, Integer spawns, LinkedList<Bot> bots, BaseCharacter player) 
@@ -57,15 +58,14 @@ public class MapGenerator extends JPanel
         this.viewportX = 0;
         this.viewportY = 0;
 
-        this.uiGenerator = new SpecialMapUiGenerator(this.screenX, this.screenY, this.viewportX, this.viewportY, spawns);
-        this.factory = new NormalTileFactory(calculateTotalTiles(), spawns, bots, player, this.uiGenerator);
+        this.mapController = new MapController(this.screenX, this.screenY, this.viewportX, this.viewportY, spawns);
+        this.factory = new NormalTileFactory(calculateTotalTiles(), spawns, bots, player, this.mapController);
         this.graph = new TileGraph(calculateTotalTiles());
 
         
         this.tiles = createHexGrid();
-        this.disableMap = false;
 
-        
+
         this.listener = new MapListener(this, this.tiles);
         this.addMouseListener(this.listener);
         this.addMouseMotionListener(this.listener);
@@ -93,7 +93,7 @@ public class MapGenerator extends JPanel
         return MapGenerator.instance;
     }
 
-
+   
     public List<TileAbstract> createHexGrid() 
     {
         List<TileAbstract> generatedMap = new ArrayList<>();
@@ -153,14 +153,14 @@ public class MapGenerator extends JPanel
         super.setBackground(new Color(90, 182, 180)); // agua
 
         g2d.translate(-this.viewportX, -this.viewportY);
-        this.uiGenerator.setDrawInformation(super.getWidth(), super.getHeight(), this.viewportX, this.viewportY);
+        this.mapController.setDrawInformation(super.getWidth(), super.getHeight(), this.viewportX, this.viewportY);
 
         this.tiles.sort(Comparator.comparingInt(t -> t.posY));
         this.tiles.forEach(t -> t.drawTile(g2d));
 
 
-        this.uiGenerator.drawPlayerHUD(g2d, this.disableMap);
-        super.setEnabled(this.disableMap);
+        this.mapController.drawPlayerHUD(g2d);
+        super.setEnabled(MapController.getDisableMap());
 
         renderBridges(g2d);
         this.fps.update();
@@ -241,11 +241,15 @@ public class MapGenerator extends JPanel
         //TODO logica de cambio de movidas ocupadas en los tiles
         if (objective.isOcupiedByCharacter())
         {
-            MapObject obj = objective.getOcupiedObject();
-            //llamar a la interfaz de mario
+            BaseCharacter enemyCharacter = (BaseCharacter) objective.getOcupiedObject();
 
-            this.disableMap = true;
+            if (!character.getEsControlado() || !enemyCharacter.getEsControlado())
+            {
+                MapController.setDisableMap(true);
 
+                CombatInterface combatInterface = new CombatInterface("Juego de Combate", 1000, 500);
+                combatInterface.showInterface();
+            }
         }
         else if (objective.isOcupiedByLoot())
         {
@@ -286,9 +290,7 @@ public class MapGenerator extends JPanel
     public Integer getViewY() { return this.viewportY; }
     public TileGraph getGraph() { return this.graph; }
     public void setFactory(TileFactory f) { this.factory = f; }
-    public void disableMap(boolean b) { this.disableMap = b; }
     public void updateRendering() { this.repaint(); }
-    public boolean isDisabled()   { return this.disableMap; }
     public Integer calculateTotalTiles() { return 1 + 3 * this.gridSize * (this.gridSize + 1); }
     public BaseCharacter getPlayer() { return this.player; }
 

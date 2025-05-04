@@ -2,11 +2,12 @@ package com.utad.proyectoFinal.mapa;
 
 import java.awt.*;
 
+
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.gameManagement.PushModelObserver;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 
-public class SpecialMapUiGenerator implements PushModelObserver
+public class MapController implements PushModelObserver
 {
 
     private Integer screenSizeX;
@@ -18,7 +19,9 @@ public class SpecialMapUiGenerator implements PushModelObserver
     private Integer currentStandingPlayers;
     private final Integer generatedPlayers;
 
-    public SpecialMapUiGenerator(Integer screenSizeX, Integer screenSizeY, Integer viewPortX, Integer viewPortY, Integer spawns)
+    private static boolean DISABLE_MAP = false;
+
+    public MapController(Integer screenSizeX, Integer screenSizeY, Integer viewPortX, Integer viewPortY, Integer spawns)
     {
         this.screenSizeX = screenSizeX;
         this.screenSizeY = screenSizeY;
@@ -29,13 +32,16 @@ public class SpecialMapUiGenerator implements PushModelObserver
         this.generatedPlayers = spawns;
     }
 
-    public void drawPlayerHUD(Graphics2D g2d, boolean disableMap) 
+    public void drawPlayerHUD(Graphics2D g2d) 
     {
         createMouseMovementTip(g2d);
         createPlayerCounter(g2d);
 
-        if (disableMap) { drawPendingScreen(g2d); }
+        if (MapController.DISABLE_MAP) { drawPendingScreen(g2d); }
     }
+
+    public static void setDisableMap(boolean b) { MapController.DISABLE_MAP = b; }
+    public static boolean getDisableMap() { return MapController.DISABLE_MAP; }
 
     public void setDrawInformation(Integer screenSizeX, Integer screenSizeY, Integer viewPortX, Integer viewPortY)
     {

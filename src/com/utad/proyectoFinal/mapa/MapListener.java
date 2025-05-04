@@ -29,14 +29,14 @@ public class MapListener extends MouseAdapter
 
     public void mousePressed(MouseEvent e) 
     {
-        if (this.map.isDisabled()) return;
+        if (MapController.getDisableMap()) return;
         this.dragStart = e.getPoint();
     }
     
     @Override
     public void mouseDragged(MouseEvent e) 
     {
-        if (this.map.isDisabled() || this.dragStart == null) return;
+        if (MapController.getDisableMap() || this.dragStart == null) return;
         if (!SwingUtilities.isLeftMouseButton(e)) return;
         
         
@@ -59,7 +59,7 @@ public class MapListener extends MouseAdapter
     @Override
     public void mouseClicked(MouseEvent e) 
     {
-        if (this.map.isDisabled()) { return; }
+        if (MapController.getDisableMap()) { return; }
 
         Point p = adjustPoint(e.getPoint());
         for (TileAbstract t : tiles) 
@@ -77,7 +77,7 @@ public class MapListener extends MouseAdapter
     @Override
     public void mouseMoved(MouseEvent e) 
     {
-        if (this.map.isDisabled()) { return; }
+        if (MapController.getDisableMap()) { return; }
 
         Point p = adjustPoint(e.getPoint());
         for (TileAbstract t : tiles) 
