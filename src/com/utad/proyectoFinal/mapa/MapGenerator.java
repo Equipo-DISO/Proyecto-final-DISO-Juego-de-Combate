@@ -37,8 +37,6 @@ public class MapGenerator extends JPanel
     private Integer viewportY;
 
     private TileGraph graph;
-
-    private FpsDebugger fps;
     
     private BaseCharacter player;
     private MapController mapController;
@@ -49,7 +47,6 @@ public class MapGenerator extends JPanel
         super();
         this.gridSize = size;
 
-        this.fps = new FpsDebugger();
 
         this.player = player;
 
@@ -163,7 +160,6 @@ public class MapGenerator extends JPanel
         super.setEnabled(MapController.getDisableMap());
 
         renderBridges(g2d);
-        this.fps.update();
     }
 
 
