@@ -1,17 +1,22 @@
 package com.utad.proyectoFinal.mapa;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.ImplementationAI.Bot;
+import com.utad.proyectoFinal.characterSystem.tools.RandomItemFactory;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 
 public class NormalTileFactory extends TileFactory
 {
 
+    private RandomItemFactory itemFactory;
+
     public NormalTileFactory(Integer tiles, Integer spawns, LinkedList<Bot> bots, BaseCharacter player) 
     {
         super(tiles, spawns, bots, player);
+        this.itemFactory = new RandomItemFactory();
     }
 
     @Override
@@ -57,7 +62,7 @@ public class NormalTileFactory extends TileFactory
             
             if (Math.random() < MapGenerator.DEFAULT_LOOT_PROBABILITY && tile instanceof GenericTile) 
             {
-                tile.setSpecialImage(new SimplifiedImage("Files/img/Pergamino.png").generateImage());
+                tile.setOcupiedObject(this.itemFactory.giveRandomObject());
             }
         }
         
