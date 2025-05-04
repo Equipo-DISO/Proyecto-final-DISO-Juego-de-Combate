@@ -27,9 +27,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="px"
-     inkscape:zoom="0.35355339"
-     inkscape:cx="1228.9516"
-     inkscape:cy="586.89863"
+     inkscape:zoom="0.5"
+     inkscape:cx="733"
+     inkscape:cy="685"
      inkscape:window-width="1920"
      inkscape:window-height="1057"
      inkscape:window-x="-8"
@@ -67,7 +67,7 @@
      inkscape:label="Capa 1"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline">
+     style="display:none">
     <g
        id="g3"
        style="display:inline"
@@ -1907,7 +1907,8 @@
        inkscape:label="PeopleIcon"
        inkscape:export-filename=".\PeopleIcon.png"
        inkscape:export-xdpi="84.02626"
-       inkscape:export-ydpi="84.02626">
+       inkscape:export-ydpi="84.02626"
+       transform="translate(183.84776)">
       <circle
          style="fill:url(#radialGradient38);fill-rule:evenodd;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
          id="path35"
@@ -1931,7 +1932,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Loot"
-     style="display:none">
+     style="display:inline">
     <g
        id="g7"
        inkscape:label="Cofre"
