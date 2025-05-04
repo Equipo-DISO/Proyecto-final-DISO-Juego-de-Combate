@@ -34,7 +34,7 @@ public class MenuInterfaceMainExample {
         player.equipHelmet(new com.utad.proyectoFinal.characterSystem.tools.BaseHelmet(com.utad.proyectoFinal.characterSystem.tools.HelmetType.DEMON_HELMET));
 
         
-        MapGenerator instance = MapGenerator.getInstance(1100, 0, 6, bots.size() + 1, bots, player);
+        MapGenerator instance = MapGenerator.getInstance(1500, 0, 6, bots.size() + 1, bots, player);
         instance.displayMap();
     }
 }

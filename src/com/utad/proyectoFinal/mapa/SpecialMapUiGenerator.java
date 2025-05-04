@@ -50,7 +50,7 @@ public class SpecialMapUiGenerator
 
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
         g2d.setColor(Color.DARK_GRAY);
-        g2d.fillRect(0, 0, this.screenSizeX, this.screenSizeY);
+        g2d.fillRect(this.viewPortX, this.viewPortY, this.screenSizeX, this.screenSizeY);
 
              
         String text = "ON GOING FIGHT";
@@ -59,6 +59,8 @@ public class SpecialMapUiGenerator
         int ty = (this.viewPortY + this.screenSizeY - fm.getHeight()) / 2 + fm.getAscent();
         createText(g2d, tx - 150, ty, text, 50f);
     
+        System.out.println(this.viewPortX + " " + this.viewPortY);
+
         g2d.setComposite(oldComp);
         g2d.setColor(oldColor);  
     }

@@ -243,6 +243,8 @@ public class MapGenerator extends JPanel
             MapObject obj = objective.getOcupiedObject();
             //llamar a la interfaz de mario
 
+            this.disableMap = true;
+
         }
         else if (objective.isOcupiedByLoot())
         {
