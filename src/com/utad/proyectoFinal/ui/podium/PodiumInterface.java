@@ -209,6 +209,10 @@ public class PodiumInterface extends JFrame{
         }
     }
 
+    /*
+
+    TESTING
+
     public static void main(String[] args) {
         for (int i = 2; i <= 8; i++){
             PodiumInterface startScreen = new PodiumInterface(i, 8, "Luisito");
@@ -231,4 +235,5 @@ public class PodiumInterface extends JFrame{
         startScreen.setVisible(true);
         startScreen.setResizable(false); // Hacer la ventana no redimensionable
     }
+    */
 }
