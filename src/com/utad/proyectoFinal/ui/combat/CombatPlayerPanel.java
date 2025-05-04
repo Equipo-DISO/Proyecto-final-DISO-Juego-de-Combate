@@ -24,11 +24,13 @@ import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.ui.InterfacePath;
 
 public class CombatPlayerPanel extends JPanel{
+    private static final Integer ITEMSIZE = 30;
     
     private int alignment = JLabel.LEFT;
     private String name;
     private SimplifiedImage simplifiedImage;
     private List<SimplifiedImage> inventory = new ArrayList();
+
     private int hp;
     private int hpMax;
     private int mp;
@@ -88,13 +90,13 @@ public class CombatPlayerPanel extends JPanel{
         imagePanel.setPreferredSize(new Dimension(82, 115));
         imagePanel.setBorder(new LineBorder(Color.BLACK, 4));
 
-        JPanel inventoryPanel = new JPanel(new GridLayout(2, 6));
+        JPanel inventoryPanel = new JPanel(new GridLayout(6, 2));
         inventoryPanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 2, 2, 1, true));
         inventoryPanel.setPreferredSize(new Dimension(82, 115));
 
         for (SimplifiedImage img : inventory) {
             JLabel item = img.generateJLabel();
-            item.setPreferredSize(new Dimension(35, 35));
+            item.setPreferredSize(new Dimension(ITEMSIZE, ITEMSIZE));
             inventoryPanel.add(item);
         }
 
@@ -183,11 +185,11 @@ public class CombatPlayerPanel extends JPanel{
 
         for (String imagePath : inventoryImages) {
             if (imagePath != null && !imagePath.isEmpty()) {
-                if (imagePath.contains("Weapon")) imagePath.replace("Weapon", "Chibi");
-                else if (imagePath.contains("Helmet")) imagePath.replace("Helmet", "HelmetInventory");
+                if (imagePath.contains("Weapon")) imagePath = imagePath.replace("Weapon", "Chibi");
+                else if (imagePath.contains("Helmet")) imagePath = imagePath.replace("Helmet", "HelmetInventory");
                 
                 if (!imagePath.contains("Pocion") || this.nPotions > 0)
-                this.inventory.add(new SimplifiedImage(imagePath, 35, 35));
+                this.inventory.add(new SimplifiedImage(imagePath, ITEMSIZE, ITEMSIZE));
             }
         }
     }
