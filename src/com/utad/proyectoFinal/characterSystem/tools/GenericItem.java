@@ -1,5 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.tools;
 
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.mapa.MapObject;
 
 import java.awt.*;
@@ -19,4 +20,20 @@ public class GenericItem implements MapObject, Consumible {
     public Image getImage() {
         return null;
     }
+
+    @Override
+    public void restoreUpgradeMana(CombatCharacter combatCharacter) {
+        combatCharacter.addManaUpgrade();
+    }
+
+    @Override
+    public void restoreHealth(CombatCharacter combatCharacter) {
+        combatCharacter.addHealthPotion();
+    }
+
+    @Override
+    public void restoreUpgradeHealth(CombatCharacter combatCharacter) {
+        combatCharacter.addHealthUpgrade();
+    }
+
 }

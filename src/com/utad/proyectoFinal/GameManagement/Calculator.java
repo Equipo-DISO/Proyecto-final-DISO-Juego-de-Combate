@@ -1,4 +1,4 @@
-package com.utad.proyectoFinal.gameManagement;
+package com.utad.proyectoFinal.GameManagement;
 
 public class Calculator {
 }
