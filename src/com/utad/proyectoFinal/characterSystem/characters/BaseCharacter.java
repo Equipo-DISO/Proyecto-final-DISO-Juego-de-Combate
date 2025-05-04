@@ -356,6 +356,11 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
 
     @Override
     public void notifyDeathObservers() {
+        // Clear the tile's occupied object when character dies
+        if (this.currentPosition != null) {
+            this.currentPosition.setOcupiedObject(null);
+        }
+        
         for (PushModelObserver observer : observers) {
             observer.characterHasDied(this);
         }
