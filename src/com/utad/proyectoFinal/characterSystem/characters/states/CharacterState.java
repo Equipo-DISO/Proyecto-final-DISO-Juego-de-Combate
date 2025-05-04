@@ -48,6 +48,11 @@ public interface CharacterState {
     void handleHeal();
 
     /**
+     * Gestiona el comportamiento al ganar maná
+     */
+    void handleGainMana();
+
+    /**
      * Obtiene el nombre del estado
      * @return El nombre del estado
      */

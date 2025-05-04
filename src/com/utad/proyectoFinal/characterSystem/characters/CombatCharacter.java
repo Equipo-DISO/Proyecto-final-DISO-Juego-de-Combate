@@ -27,7 +27,8 @@ public interface CombatCharacter {
     boolean retreat(CombatCharacter opponent);
     void heal();
     void move(GenericTile moveToTile);
-    
+    void gainMana();
+        
     // Equipment management
     void equipWeapon(BaseWeapon weapon);
     void equipHelmet(BaseHelmet helmet);

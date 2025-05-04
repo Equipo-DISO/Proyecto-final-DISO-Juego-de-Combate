@@ -60,6 +60,12 @@ public abstract class BaseState implements CharacterState {
     }
 
     @Override
+    public void handleGainMana() {
+        // Implementación por defecto (puede ser vacía o lanzar una excepción)
+        throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
+    }
+    
+    @Override
     public void updateState() {
         // In testing mode, don't transition automatically
         if (isTestingMode()) {

@@ -325,6 +325,11 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         currentState.handleMove(moveToTile);
     }
 
+    @Override 
+    public void gainMana() {
+        this.currentState.handleGainMana();
+    }
+
     @Override
     public void equipWeapon(BaseWeapon weapon) {
         this.setWeapon(weapon);

@@ -34,20 +34,18 @@ public class HealState extends BaseState {
         if (character.getHpPotions() <= 0) {
             System.out.printf("%s intenta curarse pero no tiene pociones de salud.%n",
                     character.getName());
-            return;
+        } else {
+            // Consumir maná
+            character.useHpPotion();
+
+            Integer currentHealth = character.getHealthPoints();
+
+            // Calcular nueva salud (sin exceder el máximo)
+            character.gainHealth(currentHealth + DefaultAttributes.POTION_HEAL_AMOUNT);
+
+            System.out.printf("%s se ha curado %d puntos de salud.%n",
+                    character.getName(), character.getHealthPoints() - currentHealth);
         }
-
-        // Consumir maná
-        character.useHpPotion();
-
-        Integer currentHealth = character.getHealthPoints();
-
-        // Calcular nueva salud (sin exceder el máximo)
-        character.gainHealth(currentHealth + DefaultAttributes.POTION_HEAL_AMOUNT);
-
-        System.out.printf("%s se ha curado %d puntos de salud.%n",
-                character.getName(), character.getHealthPoints() - currentHealth);
-
         // Actualizar estado
         updateState();
     }

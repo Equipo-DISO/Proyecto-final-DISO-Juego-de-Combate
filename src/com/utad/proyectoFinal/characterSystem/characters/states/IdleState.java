@@ -51,6 +51,7 @@ public class IdleState extends BaseState {
     /**
      * Método para manejar la ganancia de maná
      */
+    @Override
     public void handleGainMana() {
         // Cambiar al estado de ganancia de maná
         character.transitionTo(character.getStates().getGainManaState());

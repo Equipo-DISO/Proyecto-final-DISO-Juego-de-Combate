@@ -5,6 +5,8 @@ import javax.swing.border.TitledBorder;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
@@ -125,19 +127,25 @@ public class CombatInterface extends JFrame implements Interface {
         switch (type) {
             case 0:
                 feedLine.setNewLine("Ataque Liguero", Action.ATACK);
+                player.attack(enemy, new LightAttackStrategy());
                 break;
             case 1:
                 feedLine.setNewLine("Ataque Potente", Action.ATACK);
+                player.attack(enemy, new HeavyAttackStrategy());
                 break;
             case 2:
                 feedLine.setNewLine("Curarse (" + player.getHpPotions() + ")", Action.HEAL);
-
+                player.heal();
                 break;
             case 3:
                 feedLine.setNewLine("Concentrarse", Action.CONCENTRATE);
+                player.gainMana();
                 break;
             case 4:
                 feedLine.setNewLine("Huir", Action.RUN);
+                if (player.retreat(enemy)) {
+                    feedLine.setNewLine("Retirado", Action.RUN);
+                }   
                 break;
             default:
                 System.out.println("Error");

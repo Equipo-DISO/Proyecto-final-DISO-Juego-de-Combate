@@ -27,6 +27,26 @@ public class TiredState extends BaseState {
         character.getCurrentState().handleRetreat(opponent);
     }
 
+    /**
+     * Método para manejar la curación
+     */
+    @Override
+    public void handleHeal() {
+        // Cambiar al estado de curación
+        character.transitionTo(character.getStates().getHealState());
+        ((HealState) character.getCurrentState()).handleHeal();
+    }
+
+    /**
+     * Método para manejar la ganancia de maná
+     */
+    @Override
+    public void handleGainMana() {
+        // Cambiar al estado de ganancia de maná
+        character.transitionTo(character.getStates().getGainManaState());
+        ((GainManaState) character.getCurrentState()).gainMana();
+    }
+    
     @Override
     public void updateState() {
         // In testing mode, don't transition automatically
