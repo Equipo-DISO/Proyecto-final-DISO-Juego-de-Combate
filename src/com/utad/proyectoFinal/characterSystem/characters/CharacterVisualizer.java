@@ -14,11 +14,13 @@ public class CharacterVisualizer {
     private CharacterImage characterImage;
     private Image baseAvatar;
     private CharacterEquipment equipment;
+    private String baseImagePath;
 
     public CharacterVisualizer(CharacterEquipment equipment) {
         this.equipment = equipment;
         this.baseAvatar = loadDefaultAvatar();
         this.characterImage = new BaseCharacterImage(baseAvatar);
+        this.baseImagePath = "Files/img/GreenGuy.png";
         updateCharacterImage();
     }
 
@@ -42,8 +44,10 @@ public class CharacterVisualizer {
     public void setImage(String path) {
         try {
             this.baseAvatar = ImageIO.read(new File(path));
+            this.baseImagePath = path;
         } catch (IOException e) {
             this.baseAvatar = loadDefaultAvatar();
+            this.baseImagePath = "Files/img/GreenGuy.png";
         }
         updateCharacterImage();
     }
@@ -52,10 +56,14 @@ public class CharacterVisualizer {
         // Start with the base image
         this.characterImage = new BaseCharacterImage(this.baseAvatar);
         
+        // Apply decorators for equipment
+        if (equipment.hasHelmet()) {
+            this.characterImage = EquipmentDecorator.createFor(this.characterImage, equipment.getHelmet());
+        }
         
-        this.characterImage = EquipmentDecorator.createFor(this.characterImage, equipment.getHelmet());
-        this.characterImage = EquipmentDecorator.createFor(this.characterImage, equipment.getWeapon());
-        
+        if (equipment.hasWeapon()) {
+            this.characterImage = EquipmentDecorator.createFor(this.characterImage, equipment.getWeapon());
+        }
     }
 
     public Image getCompleteImage() {
@@ -67,5 +75,14 @@ public class CharacterVisualizer {
 
     public Image getImage() {
         return getCompleteImage();
+    }
+
+    public String getBaseImagePath() {
+        return baseImagePath;
+    }
+
+    public void setBaseImagePath(String baseImagePath) {
+        this.baseImagePath = baseImagePath;
+        setImage(baseImagePath);
     }
 } 

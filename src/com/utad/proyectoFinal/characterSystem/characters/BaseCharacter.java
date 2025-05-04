@@ -1,6 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.characters;
 
-import com.utad.proyectoFinal.gameManagement.PushModelObserver;
+import com.utad.proyectoFinal.GameManagement.PushModelObserver;
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
@@ -20,7 +20,6 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
     // Atributos de identificación
     protected Integer id;
     protected String name;
-    protected String baseImagePath;
 
     // Objetos de composición
     protected CharacterAttributes attributes;
@@ -77,8 +76,6 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
     }
 
     // ------- Equals -------
-
-    // Use id to compare characters (id is unique)
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -369,10 +366,11 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
 
     @Override
     public void setBaseImagePath(String baseImagePath) {
-        this.baseImagePath = baseImagePath;
+        this.visualizer.setBaseImagePath(baseImagePath);
     }
+
     @Override
     public String getBaseImagePath() {
-        return this.baseImagePath;
+        return this.visualizer.getBaseImagePath();
     }
 }
