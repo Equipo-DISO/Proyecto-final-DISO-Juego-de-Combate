@@ -11,7 +11,7 @@ import java.util.List;
  * Limits the number of logs stored in memory and provides a method to write them to a file.
  */
 public class CreateLogs {
-    // Insta
+    // Static initialization:
     private static final CreateLogs instance = new CreateLogs();
 
     private static final int MAX_LINEAS = 1000;
