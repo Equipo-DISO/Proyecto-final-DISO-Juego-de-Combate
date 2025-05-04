@@ -256,7 +256,7 @@ public class MenuInterface extends JFrame implements Interface {
     }
 
     public BaseCharacter getPlayerCharacter() {
-        BaseCharacter player = new BaseCharacter(nombreLabel.getText(), 10.0);
+        BaseCharacter player = new BaseCharacter(nombreLabel.getText());
         player.setImage(playerImagePath);
         return player;
     }
