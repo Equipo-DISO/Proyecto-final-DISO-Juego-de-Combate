@@ -1,5 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.tools.items;
 
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.mapa.MapObject;
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -7,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class BaseWeapon implements MapObject {
+public class BaseWeapon implements MapObject, Consumable {
 
     private String name;
     private Double damage;
@@ -90,5 +91,12 @@ public class BaseWeapon implements MapObject {
 
     public String getImagePath() {
         return imagePath;
+    }
+
+    @Override
+    public boolean consume(CombatCharacter character) {
+        // Usa el método equip() de CombatCharacter
+        character.equipWeapon(this);
+        return true;
     }
 }
