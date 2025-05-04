@@ -37,6 +37,7 @@ public class MapGenerator extends JPanel
 
     private TileGraph graph;
 
+    private FpsDebugger fps;
     
     private BaseCharacter player;
 
@@ -44,6 +45,8 @@ public class MapGenerator extends JPanel
     {
         super();
         this.gridSize = size;
+
+        this.fps = new FpsDebugger();
 
         this.player = player;
 
@@ -161,6 +164,9 @@ public class MapGenerator extends JPanel
 
         drawPlayerHUD(g2d);
         renderBridges(g2d);
+
+        
+        this.fps.update();
     }
 
 
@@ -203,7 +209,10 @@ public class MapGenerator extends JPanel
         g2d.setColor(Color.DARK_GRAY); 
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
+        
+        
        createText(g2d, boxX + 20, boxY + 35, "Hold left click to move", 20f);
+       //createText(g2d, boxX + 20, boxY + 35, "FPS " + this.fps.getFPS(), 20f);
     }
 
     private void createPlayerCounter(Graphics2D g2d)
