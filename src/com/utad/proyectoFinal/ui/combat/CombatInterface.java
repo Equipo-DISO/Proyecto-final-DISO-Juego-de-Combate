@@ -36,6 +36,8 @@ public class CombatInterface extends JFrame implements Interface {
         
         setSize(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        
         setLayout(new BorderLayout());
 
         // Player
