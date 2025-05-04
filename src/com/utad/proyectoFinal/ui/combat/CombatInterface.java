@@ -135,7 +135,6 @@ public class CombatInterface extends JFrame implements Interface {
             case 1:
                 feedLine.setNewLine("Ataque Potente", Action.ATACK);
                 player.attack(enemy, new HeavyAttackStrategy());
-                player.equipWeapon(null);
                 break;
             case 2:
                 feedLine.setNewLine("Curarse (" + player.getHpPotions() + ")", Action.HEAL);
@@ -176,6 +175,10 @@ public class CombatInterface extends JFrame implements Interface {
         enemyPanel.repaint();
 
         playerPanel.updateValues(player.getHealthPoints(), player.getManaPoints());
+        enemyPanel.updateValues(enemy.getHealthPoints(), enemy.getManaPoints());
+
+        revalidate();
+        repaint();
     }
 
     // FEED FUNCTIONS 

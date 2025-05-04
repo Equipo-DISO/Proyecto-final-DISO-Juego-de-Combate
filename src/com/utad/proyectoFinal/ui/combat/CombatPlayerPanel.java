@@ -32,8 +32,10 @@ public class CombatPlayerPanel extends JPanel{
     private int mpMax;
     private int nPotions;
     
-    private JPanel inventoryPanel;
+    private JPanel inventoryPanel = new JPanel();
+    private JLabel hpLabel;
     private JLabel hpBar = new JLabel();
+    private JLabel mpLabel;
     private JLabel mpBar = new JLabel();
 
     public CombatPlayerPanel(CombatCharacter character, int alignment) {
@@ -92,7 +94,7 @@ public class CombatPlayerPanel extends JPanel{
         JPanel hpLabelPanel = new JPanel(new BorderLayout());
 
         JLabel hpTitleLabel = new JLabel("HP");
-        JLabel hpLabel = new JLabel(hp + "/" + hpMax);
+        hpLabel = new JLabel(hp + "/" + hpMax);
         hpLabelPanel.add(hpTitleLabel, BorderLayout.WEST);
         hpLabelPanel.add(hpLabel, BorderLayout.EAST);
 
@@ -119,7 +121,7 @@ public class CombatPlayerPanel extends JPanel{
         JPanel mpLabelPanel = new JPanel(new BorderLayout());
 
         JLabel mpTitleLabel = new JLabel("MP");
-        JLabel mpLabel = new JLabel(mp + "/" + mpMax);
+        mpLabel = new JLabel(mp + "/" + mpMax);
         mpLabelPanel.add(mpTitleLabel, BorderLayout.WEST);
         mpLabelPanel.add(mpLabel, BorderLayout.EAST);
 
@@ -147,9 +149,16 @@ public class CombatPlayerPanel extends JPanel{
     public void updateValues(int hp, int mp) {
         this.hp = hp;
         this.mp = mp;
-        hpBar.repaint();
-        
+
         updateSliders();
+
+        hpLabel.setText(hp + "/" + hpMax);
+        mpLabel.setText(mp + "/" + mpMax);
+
+        hpBar.revalidate();
+        mpBar.revalidate();
+        hpBar.repaint();
+        mpBar.repaint();
     }
     
     private void updateSliders(){
@@ -184,7 +193,15 @@ public class CombatPlayerPanel extends JPanel{
     }
     
     protected void setInventory() {
-        inventoryPanel = new JPanel();
+        while (true){
+            try{ inventoryPanel.remove(0); }
+            catch (Exception e){ break; }
+        }
+
+        for (int i = 0; i < this.inventory.size(); i++) {
+            if (this.inventory.get(i) == null) this.inventory.remove(i);
+        }
+
         if (this.alignment == JLabel.LEFT) inventoryPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 1));
         else inventoryPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 3, 1));
 
@@ -192,7 +209,9 @@ public class CombatPlayerPanel extends JPanel{
         inventoryPanel.setPreferredSize(new Dimension(82, 115));
 
         int i = 0;
-        for (SimplifiedImage img : inventory) {
+        for (SimplifiedImage img : this.inventory) {
+            System.out.println("Item: " + img.getPath());
+
             JPanel itemPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
             JLabel item = img.generateJLabel();
 
@@ -208,6 +227,9 @@ public class CombatPlayerPanel extends JPanel{
 
             i++;
         }
+
+        inventoryPanel.revalidate();
+        inventoryPanel.repaint();
     }
 
 
