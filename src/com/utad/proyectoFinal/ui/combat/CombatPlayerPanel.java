@@ -28,11 +28,12 @@ public class CombatPlayerPanel extends JPanel{
     private int alignment = JLabel.LEFT;
     private String name;
     private SimplifiedImage simplifiedImage;
-    private List<Image> backpack = new ArrayList();
+    private List<SimplifiedImage> inventory = new ArrayList();
     private int hp;
     private int hpMax;
     private int mp;
     private int mpMax;
+    private int nPotions;
 
     private JLabel hpBar = new JLabel();
     private JLabel mpBar = new JLabel();
@@ -40,9 +41,10 @@ public class CombatPlayerPanel extends JPanel{
     public CombatPlayerPanel(CombatCharacter character, int alignment) {
         this(alignment, character.getName(), new SimplifiedImage(character.getBaseImagePath(), 92, 110),
         character.getHealthPoints(), character.getMaxHealthPoints(), character.getManaPoints(), character.getMaxManaPoints(),
-        character.getWeapon().getImagePath(), character.getHelmet().getImagePath());
+        0, character.getWeapon().getImagePath(), character.getHelmet().getImagePath(), "Files/img/Pocion.png");
     }
-    public CombatPlayerPanel(int alignment, String name, SimplifiedImage simplifiedImage, int hp, int hpMax, int mp, int mpMax, String... backpackImages) {
+    public CombatPlayerPanel(int alignment, String name, SimplifiedImage simplifiedImage, int hp, int hpMax, int mp, int mpMax,
+                                int nPotions, String... inventoryImages) {
 
         this.alignment = alignment;
         this.name = name;
@@ -51,6 +53,10 @@ public class CombatPlayerPanel extends JPanel{
         this.mp = mp;
         this.hpMax = hpMax;
         this.mpMax = mpMax;
+        if (alignment == JLabel.LEFT) this.nPotions = nPotions;
+        else this.nPotions = 0;
+        getInventoryImages(inventoryImages);
+
 
         setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         setMinimumSize(new Dimension(230, 500));
@@ -81,6 +87,12 @@ public class CombatPlayerPanel extends JPanel{
         JPanel inventoryPanel = new JPanel(new GridLayout(2, 6));
         inventoryPanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 2, 2, 1, true));
         inventoryPanel.setPreferredSize(new Dimension(82, 115));
+
+        for (SimplifiedImage img : inventory) {
+            JLabel item = img.generateJLabel();
+            item.setPreferredSize(new Dimension(35, 35));
+            inventoryPanel.add(item);
+        }
 
         playerPanel.add(imagePanel);
         playerPanel.add(inventoryPanel);
@@ -142,7 +154,6 @@ public class CombatPlayerPanel extends JPanel{
 
         add(mpPanel);
 
-        
         updateValues(hp, mp);
         setVisible(true);
     }
@@ -161,5 +172,19 @@ public class CombatPlayerPanel extends JPanel{
 
         hpBar.setPreferredSize(new Dimension(200 * hpPercentage / 100, 12));
         mpBar.setPreferredSize(new Dimension(200 * mpPercentage / 100, 12));
+    }
+
+    private void getInventoryImages(String... inventoryImages) {
+        this.inventory = new ArrayList<>();
+
+        for (String imagePath : inventoryImages) {
+            if (imagePath != null && !imagePath.isEmpty()) {
+                if (imagePath.contains("Weapon")) imagePath.replace("Weapon", "Chibi");
+                else if (imagePath.contains("Helmet")) imagePath.replace("Helmet", "HelmetInventory");
+                
+                if (!imagePath.contains("Pocion") || this.nPotions > 0)
+                this.inventory.add(new SimplifiedImage(imagePath, 35, 35));
+            }
+        }
     }
 }
