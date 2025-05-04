@@ -235,6 +235,7 @@ public class MapGenerator extends JPanel
     */
     public void moveToTile(BaseCharacter character, GenericTile objective)
     {
+        if (character.getCurrentPosition().equals(objective)) { return; }
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
         
         //TODO logica de cambio de movidas ocupadas en los tiles
