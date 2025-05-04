@@ -81,31 +81,16 @@ public abstract class TileAbstract
                 Integer scaledWidth = (int)(this.specialImage.getWidth(null) * scaleFactor);
                 Integer scaledHeight = TileAbstract.IMAGE_HEIGHT;
 
+                Integer finalX = imageX + this.ocupiedObject.getRenderParameters().getOffsetX();
+                Integer finalY = imageY + this.ocupiedObject.getRenderParameters().getOffsetY();
+                Integer finalWidth = (int)(scaledWidth * this.ocupiedObject.getRenderParameters().getScaleX());
+                Integer finalHeight = (int)(scaledHeight * this.ocupiedObject.getRenderParameters().getScaleY());
+
+                
                 // yo bro u know what i mean dude
                 // this guys dont know what br br patapim is
                 // this gays arent the real gggsssssss broooo
-                if (this.ocupiedObject instanceof BaseHelmet)
-                {
-                    graphics2d.drawImage(this.specialImage, imageX - 10, imageY, (int)(scaledWidth * 0.8), (int)(scaledHeight * 0.8), null);
-                }
-                else if (this.ocupiedObject instanceof BaseCharacter)
-                {
-                    graphics2d.drawImage(this.specialImage, imageX - 10, imageY - 25, (int)(scaledWidth * 1.2), (int)(scaledHeight * 1.2), null);
-                }
-                // else if (this.ocupiedObject instanceof BaseWeapon)
-                // {
-                //     BaseWeapon excepcionDeLaPutaRegla = (BaseWeapon) this.ocupiedObject;
-                //     String imagePath = excepcionDeLaPutaRegla.getImagePath().replace("Weapon", "Chibi");
-
-                //     ImageIcon icon = new ImageIcon(imagePath);
-
-                //     this.specialImage = icon.getImage().getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_AREA_AVERAGING);
-                //     graphics2d.drawImage(this.specialImage, imageX, imageY, scaledWidth, scaledHeight, null);
-                // }
-                else
-                {
-                    graphics2d.drawImage(this.specialImage, imageX, imageY, scaledWidth, scaledHeight, null);
-                }
+                graphics2d.drawImage(this.specialImage, finalX, finalY, finalWidth, finalHeight, null);
             }
 	   } 
        catch (Exception e) 

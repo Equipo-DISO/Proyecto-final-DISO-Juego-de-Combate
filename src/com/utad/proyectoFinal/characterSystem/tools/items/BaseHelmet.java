@@ -2,6 +2,8 @@ package com.utad.proyectoFinal.characterSystem.tools.items;
 
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.mapa.MapObject;
+import com.utad.proyectoFinal.mapa.RenderParameters;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -90,5 +92,10 @@ public class BaseHelmet implements MapObject, Consumable {
         // Usa el método específico para mejorar la defensa
         character.equipHelmet(this);
         return true;
+    }
+
+    @Override
+    public RenderParameters getRenderParameters() {
+        return new RenderParameters(-10, 0, 0.8, 0.8);
     }
 }

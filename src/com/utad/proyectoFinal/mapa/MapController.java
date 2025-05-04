@@ -91,12 +91,11 @@ public class MapController implements PushModelObserver
         Integer boxX = this.viewPortX + (this.screenSizeX - boxWidth) / 2;
         Integer boxY = this.viewPortY + this.screenSizeY - boxHeight - 20;
 
-
+        
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
         g2d.setColor(Color.DARK_GRAY); 
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
-        
         
        createText(g2d, boxX + 20, boxY + 35, "Hold left click to move", 20f);
     }

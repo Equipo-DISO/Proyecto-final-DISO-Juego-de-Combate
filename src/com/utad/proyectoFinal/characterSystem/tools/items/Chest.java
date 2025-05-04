@@ -2,6 +2,7 @@ package com.utad.proyectoFinal.characterSystem.tools.items;
 
 import com.utad.proyectoFinal.characterSystem.tools.factory.RandomItemFactory;
 import com.utad.proyectoFinal.mapa.MapObject;
+import com.utad.proyectoFinal.mapa.RenderParameters;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -45,5 +46,10 @@ public class Chest implements MapObject {
             // Return a small blank image as fallback
             return new BufferedImage(30, 30, BufferedImage.TYPE_INT_ARGB);
         }
+    }
+
+    @Override
+    public RenderParameters getRenderParameters() {
+        return new RenderParameters();
     }
 }

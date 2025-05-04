@@ -2,6 +2,8 @@ package com.utad.proyectoFinal.characterSystem.tools.items;
 
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.mapa.MapObject;
+import com.utad.proyectoFinal.mapa.RenderParameters;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -98,5 +100,10 @@ public class BaseWeapon implements MapObject, Consumable {
         // Usa el método equip() de CombatCharacter
         character.equipWeapon(this);
         return true;
+    }
+
+    @Override
+    public RenderParameters getRenderParameters() {
+        return new RenderParameters();
     }
 }
