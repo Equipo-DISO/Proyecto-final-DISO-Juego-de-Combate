@@ -20,34 +20,49 @@ import javax.swing.JSeparator;
 
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.ui.InterfacePath;
 
 public class CombatPlayerPanel extends JPanel{
+    private static final Integer ITEMSIZE = 30;
     
     private int alignment = JLabel.LEFT;
     private String name;
     private SimplifiedImage simplifiedImage;
-    private List<Image> backpack = new ArrayList();
+    private List<SimplifiedImage> inventory = new ArrayList();
+
     private int hp;
     private int hpMax;
     private int mp;
     private int mpMax;
+    private int nPotions;
 
     private JLabel hpBar = new JLabel();
     private JLabel mpBar = new JLabel();
 
-    public CombatPlayerPanel(BaseCharacter character, int alignment) {
-        this(alignment, character.getName(), null, character.getHealthPoints(), character.getMaxHealthPoints(), character.getManaPoints(), character.getMaxManaPoints());
-    }
-    public CombatPlayerPanel(int alignment, String name, SimplifiedImage simplifiedImage, int hp, int hpMax, int mp, int mpMax) {
+    public CombatPlayerPanel(CombatCharacter character, int alignment) {
 
         this.alignment = alignment;
-        this.name = name;
-        this.simplifiedImage = simplifiedImage;
-        this.hp = hp;
-        this.mp = mp;
-        this.hpMax = hpMax;
-        this.mpMax = mpMax;
+
+        this.name = character.getName();
+        this.simplifiedImage = new SimplifiedImage(character.getBaseImagePath(), 92, 110);
+        this.hp = character.getHealthPoints();
+        this.mp = character.getManaPoints();
+        this.hpMax = character.getMaxHealthPoints();
+        this.mpMax = character.getMaxManaPoints();
+
+        if (alignment == JLabel.LEFT) this.nPotions = character.getHpPotions();
+        else this.nPotions = 0;
+
+        String helmetPath = null;
+        String weaponPath = null;
+        String potionPath = "Files/img/pocion.png";
+
+        if (character.getWeapon() != null) weaponPath = character.getWeapon().getImagePath();
+        if (character.getWeapon() != null) weaponPath = character.getWeapon().getImagePath();
+
+        getInventoryImages(helmetPath, weaponPath, potionPath);
+
 
         setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         setMinimumSize(new Dimension(230, 500));
@@ -75,9 +90,15 @@ public class CombatPlayerPanel extends JPanel{
         imagePanel.setPreferredSize(new Dimension(82, 115));
         imagePanel.setBorder(new LineBorder(Color.BLACK, 4));
 
-        JPanel inventoryPanel = new JPanel(new GridLayout(2, 6));
+        JPanel inventoryPanel = new JPanel(new GridLayout(6, 2));
         inventoryPanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 2, 2, 1, true));
         inventoryPanel.setPreferredSize(new Dimension(82, 115));
+
+        for (SimplifiedImage img : inventory) {
+            JLabel item = img.generateJLabel();
+            item.setPreferredSize(new Dimension(ITEMSIZE, ITEMSIZE));
+            inventoryPanel.add(item);
+        }
 
         playerPanel.add(imagePanel);
         playerPanel.add(inventoryPanel);
@@ -139,7 +160,6 @@ public class CombatPlayerPanel extends JPanel{
 
         add(mpPanel);
 
-        
         updateValues(hp, mp);
         setVisible(true);
     }
@@ -158,5 +178,19 @@ public class CombatPlayerPanel extends JPanel{
 
         hpBar.setPreferredSize(new Dimension(200 * hpPercentage / 100, 12));
         mpBar.setPreferredSize(new Dimension(200 * mpPercentage / 100, 12));
+    }
+
+    private void getInventoryImages(String... inventoryImages) {
+        this.inventory = new ArrayList<>();
+
+        for (String imagePath : inventoryImages) {
+            if (imagePath != null && !imagePath.isEmpty()) {
+                if (imagePath.contains("Weapon")) imagePath = imagePath.replace("Weapon", "Chibi");
+                else if (imagePath.contains("Helmet")) imagePath = imagePath.replace("Helmet", "HelmetInventory");
+                
+                if (!imagePath.contains("Pocion") || this.nPotions > 0)
+                this.inventory.add(new SimplifiedImage(imagePath, ITEMSIZE, ITEMSIZE));
+            }
+        }
     }
 }

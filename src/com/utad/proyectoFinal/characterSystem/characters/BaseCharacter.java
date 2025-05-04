@@ -76,8 +76,6 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
     }
 
     // ------- Equals -------
-
-    // Use id to compare characters (id is unique)
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -364,5 +362,15 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         for (PushModelObserver observer : observers) {
             observer.characterHasDied(this);
         }
+    }
+
+    @Override
+    public void setBaseImagePath(String baseImagePath) {
+        this.visualizer.setBaseImagePath(baseImagePath);
+    }
+
+    @Override
+    public String getBaseImagePath() {
+        return this.visualizer.getBaseImagePath();
     }
 }

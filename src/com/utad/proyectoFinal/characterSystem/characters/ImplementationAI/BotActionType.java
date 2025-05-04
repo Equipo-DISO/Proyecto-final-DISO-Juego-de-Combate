@@ -1,4 +1,4 @@
-package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
+package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
 public enum BotActionType {
     MOVE, ATTACK, NONE, RETREAT

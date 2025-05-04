@@ -1,4 +1,4 @@
-package com.utad.proyectoFinal.GameManagement; // Assuming this package
+package com.utad.proyectoFinal.gameManagement; // Assuming this package
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
