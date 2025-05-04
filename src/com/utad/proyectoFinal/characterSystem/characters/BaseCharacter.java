@@ -4,191 +4,218 @@ import com.utad.proyectoFinal.GameManagement.PushModelObserver;
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
-import com.utad.proyectoFinal.characterSystem.images.BaseCharacterImage;
-import com.utad.proyectoFinal.characterSystem.images.CharacterImage;
 import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
-import com.utad.proyectoFinal.characterSystem.images.*; // Importa los decoradores
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapObject;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BaseCharacter implements CombatCharacter, MapObject, PushModelObservable {
 
     // Contador de personajes (usado para asignar un ID único a cada personaje)
-    public static Integer contadorPersonajes = 0;
+    protected static Integer contadorPersonajes = 0;
 
     // Atributos de identificación
-    private Integer id;
-    private String name;
+    protected Integer id;
+    protected String name;
 
-    // Atributos de estado y estadísticas
-    private Integer healthPoints;
-    private Integer maxHealthPoints;
-    private Double baseAttack;
-    private Integer manaPoints;
-    private Integer maxManaPoints;
-    private Integer hpPotions; // Cantidad de pociones de salud
+    // Objetos de composición
+    protected CharacterAttributes attributes;
+    protected CharacterEquipment equipment;
+    protected CharacterVisualizer visualizer;
 
     // Estados del personaje
-    private StatesList states;
-    private CharacterState currentState; // Estado actual del personaje
+    protected StatesList states;
+    protected CharacterState currentState; // Estado actual del personaje
 
     // Atributos de combate
-    private Boolean retreatSuccess;
-
-    // Equipamiento del personaje
-    protected BaseWeapon weapon; // Arma equipada
-    protected BaseHelmet helmet; // Casco equipado
-
-    // Sistema de decoradores de imagen
-    protected CharacterImage characterImage;
-    protected Image baseAvatar; // Guarda la imagen base original
+    protected Boolean retreatSuccess;
 
     // Atributos de posicionamiento
-    private GenericTile currentPosition;
+    protected GenericTile currentPosition;
 
     // Comportamiento
-    private Boolean esControlado; // Indica si es controlado por IA
+    protected Boolean esControlado; // Indica si es controlado por IA
 
     // Lista de observers
-    private final List<PushModelObserver> observers = new ArrayList<>();
+    protected final List<PushModelObserver> observers = new ArrayList<>();
 
     public BaseCharacter(String name) {
         this(name, DefaultAttributes.ATTACK);
     }
 
     public BaseCharacter(String name, Double baseAttack) {
-        this(name, baseAttack, loadDefaultAvatar());
+        this(name, baseAttack, null);
     }
 
     public BaseCharacter(String name, Double baseAttack, Image baseAvatar) {
         this.name = name;
-        this.baseAttack = baseAttack;
-        this.manaPoints = DefaultAttributes.MANA_POINTS; // Valor por defecto para los puntos de maná
-        this.maxManaPoints = DefaultAttributes.MAX_MANA_POINTS; // Valor por defecto
-        this.hpPotions = 0; // Inicialmente no tiene pociones de salud
-
-        this.states = new StatesList(this); // Inicializa el estado del personaje
-        this.currentState = states.getIdleState(); // Estado inicial
-
-        this.weapon = null;
-        this.helmet = null;
-
-        this.maxHealthPoints = DefaultAttributes.HEALTH;
-        this.healthPoints = this.maxHealthPoints;
-
         this.id = ++BaseCharacter.contadorPersonajes;
 
-        this.baseAvatar = baseAvatar;
-        this.characterImage = new BaseCharacterImage(baseAvatar);
+        // Inicializar los componentes usando composición
+        this.attributes = new CharacterAttributes(
+                DefaultAttributes.HEALTH,
+                DefaultAttributes.MAX_MANA_POINTS,
+                baseAttack);
 
-        this.esControlado = false; // Por defecto, el personaje no es controlado por IA
-    }
+        this.equipment = new CharacterEquipment();
 
-    private static Image loadDefaultAvatar() {
-        try {
-            return ImageIO.read(new File("Files/img/GreenGuy.png"));
-        } catch (IOException e) {
-            System.err.println("Error loading default avatar: " + e.getMessage());
-            // Return a small blank image as fallback
-            return new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
+        if (baseAvatar != null) {
+            this.visualizer = new CharacterVisualizer(this.equipment, baseAvatar);
+        } else {
+            this.visualizer = new CharacterVisualizer(this.equipment);
         }
+
+        // Inicializar estados
+        this.states = new StatesList(this);
+        this.currentState = states.getIdleState();
+
+        this.esControlado = false;
     }
 
-    // Método privado para actualizar la imagen decorada
-    private void updateCharacterImage() {
-        // Start with the base image
-        this.characterImage = new BaseCharacterImage(this.baseAvatar);
-        
-        // Apply decorators in a defined order using the factory method
-        // This decouples BaseCharacter from specific decorator implementations
-        this.characterImage = EquipmentDecorator.createFor(this.characterImage, this.helmet);
-        this.characterImage = EquipmentDecorator.createFor(this.characterImage, this.weapon);
+    // ------- Equals -------
+
+    // Use id to compare characters (id is unique)
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        BaseCharacter other = (BaseCharacter) obj;
+        return id.equals(other.id);
     }
-    
-    // Setter para el casco que actualiza el decorador
-    public void setHelmet(BaseHelmet helmet) {
-        this.helmet = helmet;
-        updateCharacterImage(); // Reconstruye la imagen decorada
+    // ------- Delegación a CharacterAttributes -------
+
+    public boolean isAlive() {
+        return this.attributes.isAlive();
     }
 
-    // Getter para el casco
-    public BaseHelmet getHelmet() {
-        return helmet;
+    public void reduceHealth(Integer damage) {
+        this.attributes.reduceHealth(damage);
     }
+
+    public Integer getHealthPoints() {
+        return this.attributes.getHealthPoints();
+    }
+
+    public void setHealthPoints(Integer healthPoints) {
+        this.attributes.setHealthPoints(healthPoints);
+    }
+
+    public Integer getMaxHealthPoints() {
+        return this.attributes.getMaxHealthPoints();
+    }
+
+    public void setMaxHealthPoints(Integer maxHealthPoints) {
+        this.attributes.setMaxHealthPoints(maxHealthPoints);
+    }
+
+    public Double getBaseAttack() {
+        return this.attributes.getBaseAttack();
+    }
+
+    public Integer getManaPoints() {
+        return this.attributes.getManaPoints();
+    }
+
+    public void setManaPoints(Integer manaPoints) {
+        this.attributes.setManaPoints(manaPoints);
+    }
+
+    public void decreaseManaPoints(int amount) {
+        this.attributes.decreaseManaPoints(amount);
+    }
+
+    public Integer getMaxManaPoints() {
+        return this.attributes.getMaxManaPoints();
+    }
+
+    public void setMaxManaPoints(Integer maxManaPoints) {
+        this.attributes.setMaxManaPoints(maxManaPoints);
+    }
+
+    public void gainHealth(Integer healthPoints) {
+        this.attributes.gainHealth(healthPoints);
+    }
+
+    public boolean isLowEnergy() {
+        return this.attributes.isLowEnergy();
+    }
+
+    public Integer getHpPotions() {
+        return this.attributes.getHpPotions();
+    }
+
+    public void useHpPotion() {
+        this.attributes.useHpPotion();
+    }
+
+    public void increaseManaPoints(Integer manaRecovered) {
+        this.attributes.increaseManaPoints(manaRecovered);
+    }
+
+    // ------- Implementación de la interfaz CombatCharacter -------
 
     @Override
     public void addHealthPotion() {
-        this.hpPotions++;
+        this.attributes.addHealthPotion();
     }
 
     @Override
     public void addManaUpgrade() {
-        this.manaPoints += DefaultAttributes.UPGRADE_MANA_AMOUNT;
-        this.maxManaPoints += DefaultAttributes.UPGRADE_MANA_AMOUNT;
+        this.attributes.addManaUpgrade();
     }
 
     @Override
     public void addHealthUpgrade() {
-        this.healthPoints += DefaultAttributes.UPGRADE_HEALTH_AMOUNT;
-        this.maxHealthPoints += DefaultAttributes.UPGRADE_HEALTH_AMOUNT;
+        this.attributes.addHealthUpgrade();
     }
 
-    // Setter para el arma que actualiza el decorador
+    // ------- Delegación a CharacterEquipment -------
+
+    public BaseWeapon getWeapon() {
+        return this.equipment.getWeapon();
+    }
+
     public void setWeapon(BaseWeapon weapon) {
-        this.weapon = weapon;
-        updateCharacterImage(); // Reconstruye la imagen decorada
+        this.equipment.equipWeapon(weapon);
+        this.visualizer.updateCharacterImage();
     }
 
-    public boolean isAlive() {
-        return this.healthPoints > 0;
+    public BaseHelmet getHelmet() {
+        return this.equipment.getHelmet();
     }
 
-    public void reduceHealth(Integer damage) {
-        this.healthPoints = Math.max(0, this.healthPoints - damage);
+    public void setHelmet(BaseHelmet helmet) {
+        this.equipment.equipHelmet(helmet);
+        this.visualizer.updateCharacterImage();
     }
 
-    public Integer getHealthPoints() {
-        return this.healthPoints;
+    // ------- Delegación a CharacterVisualizer -------
+
+    @Override
+    public Image getCompleteImage() {
+        return this.visualizer.getCompleteImage();
     }
 
-    public void setHealthPoints(Integer healthPoints) {
-        this.healthPoints = healthPoints;
+    @Override
+    public Image getImage() {
+        return this.visualizer.getImage();
     }
 
-    public Integer getMaxHealthPoints() {
-        return this.maxHealthPoints;
+    public void setImage(String path) {
+        this.visualizer.setImage(path);
     }
 
-    public void setMaxHealthPoints(Integer maxHealthPoints) {
-        this.maxHealthPoints = maxHealthPoints;
-    }
+    // ------- Gestión de estados -------
 
-    public String getName() {
-        return this.name;
-    }
-
-    public Boolean isRetreatSuccessful() {
-        return retreatSuccess;
-    }
-
-    public void setRetreatSuccess(Boolean retreatSuccess) {
-        this.retreatSuccess = retreatSuccess;
-    }
-
-    // Metodo auxiliar para cambiar el estado
     public void transitionTo(CharacterState newState) {
         this.currentState = newState;
     }
 
-    // "setXState" por delegación
     public void setIdleState() {
         transitionTo(states.getIdleState());
     }
@@ -232,49 +259,26 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         return currentState;
     }
 
-    // Getter para reutilizar la lista desde los estados
     public StatesList getStates() {
         return states;
     }
 
-    public Double getBaseAttack() {
-        return baseAttack;
+    // ------- Getters y setters de atributos simples -------
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Boolean isRetreatSuccessful() {
+        return retreatSuccess;
+    }
+
+    public void setRetreatSuccess(Boolean retreatSuccess) {
+        this.retreatSuccess = retreatSuccess;
     }
 
     public Integer getId() {
         return id;
-    }
-
-    public BaseWeapon getWeapon() {
-        return weapon;
-    }
-
-    public Integer getManaPoints() {
-        return manaPoints;
-    }
-
-    public void setManaPoints(Integer manaPoints) {
-        this.manaPoints = manaPoints;
-    }
-
-    public void decreaseManaPoints(int amount) {
-        this.manaPoints = Math.max(0, manaPoints - amount);
-    }
-
-    public Integer getMaxManaPoints() {
-        return maxManaPoints;
-    }
-
-    public void setMaxManaPoints(Integer maxManaPoints) {
-        this.maxManaPoints = maxManaPoints;
-    }
-
-    public void gainHealth(Integer healthPoints) {
-        this.healthPoints = Math.min(healthPoints, this.maxHealthPoints);
-    }
-
-    public boolean isLowEnergy() {
-        return manaPoints < DefaultAttributes.LOW_MANA_THRESHOLD;
     }
 
     public GenericTile getCurrentPosition() {
@@ -289,12 +293,8 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         return esControlado;
     }
 
-    /**
-     * Attack with a specific strategy
-     * 
-     * @param target   The character to attack
-     * @param strategy The strategy to use for this attack
-     */
+    // ------- Métodos de combate -------
+
     @Override
     public void attack(CombatCharacter target, AttackStrategy strategy) {
         if (target instanceof BaseCharacter targetBaseCharacter) {
@@ -308,10 +308,10 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
     public boolean retreat(CombatCharacter opponent) {
         if (opponent instanceof BaseCharacter opponentBaseCharacter) {
             this.currentState.handleRetreat(opponentBaseCharacter);
-            return this.retreatSuccess; // Return the retreat success value
+            return this.retreatSuccess;
         } else {
             System.out.println("El oponente no es un personaje válido.");
-            return false; // Invalid opponent means retreat fails
+            return false;
         }
     }
 
@@ -344,52 +344,19 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         }
     }
 
-    public Integer getHpPotions() {
-        return hpPotions;
-    }
+    // ------- Observer pattern management methods -------
 
-    public void useHpPotion() {
-        hpPotions--;
-    }
-
-    @Override
-    public Image getCompleteImage() {
-        if (characterImage != null) {
-            return characterImage.getCompleteImage();
-        }
-        return null;
-    }
-
-    @Override
-    public Image getImage() {
-        return getCompleteImage();
-    }
-
-    // Image
-    public void setImage(String path) {
-        try {
-            this.baseAvatar = ImageIO.read(new File(path));
-        } catch (IOException e) {
-            loadDefaultAvatar();
-        }
-        updateCharacterImage();
-    }
-
-
-    public void increaseManaPoints(Integer manaRecovered) {
-        this.manaPoints = Math.min(this.manaPoints + manaRecovered, this.maxManaPoints);
-    }
-
-    //observer pattern management methods
     public void addObserver(PushModelObserver observer) {
         this.observers.add(observer);
     }
+
     public void removeObserver(PushModelObserver observer) {
         this.observers.remove(observer);
     }
+
     @Override
     public void notifyDeathObservers() {
-        for(PushModelObserver observer : observers) {
+        for (PushModelObserver observer : observers) {
             observer.characterHasDied(this);
         }
     }

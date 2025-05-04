@@ -32,8 +32,8 @@ public class TestCharacter extends BaseCharacter {
     }
 
     public void render(Graphics2D g, int x, int y) {
-        if (characterImage != null) {
-            g.drawImage(getCompleteImage(), x, y, null);
+        if (this.visualizer != null) {
+            g.drawImage(this.visualizer.getCompleteImage(), x, y, null);
         }
     }
 }
