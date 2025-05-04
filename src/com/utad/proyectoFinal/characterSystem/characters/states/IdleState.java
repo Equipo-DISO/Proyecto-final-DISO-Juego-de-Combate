@@ -62,6 +62,7 @@ public class IdleState extends BaseState {
         // Check if character is dead first
         if (!character.isAlive()) {
             character.transitionTo(character.getStates().getDeadState());
+            character.notifyDeathObservers();
             return;
         }
 

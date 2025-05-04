@@ -1,5 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.characters;
 
+import com.utad.proyectoFinal.GameManagement.PushModelObserver;
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
@@ -15,8 +16,10 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class BaseCharacter implements CombatCharacter, MapObject {
+public class BaseCharacter implements CombatCharacter, MapObject, PushModelObservable {
 
     // Contador de personajes (usado para asignar un ID único a cada personaje)
     public static Integer contadorPersonajes = 0;
@@ -53,6 +56,9 @@ public class BaseCharacter implements CombatCharacter, MapObject {
 
     // Comportamiento
     private Boolean esControlado; // Indica si es controlado por IA
+
+    // Lista de observers
+    private final List<PushModelObserver> observers = new ArrayList<>();
 
     public BaseCharacter(String name) {
         this(name, DefaultAttributes.ATTACK);
@@ -372,7 +378,22 @@ public class BaseCharacter implements CombatCharacter, MapObject {
         updateCharacterImage();
     }
 
+
     public void increaseManaPoints(Integer manaRecovered) {
         this.manaPoints = Math.min(this.manaPoints + manaRecovered, this.maxManaPoints);
+    }
+
+    //observer pattern management methods
+    public void addObserver(PushModelObserver observer) {
+        this.observers.add(observer);
+    }
+    public void removeObserver(PushModelObserver observer) {
+        this.observers.remove(observer);
+    }
+    @Override
+    public void notifyDeathObservers() {
+        for(PushModelObserver observer : observers) {
+            observer.characterHasDied(this);
+        }
     }
 }
