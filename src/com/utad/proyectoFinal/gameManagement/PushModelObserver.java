@@ -1,4 +1,4 @@
-package com.utad.proyectoFinal.GameManagement;
+package com.utad.proyectoFinal.gameManagement;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 

@@ -1,5 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.characters.ImplementationAI;
 
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
 import com.utad.proyectoFinal.mapa.*;
 
 import java.util.ArrayList;
@@ -7,23 +9,52 @@ import java.util.List;
 
 public class TypeABotAI extends BotAI {
 
+    private Integer counter = 0;
     @Override
     public void analyzeSituation(Bot bot) {
-        //lógica para analizar si movernos a objeto o atacar (path)
-        this.targets = MapGenerator.getInstance(0,0, 0, 0).getPathToObjective(bot.getCurrentPosition(), new ClosestLootStrategy());
+        //pillar el camino hasta el objetivo, con la estrategia propuesta
+        this.targets = MapGenerator.getInstance(0,0, 0, 0, null, null).getPathToObjective(bot.getCurrentPosition(), new ClosestLootStrategy());
+        this.currentStepTile = targets.get(counter);
     }
 
     @Override
     public void decideNextMove(GenericTile tile, Bot bot) {
-        //si el oponente está cerca huimos
-
+        //si nos movemos seteamos actiontype move y si atacamos seteamos actiontype attack
+        if(targets != null && !targets.isEmpty()) {
+            if(currentStepTile.isOcupiedByCharacter()){
+                bot.setBotActionType(BotActionType.ATTACK);
+            }else{
+                bot.setBotActionType(BotActionType.MOVE);
+            }
+        }
     }
 
     @Override
     public void performAction(Bot bot) {
         //realizar la acción
+        switch(bot.getBotActionType()){
+            case MOVE:
+                bot.move(this.currentStepTile);
+                break;
+            case ATTACK:
+                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new LightAttackStrategy());
+                break;
+            case NONE:
+                System.out.println("None assigned yet");
+                break;
+            default:
+                System.out.println("Bot is zZz ");
+        }
+        this.counter++;
 
+        // Si hemos llegado al final del camino, reiniciamos para calcular un nuevo objetivo desde 0
+        if (targets != null && counter >= targets.size()) {
+            this.counter = 0;
+            this.currentStepTile = null;  // Esto fuerza un nuevo análisis en el siguiente turno
+        }
     }
+
+/*  DEPRECATED
 
     public List<GenericTile> filtrarObjetivos(Bot bot, boolean priorizarItems) {
         List<GenericTile> items = new ArrayList<>();
@@ -34,11 +65,11 @@ public class TypeABotAI extends BotAI {
             GenericTile gTile = (GenericTile) tile;
 
             // TODO: filtrarObjetivos
-//            if (gTile.hasItem()) {
-//                items.add(gTile);
-//            } else if (gTile.contieneEnemigo(bot)) {
-//                enemigos.add(gTile);
-//            }
+            if (gTile.hasItem()) {
+                items.add(gTile);
+            } else if (gTile.contieneEnemigo(bot)) {
+                enemigos.add(gTile);
+            }
         }
 
         List<GenericTile> result = new ArrayList<>();
@@ -52,6 +83,6 @@ public class TypeABotAI extends BotAI {
 
         return result;
     }
-
+*/
 }
 

@@ -1,7 +1,6 @@
-package com.utad.proyectoFinal.GameManagement;
+package com.utad.proyectoFinal.gameManagement;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.characters.PushModelObservable;
 
 public class GameContext implements PushModelObserver {
 

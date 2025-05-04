@@ -7,7 +7,9 @@ import java.util.*;
 public abstract class BotAI {
 
     protected List<GenericTile> targets;
-    // Método plantilla para recoger las 3 distintas acciones
+    protected GenericTile currentStepTile;
+
+    // Metodo plantilla para recoger las 3 distintas acciones
     public final void executeTurn(Bot bot) {
         analyzeSituation(bot);
         decideNextMove(bot.getCurrentPosition(), bot);
