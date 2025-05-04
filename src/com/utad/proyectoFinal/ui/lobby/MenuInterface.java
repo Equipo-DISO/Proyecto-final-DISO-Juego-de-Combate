@@ -251,6 +251,7 @@ public class MenuInterface extends JFrame implements Interface {
 
             Bot bot = new Bot(((JLabel) bots.get(i).getComponent(1)).getText());
             bot.setImage(path);
+            bot.setBaseImagePath(path);
             botList.add(bot);
         }
 
@@ -260,6 +261,7 @@ public class MenuInterface extends JFrame implements Interface {
     public BaseCharacter getPlayerCharacter() {
         BaseCharacter player = new BaseCharacter(nombreLabel.getText());
         player.setImage(playerImagePath);
+        player.setBaseImagePath(playerImagePath);
         return player;
     }
 }

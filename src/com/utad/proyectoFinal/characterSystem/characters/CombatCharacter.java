@@ -48,4 +48,8 @@ public interface CombatCharacter {
      * @return a complete Image of the character with all decorations
      */
     Image getCompleteImage();
+
+    // Paths
+    String getBaseImagePath();
+    void setBaseImagePath(String baseImagePath);
 }

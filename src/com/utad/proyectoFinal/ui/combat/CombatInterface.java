@@ -3,6 +3,8 @@ package com.utad.proyectoFinal.ui.combat;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
@@ -24,12 +26,14 @@ public class CombatInterface extends JFrame implements Interface {
     JPanel feedPanel = new JPanel();
     private JScrollPane scrollPane;
     private boolean feedUpdated = false;
-
-    public CombatInterface()                              { this("Juego de Combate", 1000, 500); }
-    public CombatInterface(String title)                  { this(title, 1000, 500); }
-    public CombatInterface(Integer width, Integer height) { this("Juego de Combate", width, height); }
-
-    public CombatInterface(String title, Integer width, Integer height){
+    
+    public CombatInterface(CombatCharacter player, CombatCharacter enemy){
+        this(player, enemy, "Juego de Combate - Pelea en curso");
+    }
+    public CombatInterface(CombatCharacter player, CombatCharacter enemy, String title){
+        this(player, enemy, title, 1000, 500);
+    }
+    public CombatInterface(CombatCharacter player, CombatCharacter enemy, String title, Integer width, Integer height){
 
         setTitle(title);
         setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
@@ -41,11 +45,13 @@ public class CombatInterface extends JFrame implements Interface {
         setLayout(new BorderLayout());
 
         // Player
-        JPanel playerPanel = new CombatPlayerPanel(JLabel.LEFT, "Juanito", playerSimplifiedImage, 20, 100, 60, 100);
+        JPanel playerPanel = new CombatPlayerPanel(JLabel.LEFT, player.getName(), new SimplifiedImage(player.getBaseImagePath()),
+            player.getHealthPoints(), player.getMaxHealthPoints(), player.getManaPoints(), player.getMaxManaPoints());
         add(playerPanel, BorderLayout.WEST);
 
         // Enemy
-        JPanel enemyPanel = new CombatPlayerPanel(JLabel.RIGHT, "Enemigo", playerSimplifiedImage, 80, 100, 50, 60);
+        JPanel enemyPanel = new CombatPlayerPanel(JLabel.LEFT, enemy.getName(), new SimplifiedImage(enemy.getBaseImagePath()),
+            enemy.getHealthPoints(), enemy.getMaxHealthPoints(), enemy.getManaPoints(), enemy.getMaxManaPoints());
         add(enemyPanel, BorderLayout.EAST);
 
         // Feed
@@ -171,28 +177,6 @@ public class CombatInterface extends JFrame implements Interface {
 
         System.out.println("scroll");
         feedUpdated = false;
-    }
-
-    // TEST MAIN
-    public static void main(String[] args) {
-        CombatInterface combatInterface = new CombatInterface("Juego de Combate", 1000, 500);
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        combatInterface.showInterface();
-
     }
 }
 

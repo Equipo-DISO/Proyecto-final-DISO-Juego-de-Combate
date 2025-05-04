@@ -20,6 +20,7 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
     // Atributos de identificación
     protected Integer id;
     protected String name;
+    protected String baseImagePath;
 
     // Objetos de composición
     protected CharacterAttributes attributes;
@@ -364,5 +365,14 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         for (PushModelObserver observer : observers) {
             observer.characterHasDied(this);
         }
+    }
+
+    @Override
+    public void setBaseImagePath(String baseImagePath) {
+        this.baseImagePath = baseImagePath;
+    }
+    @Override
+    public String getBaseImagePath() {
+        return this.baseImagePath;
     }
 }
