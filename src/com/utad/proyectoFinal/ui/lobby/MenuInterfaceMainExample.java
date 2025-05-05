@@ -31,7 +31,7 @@ public class MenuInterfaceMainExample {
         LinkedList<Bot> bots = interfaceMain.getBotList();
         BaseCharacter player = interfaceMain.getPlayerCharacter();
         
-        GameContext.getInstance().setInitialCharacters(bots.size() + 1);
+        GameContext.getInstance().setInitialCharacters(bots.size() + 1, bots);
 
         MapGenerator instance = MapGenerator.getInstance(1500, 0, 6, bots.size() + 1, bots, player);
         instance.displayMap();

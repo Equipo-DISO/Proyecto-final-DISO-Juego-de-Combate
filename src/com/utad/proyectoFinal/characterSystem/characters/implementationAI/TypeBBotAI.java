@@ -1,6 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.TiredState;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapGenerator;
@@ -8,17 +9,17 @@ import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
 
 public class TypeBBotAI extends BotAI {
 
-    private Integer counter = 0;
     @Override
     public void analyzeSituation(Bot bot) {
         //same para Type B bot
         this.targets = MapGenerator.getInstance(0,0, 0, 0, null, null).getPathToObjective(bot.getCurrentPosition(), new ClosestEnemyStrategy());
-        this.currentStepTile = targets.get(counter);
+        this.currentStepTile = targets.get(1);
     }
 
 
     @Override
     public void decideNextMove(GenericTile tile, Bot bot) {
+
         //same para Type B bot
         if(targets != null && !targets.isEmpty()) {
             if(currentStepTile.isOcupiedByCharacter()){
@@ -26,6 +27,10 @@ public class TypeBBotAI extends BotAI {
             }else{
                 bot.setBotActionType(BotActionType.MOVE);
             }
+        }
+
+        if(bot.getCurrentState() instanceof TiredState){
+            bot.setBotActionType(BotActionType.MANAREGEN);
         }
     }
 
@@ -43,17 +48,20 @@ public class TypeBBotAI extends BotAI {
                 break;
             case NONE:
                 System.out.println("None assigned to bot" + bot.getId());
+                break;
+            case MANAREGEN:
+                bot.gainMana();
+                break;
             default:
                 System.out.println("No action injected yet");
-            break;
+                break;
         }
 
-        this.counter++;
 
-        if (targets != null && counter >= targets.size()) {
+        /*if (targets != null && counter >= targets.size()) {
             counter = 0;
             currentStepTile = null;
-        }
+        */}
     }
 
     /*public List<GenericTile> filtrarObjetivos(Bot bot, boolean priorizarItems) {
@@ -84,4 +92,4 @@ public class TypeBBotAI extends BotAI {
         }
      */
 
-}
+

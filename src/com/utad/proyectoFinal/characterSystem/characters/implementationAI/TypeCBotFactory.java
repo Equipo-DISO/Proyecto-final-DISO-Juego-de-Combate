@@ -7,7 +7,7 @@ public class TypeCBotFactory implements BotFactory {
     public Bot createBot() {
         Bot bot = new Bot();
         bot.setBotAI(new TypeCBotAI()); // sobrevive y lucha
-        bot.setMap(MapGenerator.getInstance(1280, 720, 3, 2, null, null));
+        //bot.setMap(MapGenerator.getInstance(1280, 720, 3, 2, null, null));
         return bot;
     }
 }

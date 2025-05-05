@@ -1,17 +1,20 @@
 package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.TiredState;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
 import com.utad.proyectoFinal.mapa.*;
 
 public class TypeABotAI extends BotAI {
 
-    private Integer counter = 0;
+    //private Integer counter = 0;
     @Override
     public void analyzeSituation(Bot bot) {
         //pillar el camino hasta el objetivo, con la estrategia propuesta
         this.targets = MapGenerator.getInstance(0,0, 0, 0, null, null).getPathToObjective(bot.getCurrentPosition(), new ClosestLootStrategy());
-        this.currentStepTile = targets.get(counter);
+        MapGenerator.getInstance(1280, 720, 3, 2, null, null).pathFindingDebug(targets);
+        this.currentStepTile = targets.get(1);
+
     }
 
     @Override
@@ -23,6 +26,10 @@ public class TypeABotAI extends BotAI {
             }else{
                 bot.setBotActionType(BotActionType.MOVE);
             }
+        }
+
+        if(bot.getCurrentState() instanceof TiredState){
+            bot.setBotActionType(BotActionType.MANAREGEN);
         }
     }
 
@@ -42,12 +49,12 @@ public class TypeABotAI extends BotAI {
             default:
                 System.out.println("Bot is zZz ");
         }
-        this.counter++;
+        //this.counter++;
 
         // Si hemos llegado al final del camino, reiniciamos para calcular un nuevo objetivo desde 0
-        if (targets != null && counter >= targets.size()) {
-            this.counter = 0;
-            this.currentStepTile = null;  // Esto fuerza un nuevo análisis en el siguiente turno
+        //if (targets != null && counter >= targets.size()) {
+            //this.counter = 0;
+            //this.currentStepTile = null;  // Esto fuerza un nuevo análisis en el siguiente turno
         }
     }
 
@@ -81,5 +88,5 @@ public class TypeABotAI extends BotAI {
         return result;
     }
 */
-}
+
 

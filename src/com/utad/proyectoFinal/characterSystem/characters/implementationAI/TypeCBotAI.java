@@ -1,6 +1,7 @@
 package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.TiredState;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
 import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
 import com.utad.proyectoFinal.mapa.ClosestLootStrategy;
@@ -10,7 +11,7 @@ import com.utad.proyectoFinal.mapa.MapGenerator;
 public class TypeCBotAI extends BotAI {
 
     private static final double LOW_HEALTH_THRESHOLD = 0.3;
-    private int counter = 0;
+    //private int counter = 0;
 
     @Override
     public void analyzeSituation(Bot bot) {
@@ -27,7 +28,11 @@ public class TypeCBotAI extends BotAI {
         }
 
         if (targets != null && !targets.isEmpty()) {
-            this.currentStepTile = targets.get(counter);
+            this.currentStepTile = targets.get(1);
+        }
+
+        if(bot.getCurrentState() instanceof TiredState){
+            bot.setBotActionType(BotActionType.MANAREGEN);
         }
     }
 
@@ -39,8 +44,8 @@ public class TypeCBotAI extends BotAI {
                 // Huir si está débil o mal equipado
                 if (bot.getHealthPoints() < bot.getMaxHealthPoints() * LOW_HEALTH_THRESHOLD || bot.getWeapon() == null || bot.getHelmet() == null) {
 
-                    Boolean success = bot.retreat(enemy); // acción de huida
-                    bot.setBotActionType(success ? BotActionType.RETREAT : BotActionType.NONE); //
+                    //Boolean success = bot.retreat(enemy); // acción de huida
+                    //bot.setBotActionType(success ? BotActionType.RETREAT : BotActionType.NONE); //
 
                 } else {
                     bot.setBotActionType(BotActionType.ATTACK);
@@ -69,13 +74,9 @@ public class TypeCBotAI extends BotAI {
                 System.out.println("Unexpected action type for bot " + bot.getId());
         }
 
-        this.counter++;
 
-        if (targets != null && counter >= targets.size()) {
-            this.counter = 0;
-            currentStepTile = null;
         }
     }
-}
+
 
 
