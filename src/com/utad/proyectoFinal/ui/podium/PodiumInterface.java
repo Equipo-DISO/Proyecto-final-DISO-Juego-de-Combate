@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.List;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -16,11 +14,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import javax.swing.plaf.SeparatorUI;
 
+import com.utad.proyectoFinal.gameManagement.GameContext;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 import com.utad.proyectoFinal.ui.combat.Action;
@@ -201,7 +197,10 @@ public class PodiumInterface extends JFrame implements Interface{
     public void actionButton(int action) {
         System.out.println(correctButton);
 
-        if (action == correctButton) { dispose(); }
+        if (action == correctButton) { 
+            dispose(); 
+            System.exit(0);
+        }
         else correctButton = random.nextInt(3); // Cambiar el botón correcto
     }
     @Override
@@ -215,7 +214,6 @@ public class PodiumInterface extends JFrame implements Interface{
     
     @Override
     public Object getData() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getData'");
     }
 
