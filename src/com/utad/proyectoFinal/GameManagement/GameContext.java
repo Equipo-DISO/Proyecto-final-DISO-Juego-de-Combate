@@ -29,6 +29,7 @@ public class GameContext implements PushModelObserver {
     @Override
     public void characterHasDied(BaseCharacter character) {
         personajesVivos--;
+        characterKilled(character);
         System.out.println("Ha muerto " + character.getName() + ". Vivos: " + personajesVivos);
 
         if(personajesVivos == 1) {
