@@ -13,6 +13,7 @@ public class MapListener extends MouseAdapter
     private MapGenerator map;
    
     private Point dragStart;
+    private long clickTime;
     private Integer dx = 0;
     private Integer dy = 0;
 
@@ -31,6 +32,7 @@ public class MapListener extends MouseAdapter
     {
         if (MapController.getDisableMap()) return;
         this.dragStart = e.getPoint();
+        this.clickTime = e.getWhen();
     }
     
     @Override
@@ -62,11 +64,21 @@ public class MapListener extends MouseAdapter
 
             if (initialTile != null) 
             {
-                Point p2 = adjustPoint(e.getPoint());
-                for (TileAbstract t : tiles)
+                if (e.getWhen() - clickTime < 200) 
                 {
-                    if (t.contains(p2.x, p2.y))
-                    if (t == initialTile) this.map.executeActionOnMove(this.map.getPlayer(), (GenericTile) t);
+                    this.map.executeActionOnMove(this.map.getPlayer(), (GenericTile) initialTile);
+                } 
+                else // Si no, es un drag y comprobar
+                {
+                    Point p2 = adjustPoint(e.getPoint());
+                    for (TileAbstract t : tiles)
+                    {
+                        if (t.contains(p2.x, p2.y))
+                        if (t == initialTile){
+                            this.map.executeActionOnMove(this.map.getPlayer(), (GenericTile) t);
+                            break;
+                        }
+                    }
                 }
             }
         }
