@@ -246,7 +246,6 @@ public class MapGenerator extends JPanel
         if (character.getCurrentPosition().equals(objective)) { return; }
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
         
-        boolean combatOccurred = false;
        
         if (objective.isOcupiedByCharacter())
         {
@@ -259,8 +258,6 @@ public class MapGenerator extends JPanel
 
                 CombatInterface combatInterface = new CombatInterface(character, enemyCharacter);
                 combatInterface.showInterface();
-
-                combatOccurred = false;
             }
         }
         else if (objective.isOcupiedByLoot())
@@ -276,9 +273,7 @@ public class MapGenerator extends JPanel
         }
 
         // Only execute bot turn if no combat occurred
-        if (!combatOccurred) {
-            GameContext.getInstance().botTurn(character);
-        }
+        if (!character.getEsControlado()) { GameContext.getInstance().botTurn(character); }
     }
 
     /**
