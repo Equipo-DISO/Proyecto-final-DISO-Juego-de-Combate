@@ -51,6 +51,15 @@ public abstract class AbstractAttackStrategy implements AttackStrategy {
 
     /* -------------------------- Métodos utilitarios ------------------------ */
 
+    protected void handleCriticalHitMessage(BaseCharacter attacker) {
+        StringBuilder message = new StringBuilder(String.format("¡%s asesta un golpe CRÍTICO con su %s!%n", 
+                attacker.getName(), attacker.getWeapon().getName()));
+        System.out.printf(message.toString());
+        if (attacker.getFeedLogger() != null) {
+            attacker.getFeedLogger().addFeedLine(message.toString(), Action.ATACK);
+        }
+    }
+
     protected void applyHit(BaseCharacter attacker, BaseCharacter target, double damage) {
         target.getCurrentState().handleReceiveAttack(damage);
         StringBuilder message = new StringBuilder(String.format("%s ejecuta %s y causa %.0f de daño a %s.%n",

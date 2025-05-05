@@ -306,7 +306,7 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         if (target instanceof BaseCharacter targetBaseCharacter) {
             this.currentState.handleAttack(targetBaseCharacter, strategy);
         } else {
-            System.out.println("El objetivo no es un personaje válido.");
+            System.err.println("El objetivo no es un personaje válido.");
         }
     }
 
@@ -316,7 +316,7 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
             this.currentState.handleRetreat(opponentBaseCharacter);
             return this.retreatSuccess;
         } else {
-            System.out.println("El oponente no es un personaje válido.");
+            System.err.println("El oponente no es un personaje válido.");
             return false;
         }
     }

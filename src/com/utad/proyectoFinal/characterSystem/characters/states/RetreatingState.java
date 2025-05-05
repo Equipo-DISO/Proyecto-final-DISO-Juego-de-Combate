@@ -49,11 +49,9 @@ public class RetreatingState extends BaseState {
             return;
         }
 
-        if (character.isRetreatSuccessful()) {
-            character.transitionTo(character.getStates().getMovingOnMapState());
-        } else {
-            character.transitionTo(character.getStates().getIdleState());
-        }
+        
+        character.transitionTo(character.getStates().getIdleState());
+        
     }
 
     @Override
