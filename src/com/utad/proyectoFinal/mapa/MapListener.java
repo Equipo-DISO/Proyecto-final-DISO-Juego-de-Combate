@@ -82,9 +82,8 @@ public class MapListener extends MouseAdapter
                 }
             }
         }
-
+        
         this.dragStart = null; // Limpiamos al soltar el mouse
-
     }
 
     @Override
