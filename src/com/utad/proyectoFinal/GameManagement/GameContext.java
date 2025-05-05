@@ -29,10 +29,13 @@ public class GameContext implements PushModelObserver {
         this.bots = b;
     }
 
-    public void botTurn()
+    public void botTurn(BaseCharacter bot)
     {
         this.bots.forEach(b -> {
-            b.BotMove();
+            if (!bot.equals(b))
+            {
+                b.BotMove();
+            }
         });
     }
 

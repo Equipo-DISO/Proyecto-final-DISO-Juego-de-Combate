@@ -272,7 +272,7 @@ public class MapGenerator extends JPanel
             character.move(objective);
         }
 
-        GameContext.getInstance().botTurn();
+        GameContext.getInstance().botTurn(character);
     }
 
     /**

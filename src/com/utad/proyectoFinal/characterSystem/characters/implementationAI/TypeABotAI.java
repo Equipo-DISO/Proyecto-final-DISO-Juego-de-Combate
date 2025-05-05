@@ -36,19 +36,30 @@ public class TypeABotAI extends BotAI {
     @Override
     public void performAction(Bot bot) {
         //realizar la acción
-        switch(bot.getBotActionType()){
-            case MOVE:
-                bot.move(this.currentStepTile);
-                break;
-            case ATTACK:
-                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new LightAttackStrategy());
-                break;
-            case NONE:
-                System.out.println("None assigned yet");
-                break;
-            default:
-                System.out.println("Bot is zZz ");
+        // switch(bot.getBotActionType()){
+        //     case MOVE:
+        //         try {
+        //             MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+        //         } catch (Exception e) {
+        //             System.out.println("no hay mapa aun");
+        //         }
+        //         break;
+        //     case ATTACK:
+        //         bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new LightAttackStrategy());
+        //         break;
+        //     case NONE:
+        //         System.out.println("None assigned yet");
+        //         break;
+        //     default:
+        //         System.out.println("Bot is zZz ");
+        // }
+
+        try {
+            MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+        } catch (Exception e) {
+            System.out.println("no hay mapa aun");
         }
+
         //this.counter++;
 
         // Si hemos llegado al final del camino, reiniciamos para calcular un nuevo objetivo desde 0

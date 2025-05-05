@@ -37,24 +37,33 @@ public class TypeBBotAI extends BotAI {
     @Override
     public void performAction(Bot bot) {
         //same para Type B bot
-        switch(bot.getBotActionType()){
-            case MOVE:
-                //aquí move to
-                bot.move(currentStepTile);
-                break;
-            case ATTACK:
-                //bot.attack
-                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
-                break;
-            case NONE:
-                System.out.println("None assigned to bot" + bot.getId());
-                break;
-            case MANAREGEN:
-                bot.gainMana();
-                break;
-            default:
-                System.out.println("No action injected yet");
-                break;
+        // switch(bot.getBotActionType()){
+        //     case MOVE:
+        //         try {
+        //             MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+        //         } catch (Exception e) {
+        //             System.out.println("no hay mapa aun");
+        //         }
+        //         break;
+        //     case ATTACK:
+        //         //bot.attack
+        //         bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
+        //         break;
+        //     case NONE:
+        //         System.out.println("None assigned to bot" + bot.getId());
+        //         break;
+        //     case MANAREGEN:
+        //         bot.gainMana();
+        //         break;
+        //     default:
+        //         System.out.println("No action injected yet");
+        //         break;
+        // }
+
+        try {
+            MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+        } catch (Exception e) {
+            System.out.println("no hay mapa aun");
         }
 
 

@@ -60,20 +60,25 @@ public class TypeCBotAI extends BotAI {
 
     @Override
     public void performAction(Bot bot) {
-        switch (bot.getBotActionType()) {
-            case MOVE:
-                bot.move(currentStepTile);
-                break;
-            case ATTACK:
-                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
-                break;
-            case NONE:
-                System.out.println("Type C Bot " + bot.getId() + " skipped or retreated.");
-                break;
-            default:
-                System.out.println("Unexpected action type for bot " + bot.getId());
-        }
+        // switch (bot.getBotActionType()) {
+        //     case MOVE:
+        //         bot.move(currentStepTile);
+        //         break;
+        //     case ATTACK:
+        //         bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
+        //         break;
+        //     case NONE:
+        //         System.out.println("Type C Bot " + bot.getId() + " skipped or retreated.");
+        //         break;
+        //     default:
+        //         System.out.println("Unexpected action type for bot " + bot.getId());
+        // }
 
+        try {
+            MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+        } catch (Exception e) {
+            System.out.println("no hay mapa aun");
+        }
 
         }
     }
