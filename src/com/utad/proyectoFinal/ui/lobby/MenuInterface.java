@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
+import com.utad.proyectoFinal.characterSystem.characters.implementationAI.RandomBotFactory;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.TypeABotAI;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.TypeBBotAI;
 import com.utad.proyectoFinal.ui.Interface;
@@ -251,8 +252,7 @@ public class MenuInterface extends JFrame implements Interface {
             String botName = ((JLabel) bots.get(i).getComponent(1)).getText();
             if (botName.toLowerCase().contains("nig")) path = path.replace(".png", "Dark.png");
 
-            Bot bot = new Bot(botName);
-            bot.setBotAI(new TypeBBotAI());
+            Bot bot = RandomBotFactory.createBot(); 
             bot.setImage(path);
             bot.setBaseImagePath(path);
             botList.add(bot);
