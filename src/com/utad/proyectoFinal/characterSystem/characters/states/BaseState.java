@@ -80,8 +80,10 @@ public abstract class BaseState implements CharacterState {
         // Normal behavior when not in testing mode
         if (character.isAlive())
             character.transitionTo(character.getStates().getIdleState());
-        else
+        else {
             character.transitionTo(character.getStates().getDeadState());
+
+        }
     }
 
     @Override
@@ -131,6 +133,9 @@ public abstract class BaseState implements CharacterState {
             if (character.getFeedLogger() != null) {
                 character.getFeedLogger().addFeedLine(defeatMessage.toString(), Action.BREAK);
             }
+
+            // Notificamos a los aqui porque si no los hilos de Java no notifican y dan problemas
+            character.notifyDeathObservers();
         }
 
         updateState();

@@ -2,6 +2,7 @@ package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
+import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.ui.combat.Action;
 
 /**
@@ -30,6 +31,13 @@ public class TiredState extends BaseState {
         // Cambiar al estado de retirada
         character.transitionTo(character.getStates().getRetreatingState());
         character.getCurrentState().handleRetreat(opponent);
+    }
+
+    @Override
+    public void handleMove(GenericTile moveToTile) {
+        // Cambiar al estado de movimiento en el mapa
+        character.transitionTo(character.getStates().getMovingOnMapState());
+        character.getCurrentState().handleMove(moveToTile);
     }
 
     /**

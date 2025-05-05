@@ -92,7 +92,7 @@ public class MapGenerator extends JPanel
         return MapGenerator.instance;
     }
 
-    public static MapGenerator getInstance() throws Exception
+    public static synchronized MapGenerator getInstance() throws Exception
     {
 
         if (MapGenerator.instance == null)

@@ -252,12 +252,7 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         transitionTo(states.getDeadState());
     }
 
-    public void setCurrentState(CharacterState state) {
-        if (state == null) {
-            throw new IllegalArgumentException("El estado no puede ser nulo");
-        }
-        this.currentState = state;
-    }
+
 
     public CharacterState getCurrentState() {
         return currentState;
