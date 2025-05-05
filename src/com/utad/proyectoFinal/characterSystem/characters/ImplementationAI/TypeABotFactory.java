@@ -1,15 +1,17 @@
 package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
-import com.utad.proyectoFinal.mapa.MapGenerator;
+public class TypeABotFactory {
 
-public class TypeABotFactory implements BotFactory {
-    @Override
-    public Bot createBot(){
+    // Private constructor to prevent instantiation
+    private TypeABotFactory() {}
+
+    /**
+     * Creates a bot with TypeA AI (loot-seeking behavior)
+     * @return a new Bot with TypeA AI
+     */
+    public static Bot createBot() {
         Bot bot = new Bot();
         bot.setBotAI(new TypeABotAI());
-
-        bot.setMap(MapGenerator.getInstance(1280, 720, 3, 2, null, null));
         return bot;
     }
-
 }
