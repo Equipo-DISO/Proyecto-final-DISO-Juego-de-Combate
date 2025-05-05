@@ -17,7 +17,10 @@ public class HeavyAttackStrategy extends AbstractAttackStrategy {
 
     @Override
     public double calculateDamage(BaseCharacter attacker) {
-        return Calculator.getInstance().calculateAttackDamage(attacker, DAMAGE_MULTIPLIER);
+        Boolean isCritical = Calculator.getInstance().isCriticalHit(attacker);
+        if (isCritical)
+            handleCriticalHitMessage(attacker);
+        return Calculator.getInstance().calculateAttackDamage(attacker, DAMAGE_MULTIPLIER, isCritical);
     }
 
     @Override

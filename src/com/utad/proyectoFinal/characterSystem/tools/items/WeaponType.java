@@ -2,11 +2,11 @@ package com.utad.proyectoFinal.characterSystem.tools.items;
 
 public enum WeaponType {
     // Define weapon types with their attributes
-    STICK("Stick", 2.0, 0.05, 1.05, 2, "Files/img/StickWeapon.png"),
-    KNIFE("Stick", 5.0, 0.10, 1.10, 3, "Files/img/KnifeWeapon.png"),
-    SWORD("Sword", 10.0, 0.20, 1.20, 4, "Files/img/SwordWeapon.png"),
-    AXE("Axe", 15.0, 0.25, 1.30, 5, "Files/img/AxeWeapon.png"),
-    SPEAR("Spear", 15.0, 0.15, 1.30, 6, "Files/img/SpearWeapon.png"),;
+    STICK("Palo", 2.0, 0.05, 1.05, 2, "Files/img/StickWeapon.png"),
+    KNIFE("Cuchillo", 5.0, 0.10, 1.10, 3, "Files/img/KnifeWeapon.png"),
+    SWORD("Espada", 10.0, 0.20, 1.20, 4, "Files/img/SwordWeapon.png"),
+    AXE("Hacha", 15.0, 0.25, 1.30, 5, "Files/img/AxeWeapon.png"),
+    SPEAR("Lanza", 15.0, 0.15, 1.30, 6, "Files/img/SpearWeapon.png");
 
     private final String name;
     private final Double damage;

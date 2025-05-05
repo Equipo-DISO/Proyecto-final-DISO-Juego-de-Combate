@@ -42,16 +42,14 @@ public final class Calculator {
      * @param multiplier El multiplicador de daño a aplicar
      * @return El daño calculado después de aplicar el multiplicador
      */
-    public double calculateAttackDamage(BaseCharacter attacker, double multiplier) {
+    public double calculateAttackDamage(BaseCharacter attacker, double multiplier, Boolean isCritical) {
         double baseDamage = calculateBaseDamage(attacker);
         double finalDamage = baseDamage * multiplier;
         
         // Verificar si el atacante tiene un arma y puede hacer crítico
-        if (attacker.getWeapon() != null && isCriticalHit(attacker)) {
+        if (attacker.getWeapon() != null && isCritical) {
             // Aplicar daño crítico
             finalDamage = applyWeaponCriticalDamage(attacker, finalDamage);
-            System.out.printf("¡%s asesta un golpe CRÍTICO con %s!%n", 
-                    attacker.getName(), attacker.getWeapon().getName());
         }
         
         return finalDamage;
