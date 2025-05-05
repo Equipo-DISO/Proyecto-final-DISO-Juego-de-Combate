@@ -1,6 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.characters;
 
-import com.utad.proyectoFinal.GameManagement.PushModelObserver;
+import com.utad.proyectoFinal.gameManagement.PushModelObserver;
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;

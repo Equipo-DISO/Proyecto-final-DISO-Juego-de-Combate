@@ -1,4 +1,4 @@
-package com.utad.proyectoFinal.GameManagement;
+package com.utad.proyectoFinal.gameManagement;
 
 import java.util.LinkedList;
 
