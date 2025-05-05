@@ -19,7 +19,6 @@ public class MenuInterfaceMainExample {
 
         List<String> data = interfaceMain.getData();
         
-
         // Primer elemento de la lista es el jugador humano
         // Los siguientes elementos son los bots
         for (String element : data) {
@@ -30,12 +29,10 @@ public class MenuInterfaceMainExample {
 
         LinkedList<Bot> bots = interfaceMain.getBotList();
         BaseCharacter player = interfaceMain.getPlayerCharacter();
-
-        // player.equipWeapon(new BaseWeapon(WeaponType.SPEAR));
-        // player.equipHelmet(new BaseHelmet(HelmetType.DEMON_HELMET));
-
         
         MapGenerator instance = MapGenerator.getInstance(1500, 0, 6, bots.size() + 1, bots, player);
         instance.displayMap();
+
+        
     }
 }

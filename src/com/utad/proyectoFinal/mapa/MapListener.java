@@ -37,7 +37,7 @@ public class MapListener extends MouseAdapter
     public void mouseDragged(MouseEvent e) 
     {
         if (MapController.getDisableMap() || this.dragStart == null) return;
-        if (!SwingUtilities.isLeftMouseButton(e)) return;
+        if (!SwingUtilities.isRightMouseButton(e)) return;
         
         
         Point current = e.getPoint();
@@ -53,14 +53,33 @@ public class MapListener extends MouseAdapter
     
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (SwingUtilities.isLeftMouseButton(e)){
+
+            TileAbstract initialTile = null;
+            Point p = adjustPoint(dragStart);
+            for (TileAbstract t : tiles)
+            { if (t.contains(p.x, p.y)) initialTile = t; }
+
+            if (initialTile != null) 
+            {
+                Point p2 = adjustPoint(e.getPoint());
+                for (TileAbstract t : tiles)
+                {
+                    if (t.contains(p2.x, p2.y))
+                    if (t == initialTile) this.map.executeActionOnMove(this.map.getPlayer(), (GenericTile) t);
+                }
+            }
+        }
+
         this.dragStart = null; // Limpiamos al soltar el mouse
+
     }
 
     @Override
     public void mouseClicked(MouseEvent e) 
     {
         if (MapController.getDisableMap()) { return; }
-        if (!SwingUtilities.isRightMouseButton(e)) return;
+        if (!SwingUtilities.isLeftMouseButton(e)) return;
 
         Point p = adjustPoint(e.getPoint());
         for (TileAbstract t : tiles) 

@@ -157,7 +157,7 @@ public class CombatInterface extends JFrame implements Interface {
         feedPanel.revalidate();
         feedPanel.repaint();
 
-        feedUpdated = true;
+        this.feedUpdated = true;
         
         //TODO: Esto es un conjunto de acciones al acabar la batalla, seguramente se deba llevar a otra clase
         player.setFeedLogger(null);
@@ -201,25 +201,17 @@ public class CombatInterface extends JFrame implements Interface {
         feedPanel.repaint();
     }
 
-    // ON MAIN FUNCTIONS
-    public void waitTillClose(){
-        while (isVisible()){
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            if (feedUpdated) slideBottom();
-        }
+    public Boolean getFeedUpdated(){
+        return this.feedUpdated;
     }
-    private void slideBottom() {
+
+    public void slideBottom() {
         scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
         feedPanel.revalidate();
         feedPanel.repaint();
 
         System.out.println("scroll");
-        feedUpdated = false;
+        this.feedUpdated = false;
     }
 }
 
