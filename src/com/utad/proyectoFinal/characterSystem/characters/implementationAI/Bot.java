@@ -23,8 +23,7 @@ public class Bot extends BaseCharacter {
     public Bot(String name, Double baseAttack) {
         super(name, baseAttack);
         botActionType = BotActionType.NONE;
-
-        super.esControlado = true; // no se si esto va aqui, pero lo necesitaba, Sergio
+        super.esControlado = true; 
     }
 
     public void BotMove() {

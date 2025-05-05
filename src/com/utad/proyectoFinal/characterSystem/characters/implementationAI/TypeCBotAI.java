@@ -3,6 +3,7 @@ package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 import com.utad.proyectoFinal.characterSystem.characters.states.TiredState;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
 import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
 import com.utad.proyectoFinal.mapa.ClosestLootStrategy;
 import com.utad.proyectoFinal.mapa.GenericTile;
@@ -22,15 +23,21 @@ public class TypeCBotAI extends BotAI {
 
         if (healthRatio < LOW_HEALTH_THRESHOLD || bot.getHelmet() == null || bot.getWeapon() == null) {
             // Buscar loot si está débil o sin equipamiento
-            this.targets = MapGenerator.getInstance(0, 0, 0, 0, null, null)
-                    .getPathToObjective(bot.getCurrentPosition(), new ClosestLootStrategy());
+            try {
+                this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), new ClosestLootStrategy());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             // Solo si está bien equipado y con vida, busca enemigos
-            this.targets = MapGenerator.getInstance(0, 0, 0, 0, null, null)
-                    .getPathToObjective(bot.getCurrentPosition(), new ClosestEnemyStrategy());
+            try {
+                this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), new ClosestEnemyStrategy());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        if (targets != null && !targets.isEmpty()) {
+        if (targets != null && !targets.isEmpty() && bot.getCurrentPosition() != null) {
             this.currentStepTile = (this.targets.size() <= 1 ? targets.get(0) : targets.get(1)); 
         }
 
@@ -78,7 +85,13 @@ public class TypeCBotAI extends BotAI {
         // }
 
         try {
-            MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+            if (currentStepTile.getOcupiedObject() instanceof Bot) {
+                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new LightAttackStrategy());
+            } else if (bot.getCurrentState() instanceof TiredState) {
+                bot.gainMana();
+            } else {
+                MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+            }
         } catch (Exception e) {
             System.out.println("no hay mapa aun");
         }

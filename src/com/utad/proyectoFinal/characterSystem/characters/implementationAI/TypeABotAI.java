@@ -1,8 +1,9 @@
 package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 import com.utad.proyectoFinal.characterSystem.characters.states.TiredState;
-
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
 import com.utad.proyectoFinal.mapa.*;
 
 public class TypeABotAI extends BotAI {
@@ -15,11 +16,15 @@ public class TypeABotAI extends BotAI {
     @Override
     public void analyzeSituation(Bot bot) {
         //pillar el camino hasta el objetivo, con la estrategia propuesta
-        this.targets = MapGenerator.getInstance(0,0, 0, 0, null, null).getPathToObjective(bot.getCurrentPosition(), new ClosestLootStrategy());
-        MapGenerator.getInstance(1280, 720, 3, 2, null, null).pathFindingDebug(targets);
+        try {
+            this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), new ClosestLootStrategy());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-
-        this.currentStepTile = (this.targets.size() <= 1 ? targets.get(0) : targets.get(1)); 
+        if(targets != null && !targets.isEmpty() && bot.getCurrentPosition() != null) {
+            this.currentStepTile = (this.targets.size() <= 1 ? targets.get(0) : targets.get(1)); 
+        }   
 
     }
 
@@ -62,7 +67,13 @@ public class TypeABotAI extends BotAI {
 
         //actualizar su posicion
         try {
-            MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+            if (currentStepTile.getOcupiedObject() instanceof Bot) {
+                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new LightAttackStrategy());  
+            } else if (bot.getCurrentState() instanceof TiredState) {
+                bot.gainMana(); 
+            } else {
+                MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+            }
         } catch (Exception e) {
             System.out.println("no hay mapa aun");
         }

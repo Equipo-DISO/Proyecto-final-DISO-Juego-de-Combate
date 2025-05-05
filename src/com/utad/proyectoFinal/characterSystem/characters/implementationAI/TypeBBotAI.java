@@ -2,7 +2,8 @@ package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
 import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 import com.utad.proyectoFinal.characterSystem.characters.states.TiredState;
-
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
@@ -17,8 +18,14 @@ public class TypeBBotAI extends BotAI {
     @Override
     public void analyzeSituation(Bot bot) {
         //same para Type B bot
-        this.targets = MapGenerator.getInstance(0,0, 0, 0, null, null).getPathToObjective(bot.getCurrentPosition(), new ClosestEnemyStrategy());
-        this.currentStepTile = (this.targets.size() <= 1 ? targets.get(0) : targets.get(1)); 
+        try {
+            this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), new ClosestEnemyStrategy());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(targets != null && !targets.isEmpty() && bot.getCurrentPosition() != null) {
+            this.currentStepTile = (this.targets.size() <= 1 ? targets.get(0) : targets.get(1)); 
+        }
     }
 
 
@@ -66,7 +73,13 @@ public class TypeBBotAI extends BotAI {
         // }
 
         try {
-            MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+            if (currentStepTile.getOcupiedObject() instanceof Bot) {
+                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
+            } else if (bot.getCurrentState() instanceof TiredState)     {
+                bot.gainMana();
+            } else {
+                MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+            }
         } catch (Exception e) {
             System.out.println("no hay mapa aun");
         }
