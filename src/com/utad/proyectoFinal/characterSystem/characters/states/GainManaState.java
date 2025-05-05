@@ -1,7 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
 import com.utad.proyectoFinal.ui.combat.Action;
 
@@ -35,7 +34,7 @@ public class GainManaState extends BaseState {
     public void gainMana() {
         // Calcular nuevo maná (sin exceder el máximo)
         int currentMana = character.getManaPoints();
-        int newMana = Math.min(currentMana + MANA_GAIN_AMOUNT, DefaultAttributes.MAX_MANA_POINTS);
+        int newMana = Math.min(currentMana + MANA_GAIN_AMOUNT, character.getMaxManaPoints());
         character.setManaPoints(newMana);
 
         StringBuilder message = new StringBuilder(String.format("%s ha recuperado %d puntos de energía.%n",

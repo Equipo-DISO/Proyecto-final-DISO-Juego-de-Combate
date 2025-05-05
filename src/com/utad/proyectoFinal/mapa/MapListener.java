@@ -55,6 +55,8 @@ public class MapListener extends MouseAdapter
     
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (dragStart == null) return;
+
         if (SwingUtilities.isLeftMouseButton(e)){
 
             TileAbstract initialTile = null;
@@ -82,9 +84,8 @@ public class MapListener extends MouseAdapter
                 }
             }
         }
-
+        
         this.dragStart = null; // Limpiamos al soltar el mouse
-
     }
 
     @Override

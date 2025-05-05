@@ -19,13 +19,12 @@ public abstract class TileFactory
     {
         this.totalNumberOfTiles = tiles;
         this.numberOfSpawns = spawns;
-        this.bots = bots;
+        this.bots = new LinkedList<Bot>(bots);;
+        
         this.player = player;
 
         this.obs = obs;
     }
-
-    
 
     public abstract GenericTile createTile(Integer x, Integer y, Integer tileId);
     public abstract ObstacleTile creatileObstacle(Integer x, Integer y, Integer tileId);
