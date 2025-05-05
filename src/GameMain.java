@@ -29,6 +29,14 @@ public class GameMain
 
         MapGenerator instance = MapGenerator.getInstance(1500, 0, 6, bots.size() + 1, bots, player);
         instance.displayMap();
+
+        // for (Bot b : bots)
+        // {
+           
+        //     System.out.println(b.getName());
+        // }
+
+        //  System.out.println("BR BR BR PATAPIM");
     }
 
 }
