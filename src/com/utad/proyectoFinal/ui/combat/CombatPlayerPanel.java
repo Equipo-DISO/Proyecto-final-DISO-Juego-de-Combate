@@ -39,7 +39,6 @@ public class CombatPlayerPanel extends JPanel{
     private JLabel mpBar = new JLabel();
 
     public CombatPlayerPanel(CombatCharacter character, int alignment) {
-
         this.character = character;
         this.alignment = alignment;
 
@@ -53,7 +52,6 @@ public class CombatPlayerPanel extends JPanel{
         if (this.alignment == JLabel.LEFT) this.nPotions = character.getHpPotions();
         else this.nPotions = 0;
         getInventoryImages();
-
 
         setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         setMinimumSize(new Dimension(230, 500));
@@ -187,7 +185,6 @@ public class CombatPlayerPanel extends JPanel{
                 else if (imagePath.contains("Helmet")) imagePath = imagePath.replace("Helmet", "HelmetInventory");
                 
                 this.inventory.add(new SimplifiedImage(imagePath, ITEMSIZE, ITEMSIZE));
-                System.out.println("Item");
             }
         }
     }
@@ -207,7 +204,6 @@ public class CombatPlayerPanel extends JPanel{
 
         int i = 0;
         for (SimplifiedImage img : this.inventory) {
-            System.out.println("Item: " + img.getPath());
 
             JPanel itemPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
             JLabel item = img.generateJLabel();

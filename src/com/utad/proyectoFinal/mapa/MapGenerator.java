@@ -246,18 +246,21 @@ public class MapGenerator extends JPanel
         if (character.getCurrentPosition().equals(objective)) { return; }
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
         
+        boolean combatOccurred = false;
        
         if (objective.isOcupiedByCharacter())
         {
             BaseCharacter enemyCharacter = (BaseCharacter) objective.getOcupiedObject();
 
-            if (!character.getEsControlado() || !enemyCharacter.getEsControlado())
+            if ((!character.getEsControlado() || !enemyCharacter.getEsControlado()) && !MapController.getDisableMap())
             {
                 MapController.setDisableMap(true);
                 updateRendering(); // java te puto odio
 
-                CombatInterface combatInterface = new CombatInterface((CombatCharacter) character, (CombatCharacter) enemyCharacter);
+                CombatInterface combatInterface = new CombatInterface(character, enemyCharacter);
                 combatInterface.showInterface();
+
+                combatOccurred = false;
             }
         }
         else if (objective.isOcupiedByLoot())
@@ -272,7 +275,10 @@ public class MapGenerator extends JPanel
             character.move(objective);
         }
 
-        if (!character.getEsControlado()) { GameContext.getInstance().botTurn(character); }
+        // Only execute bot turn if no combat occurred
+        if (!combatOccurred) {
+            GameContext.getInstance().botTurn(character);
+        }
     }
 
     /**
