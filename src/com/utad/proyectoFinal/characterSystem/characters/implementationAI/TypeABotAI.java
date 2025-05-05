@@ -13,7 +13,9 @@ public class TypeABotAI extends BotAI {
         //pillar el camino hasta el objetivo, con la estrategia propuesta
         this.targets = MapGenerator.getInstance(0,0, 0, 0, null, null).getPathToObjective(bot.getCurrentPosition(), new ClosestLootStrategy());
         MapGenerator.getInstance(1280, 720, 3, 2, null, null).pathFindingDebug(targets);
-        this.currentStepTile = targets.get(1);
+
+
+        this.currentStepTile = (this.targets.size() <= 1 ? targets.get(0) : targets.get(1)); 
 
     }
 

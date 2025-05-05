@@ -28,7 +28,7 @@ public class TypeCBotAI extends BotAI {
         }
 
         if (targets != null && !targets.isEmpty()) {
-            this.currentStepTile = targets.get(1);
+            this.currentStepTile = (this.targets.size() <= 1 ? targets.get(0) : targets.get(1)); 
         }
 
         if(bot.getCurrentState() instanceof TiredState){

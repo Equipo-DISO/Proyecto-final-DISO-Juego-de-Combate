@@ -13,7 +13,7 @@ public class TypeBBotAI extends BotAI {
     public void analyzeSituation(Bot bot) {
         //same para Type B bot
         this.targets = MapGenerator.getInstance(0,0, 0, 0, null, null).getPathToObjective(bot.getCurrentPosition(), new ClosestEnemyStrategy());
-        this.currentStepTile = targets.get(1);
+        this.currentStepTile = (this.targets.size() <= 1 ? targets.get(0) : targets.get(1)); 
     }
 
 
