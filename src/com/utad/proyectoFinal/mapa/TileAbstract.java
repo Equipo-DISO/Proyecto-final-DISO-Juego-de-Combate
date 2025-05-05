@@ -127,7 +127,7 @@ public abstract class TileAbstract
         }
     }
 
-    protected void setSpecialImage(Image specialImage) { this.specialImage = specialImage; }
+    public void setSpecialImage(Image specialImage) { this.specialImage = specialImage; }
 
     @Override
     public String toString() 
