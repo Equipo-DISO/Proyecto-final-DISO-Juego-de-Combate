@@ -96,20 +96,6 @@ public abstract class AbstractAttackStrategy implements AttackStrategy {
         }
     }
 
-    /* -------------------- Métodos a implementar por hijos ------------------ */
-
-    @Override
-    public abstract double calculateDamage(BaseCharacter attacker);
-
-    @Override
-    public abstract int calculateManaCost();
-
-    @Override
-    public abstract boolean calculateHitSuccess(BaseCharacter attacker);
-
-    @Override
-    public abstract int calculateDurabilityCost();
-
     @Override
     public String getName() {
         return name;
