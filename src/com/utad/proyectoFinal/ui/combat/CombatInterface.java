@@ -7,6 +7,7 @@ import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
+import com.utad.proyectoFinal.mapa.MapController;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
@@ -79,7 +80,7 @@ public class CombatInterface extends JFrame implements Interface {
         actionsPanel.setBackground(Color.LIGHT_GRAY);
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        String[] actions = {"Ataque Liguero", "Ataque Potente", "Curarse (" + player.getHpPotions() + ")", "Concentrarse", "Huir"};
+        String[] actions = {"Ataque Ligero", "Ataque Potente", "Curarse (" + player.getHpPotions() + ")", "Concentrarse", "Huir"};
         for (int i = 0; i < actions.length; i++) {
             int actionIndex = i;
 
@@ -153,12 +154,19 @@ public class CombatInterface extends JFrame implements Interface {
         }
 
         updatePanels();
-
-        feedPanel.add(feedLine);
         feedPanel.revalidate();
         feedPanel.repaint();
 
         feedUpdated = true;
+        
+        //TODO: Esto es un conjunto de acciones al acabar la batalla, seguramente se deba llevar a otra clase
+        player.setFeedLogger(null);
+        enemy.setFeedLogger(null);
+
+        if (!player.isAlive() || !enemy.isAlive()) {
+            hideInterface();
+            MapController.setDisableMap(false);
+        }
     }
 
     public void updatePanels(){
