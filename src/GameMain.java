@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.util.List;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;

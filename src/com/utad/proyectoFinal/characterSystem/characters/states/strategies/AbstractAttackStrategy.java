@@ -25,7 +25,6 @@ public abstract class AbstractAttackStrategy implements AttackStrategy {
 
         int manaCost = calculateManaCost();
         if (attacker.getManaPoints() < manaCost) {
-            // TODO: Esto debería deshabilitar el ataque en la UI y lanzar un mensaje
             StringBuilder message = new StringBuilder(String.format("%s intenta %s pero no tiene suficiente maná (%d requerido).%n",
                     attacker.getName(), name, manaCost));
             System.out.printf(message.toString());

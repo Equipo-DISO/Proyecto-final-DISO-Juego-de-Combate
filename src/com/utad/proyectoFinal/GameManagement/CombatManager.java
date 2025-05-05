@@ -6,9 +6,6 @@ import com.utad.proyectoFinal.characterSystem.characters.states.strategies.Heavy
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.CombatActionType;
-import com.utad.proyectoFinal.characterSystem.characters.implementationAI.TypeABotAI;
-import com.utad.proyectoFinal.characterSystem.characters.implementationAI.TypeBBotAI;
-import com.utad.proyectoFinal.characterSystem.characters.implementationAI.TypeCBotAI;
 import com.utad.proyectoFinal.ui.combat.Action;
 import com.utad.proyectoFinal.ui.combat.CombatFeedLine;
 import com.utad.proyectoFinal.ui.combat.CombatInterface;
@@ -124,30 +121,6 @@ public class CombatManager {
      */
     private CombatActionType determineBotAction(Bot bot, CombatCharacter enemy) {
         return bot.getBotAI().decideCombatAction(bot);
-    }
-    
-    /**
-     * Gets a random combat action type for bots without specific AI implementation
-     * @param bot The bot character
-     * @return A random combat action type
-     */
-    private CombatActionType getRandomCombatAction(CombatCharacter bot) {
-        int action = (int)(Math.random() * 5);
-        
-        // If action is HEAL but no potions, change to LIGHT_ATTACK
-        if (action == CombatActionType.HEAL.getActionCode() && bot.getHpPotions() <= 0) {
-            action = CombatActionType.LIGHT_ATTACK.getActionCode();
-        }
-        
-        // Convert int to CombatActionType
-        switch (action) {
-            case 0: return CombatActionType.LIGHT_ATTACK;
-            case 1: return CombatActionType.HEAVY_ATTACK;
-            case 2: return CombatActionType.HEAL;
-            case 3: return CombatActionType.GAIN_MANA;
-            case 4: return CombatActionType.RETREAT;
-            default: return CombatActionType.LIGHT_ATTACK;
-        }
     }
     
     /**

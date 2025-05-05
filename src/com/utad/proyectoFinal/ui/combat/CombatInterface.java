@@ -5,10 +5,7 @@ import javax.swing.border.TitledBorder;
 
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
-import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
-import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
 import com.utad.proyectoFinal.gameManagement.CombatManager;
-import com.utad.proyectoFinal.gameManagement.GameContext;
 import com.utad.proyectoFinal.mapa.MapController;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;

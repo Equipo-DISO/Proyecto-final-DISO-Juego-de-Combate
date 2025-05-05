@@ -5,10 +5,6 @@ import java.util.List;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
-import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
-import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
-import com.utad.proyectoFinal.characterSystem.tools.items.HelmetType;
-import com.utad.proyectoFinal.characterSystem.tools.items.WeaponType;
 import com.utad.proyectoFinal.gameManagement.GameContext;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 

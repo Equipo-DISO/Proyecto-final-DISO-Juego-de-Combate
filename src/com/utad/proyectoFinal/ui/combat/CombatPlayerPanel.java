@@ -24,7 +24,7 @@ public class CombatPlayerPanel extends JPanel{
     private CombatCharacter character;
     private String name;
     private SimplifiedImage simplifiedImage;
-    private List<SimplifiedImage> inventory = new ArrayList();
+    private List<SimplifiedImage> inventory = new ArrayList<>();
     
     private int hp;
     private int hpMax;
