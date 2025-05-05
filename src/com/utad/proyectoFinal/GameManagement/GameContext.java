@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
 import com.utad.proyectoFinal.ui.podium.PodiumInterface;
 
 public class GameContext implements PushModelObserver {
@@ -13,6 +14,7 @@ public class GameContext implements PushModelObserver {
     private Integer personajesIniciales;
     private Integer personajesVivos;
     private LinkedList<String> personajesMuertos = new LinkedList<>();
+    private LinkedList<Bot> bots;
 
     public static GameContext getInstance() {
         if (instance == null) {
@@ -21,9 +23,17 @@ public class GameContext implements PushModelObserver {
         return instance;
     }
 
-    public void setInitialCharacters(Integer initialCharacters) {
+    public void setInitialCharacters(Integer initialCharacters, LinkedList<Bot> b) {
         this.personajesIniciales = initialCharacters;
         this.personajesVivos = initialCharacters;
+        this.bots = b;
+    }
+
+    public void botTurn()
+    {
+        this.bots.forEach(b -> {
+            b.BotMove();
+        });
     }
 
     @Override
