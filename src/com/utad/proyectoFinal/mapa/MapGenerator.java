@@ -4,7 +4,6 @@ package com.utad.proyectoFinal.mapa;
 import javax.swing.*;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
 import com.utad.proyectoFinal.characterSystem.tools.items.Consumable;
 import com.utad.proyectoFinal.gameManagement.GameContext;
@@ -243,10 +242,14 @@ public class MapGenerator extends JPanel
     */
     public void executeActionOnMove(BaseCharacter character, GenericTile objective)
     {
+        // Check for null current position which can happen after combat
+        if (character.getCurrentPosition() == null) { 
+            return; // Can't move to an occupied tile when position is null (character is dead)
+        }
+        
         if (character.getCurrentPosition().equals(objective)) { return; }
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
         
-       
         if (objective.isOcupiedByCharacter())
         {
             BaseCharacter enemyCharacter = (BaseCharacter) objective.getOcupiedObject();
