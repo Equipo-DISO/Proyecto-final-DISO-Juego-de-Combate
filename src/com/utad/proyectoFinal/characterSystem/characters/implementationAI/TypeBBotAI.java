@@ -1,13 +1,18 @@
 package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
-import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 import com.utad.proyectoFinal.characterSystem.characters.states.TiredState;
-import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
+
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
 
 public class TypeBBotAI extends BotAI {
+
+    // Threshold values for decision making
+    private static final double LOW_HEALTH_THRESHOLD = 0.25; // They are more willing to risk
+    private static final int HEAVY_ATTACK_MANA_NEEDED = 10;
+    private static final int LIGHT_ATTACK_MANA_NEEDED = DefaultAttributes.LOW_MANA_THRESHOLD;
 
     @Override
     public void analyzeSituation(Bot bot) {
@@ -65,12 +70,40 @@ public class TypeBBotAI extends BotAI {
         } catch (Exception e) {
             System.out.println("no hay mapa aun");
         }
-
-
-        /*if (targets != null && counter >= targets.size()) {
-            counter = 0;
-            currentStepTile = null;
-        */}
+    }
+    
+    /**
+     * Determines combat action for a TypeB bot (combat-focused)
+     * This bot type prioritizes:
+     * 1. Heavy attacks when possible (they prefer power)
+     * 2. Gaining mana to execute heavy attacks
+     * 3. Light attacks as fallback
+     * 4. Healing only when critically low
+     * 5. Almost never retreats
+     * @param bot The bot character
+     *
+     * @return The combat action type to perform
+     */ 
+    @Override
+    public CombatActionType decideCombatAction(Bot bot) {
+        // If critically low on health, consider healing
+        double healthRatio = (double) bot.getHealthPoints() / bot.getMaxHealthPoints();
+        if (healthRatio < LOW_HEALTH_THRESHOLD && bot.getHpPotions() > 0) {
+            return CombatActionType.HEAL;
+        }
+        
+        // If has enough mana for heavy attack, use it (preferred attack)
+        if (bot.getManaPoints() >= HEAVY_ATTACK_MANA_NEEDED) {
+            return CombatActionType.HEAVY_ATTACK;
+        }
+        
+        // If has enough mana for light attack, use it
+        if (bot.getManaPoints() >= LIGHT_ATTACK_MANA_NEEDED) {
+            return CombatActionType.LIGHT_ATTACK;
+        }
+        
+        // Otherwise, regenerate mana
+        return CombatActionType.GAIN_MANA;
     }
 
     /*public List<GenericTile> filtrarObjetivos(Bot bot, boolean priorizarItems) {
@@ -100,5 +133,6 @@ public class TypeBBotAI extends BotAI {
         return result;
         }
      */
+}
 
 
