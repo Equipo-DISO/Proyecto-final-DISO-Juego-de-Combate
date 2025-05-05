@@ -9,6 +9,7 @@ import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
 import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
 import com.utad.proyectoFinal.characterSystem.tools.items.HelmetType;
 import com.utad.proyectoFinal.characterSystem.tools.items.WeaponType;
+import com.utad.proyectoFinal.gameManagement.GameContext;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 
 public class MenuInterfaceMainExample {
@@ -30,9 +31,9 @@ public class MenuInterfaceMainExample {
         LinkedList<Bot> bots = interfaceMain.getBotList();
         BaseCharacter player = interfaceMain.getPlayerCharacter();
         
+        GameContext.getInstance().setInitialCharacters(bots.size() + 1);
+
         MapGenerator instance = MapGenerator.getInstance(1500, 0, 6, bots.size() + 1, bots, player);
         instance.displayMap();
-
-        
     }
 }

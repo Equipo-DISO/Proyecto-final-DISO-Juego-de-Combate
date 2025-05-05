@@ -7,6 +7,7 @@ import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
+import com.utad.proyectoFinal.gameManagement.GameContext;
 import com.utad.proyectoFinal.mapa.MapController;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;
@@ -127,6 +128,7 @@ public class CombatInterface extends JFrame implements Interface {
     private void action(int type){
 
         CombatFeedLine feedLine = new CombatFeedLine("");
+        Boolean isRunning = false;
         player.setFeedLogger(this);
         enemy.setFeedLogger(this);
 
@@ -145,7 +147,8 @@ public class CombatInterface extends JFrame implements Interface {
                 player.gainMana();
                 break;
             case 4:
-                if (player.retreat(enemy)) {
+                isRunning = player.retreat(enemy);
+                if (isRunning) {
                     feedLine.setNewLine("Retirado", Action.RUN);
                 }   
                 break;
@@ -163,7 +166,15 @@ public class CombatInterface extends JFrame implements Interface {
         player.setFeedLogger(null);
         enemy.setFeedLogger(null);
 
-        if (!player.isAlive() || !enemy.isAlive()) {
+        if (!player.isAlive() || !enemy.isAlive() || isRunning) {
+
+            if (!player.isAlive()) {
+                GameContext.getInstance().playerKilled(enemy);
+            } else if (!enemy.isAlive()) {
+                GameContext.getInstance().characterKilled(enemy);
+            }
+
+
             hideInterface();
             MapController.setDisableMap(false);
         }
