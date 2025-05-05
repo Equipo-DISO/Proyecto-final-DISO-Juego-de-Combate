@@ -2,6 +2,8 @@ package com.utad.proyectoFinal.mapa;
 
 import java.awt.*;
 
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+
 
 public class GenericTile extends TileAbstract
 {
@@ -65,15 +67,22 @@ public class GenericTile extends TileAbstract
             graphics2d.fillPolygon(side);
         }
 
+      
         DecoratingHexagon specialGrass = new DecoratingHexagon(super.posX, super.posY + 4, super.tileId, false);
-        specialGrass.setColor(new Color(118, 184, 58));
         specialGrass.setStrokeWidth(6);
         specialGrass.setRadious(super.radious - 4);
-        specialGrass.drawTile(graphics2d);
+        
+        if (super.isOcupiedByCharacter() && !((BaseCharacter) super.ocupiedObject).getEsControlado()) 
+        { specialGrass.setColor(new Color(192, 43, 43, 150));}
+        else { specialGrass.setColor(new Color(118, 184, 58)); }
 
+        specialGrass.drawTile(graphics2d);
        
-           
-        graphics2d.setColor(this.color); 
+        if (super.isOcupiedByCharacter() && !((BaseCharacter) super.ocupiedObject).getEsControlado()) 
+        {  graphics2d.setColor(new Color(202, 53, 43));}
+        else {  graphics2d.setColor(this.color); }
+
+        
         graphics2d.fillPolygon(super.hexagon);
 
         super.drawImage(graphics2d);
@@ -84,6 +93,8 @@ public class GenericTile extends TileAbstract
             graphics2d.fillPolygon(super.hexagon);
             graphics2d.drawPolygon(super.hexagon);  
         }
+
+       
     }
 
     public void setDebugColor(Color c)

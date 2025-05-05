@@ -1,8 +1,10 @@
 package com.utad.proyectoFinal.mapa;
 
 import java.awt.*;
-import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 
+
+
+import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 
 
 public abstract class TileAbstract 
@@ -71,7 +73,20 @@ public abstract class TileAbstract
        {
             if (this.specialImage != null)
             {
-                graphics2d.drawImage(this.specialImage, imageX, imageY, TileAbstract.IMAGE_WIDTH, TileAbstract.IMAGE_HEIGHT, null);
+                Float scaleFactor = (float)TileAbstract.IMAGE_HEIGHT / (float)this.specialImage.getHeight(null);
+                Integer scaledWidth = (int)(this.specialImage.getWidth(null) * scaleFactor);
+                Integer scaledHeight = TileAbstract.IMAGE_HEIGHT;
+
+                Integer finalX = imageX + this.ocupiedObject.getRenderParameters().getOffsetX();
+                Integer finalY = imageY + this.ocupiedObject.getRenderParameters().getOffsetY();
+                Integer finalWidth = (int)(scaledWidth * this.ocupiedObject.getRenderParameters().getScaleX());
+                Integer finalHeight = (int)(scaledHeight * this.ocupiedObject.getRenderParameters().getScaleY());
+
+                
+                // yo bro u know what i mean dude
+                // this guys dont know what br br patapim is
+                // this gays arent the real gggsssssss broooo
+                graphics2d.drawImage(this.specialImage, finalX, finalY, finalWidth, finalHeight, null);
             }
 	   } 
        catch (Exception e) 
@@ -112,7 +127,7 @@ public abstract class TileAbstract
         }
     }
 
-    protected void setSpecialImage(Image specialImage) { this.specialImage = specialImage; }
+    public void setSpecialImage(Image specialImage) { this.specialImage = specialImage; }
 
     @Override
     public String toString() 

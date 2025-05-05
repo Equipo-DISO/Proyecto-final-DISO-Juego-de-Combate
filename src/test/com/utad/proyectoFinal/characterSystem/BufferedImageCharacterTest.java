@@ -15,10 +15,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
-import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
-import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
-import com.utad.proyectoFinal.characterSystem.tools.HelmetType;
-import com.utad.proyectoFinal.characterSystem.tools.WeaponType;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
+import com.utad.proyectoFinal.characterSystem.tools.items.HelmetType;
+import com.utad.proyectoFinal.characterSystem.tools.items.WeaponType;
 
 /**
  * Test class that demonstrates character equipment visualization using Image

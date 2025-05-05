@@ -5,6 +5,10 @@ import javax.swing.border.TitledBorder;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
+import com.utad.proyectoFinal.gameManagement.GameContext;
+import com.utad.proyectoFinal.mapa.MapController;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
@@ -23,6 +27,12 @@ public class CombatInterface extends JFrame implements Interface {
     JPanel feedPanel = new JPanel();
     private JScrollPane scrollPane;
     private boolean feedUpdated = false;
+
+    private CombatCharacter player;
+    private CombatCharacter enemy;
+
+    private CombatPlayerPanel playerPanel;
+    private CombatPlayerPanel enemyPanel;
     
     public CombatInterface(CombatCharacter player, CombatCharacter enemy){
         this(player, enemy, "Juego de Combate - Pelea en curso");
@@ -31,6 +41,9 @@ public class CombatInterface extends JFrame implements Interface {
         this(player, enemy, title, 1000, 500);
     }
     public CombatInterface(CombatCharacter player, CombatCharacter enemy, String title, Integer width, Integer height){
+
+        this.player = player;
+        this.enemy = enemy;
 
         setTitle(title);
         setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
@@ -42,11 +55,11 @@ public class CombatInterface extends JFrame implements Interface {
         setLayout(new BorderLayout());
 
         // Player
-        JPanel playerPanel = new CombatPlayerPanel(player, JLabel.LEFT);
+        playerPanel = new CombatPlayerPanel(player, JLabel.LEFT);
         add(playerPanel, BorderLayout.WEST);
 
         // Enemy
-        JPanel enemyPanel = new CombatPlayerPanel(enemy, JLabel.RIGHT);
+        enemyPanel = new CombatPlayerPanel(enemy, JLabel.RIGHT);
         add(enemyPanel, BorderLayout.EAST);
 
         // Feed
@@ -68,7 +81,7 @@ public class CombatInterface extends JFrame implements Interface {
         actionsPanel.setBackground(Color.LIGHT_GRAY);
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        String[] actions = {"Ataque Liguero", "Ataque Potente", "Curarse (x)", "Concentrarse", "Huir"};
+        String[] actions = {"Ataque Ligero", "Ataque Potente", "Curarse (" + player.getHpPotions() + ")", "Concentrarse", "Huir"};
         for (int i = 0; i < actions.length; i++) {
             int actionIndex = i;
 
@@ -77,7 +90,11 @@ public class CombatInterface extends JFrame implements Interface {
             actionButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    action(actionIndex + 1);
+                    action(actionIndex);
+
+                    if (actionIndex == 2) {
+                        actionButton.setText("Curarse (" + player.getHpPotions() + ")");
+                    }
                 }
             });
             actionsPanel.add(actionButton);
@@ -111,32 +128,74 @@ public class CombatInterface extends JFrame implements Interface {
     private void action(int type){
 
         CombatFeedLine feedLine = new CombatFeedLine("");
+        Boolean isRunning = false;
+        player.setFeedLogger(this);
+        enemy.setFeedLogger(this);
 
         switch (type) {
+            case 0:
+                player.attack(enemy, new LightAttackStrategy());
+                break;
             case 1:
-                feedLine.setNewLine("Ataque Liguero", Action.ATACK);
+                player.attack(enemy, new HeavyAttackStrategy());
                 break;
             case 2:
-                feedLine.setNewLine("Ataque Potente", Action.ATACK);
+                feedLine.setNewLine("Curarse (" + player.getHpPotions() + ")", Action.HEAL);
+                player.heal();
                 break;
             case 3:
-                feedLine.setNewLine("Curarse (x)", Action.HEAL);
+                player.gainMana();
                 break;
             case 4:
-                feedLine.setNewLine("Concentrarse", Action.CONCENTRATE);
-                break;
-            case 5:
-                feedLine.setNewLine("Huir", Action.RUN);
+                isRunning = player.retreat(enemy);
+                if (isRunning) {
+                    feedLine.setNewLine("Retirado", Action.RUN);
+                }   
                 break;
             default:
                 System.out.println("Error");
         }
 
-        feedPanel.add(feedLine);
+        updatePanels();
         feedPanel.revalidate();
         feedPanel.repaint();
 
-        feedUpdated = true;
+        this.feedUpdated = true;
+        
+        //TODO: Esto es un conjunto de acciones al acabar la batalla, seguramente se deba llevar a otra clase
+        player.setFeedLogger(null);
+        enemy.setFeedLogger(null);
+
+        if (!player.isAlive() || !enemy.isAlive() || isRunning) {
+
+            if (!player.isAlive()) {
+                GameContext.getInstance().playerKilled(enemy);
+            } else if (!enemy.isAlive()) {
+                GameContext.getInstance().characterKilled(enemy);
+            }
+
+
+            hideInterface();
+            MapController.setDisableMap(false);
+        }
+    }
+
+    public void updatePanels(){
+        playerPanel.getInventoryImages();
+        playerPanel.setInventory();
+        playerPanel.revalidate();
+        playerPanel.repaint();
+        
+        enemyPanel.getInventoryImages();
+        enemyPanel.setInventory();
+        enemyPanel.revalidate();
+        enemyPanel.repaint();
+
+        playerPanel.updateValues(player.getHealthPoints(), player.getManaPoints());
+        enemyPanel.updateValues(enemy.getHealthPoints(), enemy.getManaPoints());
+
+        revalidate();
+        repaint();
     }
 
     // FEED FUNCTIONS 
@@ -153,25 +212,17 @@ public class CombatInterface extends JFrame implements Interface {
         feedPanel.repaint();
     }
 
-    // ON MAIN FUNCTIONS
-    public void waitTillClose(){
-        while (isVisible()){
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            if (feedUpdated) slideBottom();
-        }
+    public Boolean getFeedUpdated(){
+        return this.feedUpdated;
     }
-    private void slideBottom() {
+
+    public void slideBottom() {
         scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
         feedPanel.revalidate();
         feedPanel.repaint();
 
         System.out.println("scroll");
-        feedUpdated = false;
+        this.feedUpdated = false;
     }
 }
 

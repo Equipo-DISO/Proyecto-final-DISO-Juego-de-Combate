@@ -1,4 +1,4 @@
-package com.utad.proyectoFinal.characterSystem.tools;
+package com.utad.proyectoFinal.characterSystem.tools.items;
 
 public enum WeaponType {
     // Define weapon types with their attributes

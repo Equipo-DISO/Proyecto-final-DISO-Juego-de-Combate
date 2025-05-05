@@ -13,6 +13,7 @@ public class MapListener extends MouseAdapter
     private MapGenerator map;
    
     private Point dragStart;
+    private long clickTime;
     private Integer dx = 0;
     private Integer dy = 0;
 
@@ -31,13 +32,14 @@ public class MapListener extends MouseAdapter
     {
         if (MapController.getDisableMap()) return;
         this.dragStart = e.getPoint();
+        this.clickTime = e.getWhen();
     }
     
     @Override
     public void mouseDragged(MouseEvent e) 
     {
         if (MapController.getDisableMap() || this.dragStart == null) return;
-        if (!SwingUtilities.isLeftMouseButton(e)) return;
+        if (!SwingUtilities.isRightMouseButton(e)) return;
         
         
         Point current = e.getPoint();
@@ -53,13 +55,43 @@ public class MapListener extends MouseAdapter
     
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (SwingUtilities.isLeftMouseButton(e)){
+
+            TileAbstract initialTile = null;
+            Point p = adjustPoint(dragStart);
+            for (TileAbstract t : tiles)
+            { if (t.contains(p.x, p.y)) initialTile = t; }
+
+            if (initialTile != null) 
+            {
+                if (e.getWhen() - clickTime < 200) 
+                {
+                    this.map.executeActionOnMove(this.map.getPlayer(), (GenericTile) initialTile);
+                } 
+                else // Si no, es un drag y comprobar
+                {
+                    Point p2 = adjustPoint(e.getPoint());
+                    for (TileAbstract t : tiles)
+                    {
+                        if (t.contains(p2.x, p2.y))
+                        if (t == initialTile){
+                            this.map.executeActionOnMove(this.map.getPlayer(), (GenericTile) t);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         this.dragStart = null; // Limpiamos al soltar el mouse
+
     }
 
     @Override
     public void mouseClicked(MouseEvent e) 
     {
         if (MapController.getDisableMap()) { return; }
+        if (!SwingUtilities.isLeftMouseButton(e)) return;
 
         Point p = adjustPoint(e.getPoint());
         for (TileAbstract t : tiles) 
@@ -67,7 +99,7 @@ public class MapListener extends MouseAdapter
             if (t.contains(p.x, p.y)) 
             {
                 this.map.executeActionOnMove(this.map.getPlayer(), (GenericTile) t);
-                this.map.pathFindingDebug(this.map.getPathToObjective(this.map.getPlayer().getCurrentPosition(), new ClosestEnemyStrategy()));
+                //this.map.pathFindingDebug(this.map.getPathToObjective(this.map.getPlayer().getCurrentPosition(), new ClosestLootStrategy()));
                 //System.out.println("Has clicado la tile en: " + t.getTileId());
                 break;
             }

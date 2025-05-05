@@ -85,20 +85,20 @@ public class MapController implements PushModelObserver
    
     private void createMouseMovementTip(Graphics2D g2d)
     {
-        Integer boxWidth = 250;
-        Integer boxHeight = 60;
+        Integer boxWidth = 290;
+        Integer boxHeight = 75;
 
         Integer boxX = this.viewPortX + (this.screenSizeX - boxWidth) / 2;
         Integer boxY = this.viewPortY + this.screenSizeY - boxHeight - 20;
 
-
+        
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
         g2d.setColor(Color.DARK_GRAY); 
         g2d.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 20, 20);
 
-        
-        
-       createText(g2d, boxX + 20, boxY + 35, "Hold left click to move", 20f);
+       
+        createText(g2d, boxX + 24, boxY + 30, "Hold MBR to change view", 20f);
+        createText(g2d, boxX + 18, boxY + 55, "MBL on tile to move player", 20f);
     }
 
     private void createPlayerCounter(Graphics2D g2d)

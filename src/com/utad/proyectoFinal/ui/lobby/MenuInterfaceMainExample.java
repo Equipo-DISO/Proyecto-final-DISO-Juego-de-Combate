@@ -5,6 +5,11 @@ import java.util.List;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
+import com.utad.proyectoFinal.characterSystem.tools.items.HelmetType;
+import com.utad.proyectoFinal.characterSystem.tools.items.WeaponType;
+import com.utad.proyectoFinal.gameManagement.GameContext;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 
 public class MenuInterfaceMainExample {
@@ -15,7 +20,6 @@ public class MenuInterfaceMainExample {
 
         List<String> data = interfaceMain.getData();
         
-
         // Primer elemento de la lista es el jugador humano
         // Los siguientes elementos son los bots
         for (String element : data) {
@@ -26,11 +30,9 @@ public class MenuInterfaceMainExample {
 
         LinkedList<Bot> bots = interfaceMain.getBotList();
         BaseCharacter player = interfaceMain.getPlayerCharacter();
-
-        player.equipWeapon(new com.utad.proyectoFinal.characterSystem.tools.BaseWeapon(com.utad.proyectoFinal.characterSystem.tools.WeaponType.SPEAR));
-        player.equipHelmet(new com.utad.proyectoFinal.characterSystem.tools.BaseHelmet(com.utad.proyectoFinal.characterSystem.tools.HelmetType.DEMON_HELMET));
-
         
+        GameContext.getInstance().setInitialCharacters(bots.size() + 1);
+
         MapGenerator instance = MapGenerator.getInstance(1500, 0, 6, bots.size() + 1, bots, player);
         instance.displayMap();
     }

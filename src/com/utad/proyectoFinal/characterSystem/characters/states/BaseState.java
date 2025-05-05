@@ -2,8 +2,9 @@ package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
-import com.utad.proyectoFinal.characterSystem.tools.Calculator;
+import com.utad.proyectoFinal.gameManagement.Calculator;
 import com.utad.proyectoFinal.mapa.GenericTile;
+import com.utad.proyectoFinal.ui.combat.Action;
 import test.com.utad.proyectoFinal.characterSystem.TestUtils;
 
 public abstract class BaseState implements CharacterState {
@@ -60,6 +61,12 @@ public abstract class BaseState implements CharacterState {
     }
 
     @Override
+    public void handleGainMana() {
+        // Implementación por defecto (puede ser vacía o lanzar una excepción)
+        throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
+    }
+    
+    @Override
     public void updateState() {
         // In testing mode, don't transition automatically
         if (isTestingMode()) {
@@ -84,7 +91,11 @@ public abstract class BaseState implements CharacterState {
         // Si el personaje está retirándose y la retirada fue exitosa, evita todo el daño
         if (character.getCurrentState() instanceof RetreatingState && character.isRetreatSuccessful()) {
             finalDamage = 0.0;
-            System.out.println(character.getName() + " ha evitado el ataque con éxito");
+            StringBuilder message = new StringBuilder(character.getName() + " ha evitado el ataque con éxito");
+            System.out.println(message);
+            if (character.getFeedLogger() != null) {
+                character.getFeedLogger().addFeedLine(message.toString(), Action.PROTECTED);
+            }
         } else {
             // Aplicar reducción por casco usando Calculator
             finalDamage = Calculator.getInstance().calculateHelmetReduction(character, finalDamage);
@@ -93,20 +104,33 @@ public abstract class BaseState implements CharacterState {
         int actualDamage = (int) finalDamage;
         character.reduceHealth(actualDamage);
 
-        System.out.println(character.getName() + " ha recibido un ataque de " + damage.intValue() +
-                " puntos pero gracias a su casco y defensa ha recibido " + actualDamage + " de daño");
-
+        if (character.getHelmet() != null) {
+            StringBuilder damageMessage = new StringBuilder(character.getName() + " ha recibido un ataque pero gracias a su casco ha recibido "
+             + actualDamage + " de daño");
+            System.out.println(damageMessage);
+            if (character.getFeedLogger() != null) {
+                character.getFeedLogger().addFeedLine(damageMessage.toString(), Action.ATACK);
+            }
+        }
 
         if (character.getHelmet() != null) {
             character.getHelmet().decreaseDurability();
             if (character.getHelmet().getDurability() <= 0) {
-                System.out.println("El casco de " + character.getName() + " se ha roto");
+                StringBuilder helmetBreakMessage = new StringBuilder("El casco de " + character.getName() + " se ha roto");
+                System.out.println(helmetBreakMessage);
+                if (character.getFeedLogger() != null) {
+                    character.getFeedLogger().addFeedLine(helmetBreakMessage.toString(), Action.BREAK);
+                }
                 character.setHelmet(null);
             }
         }
 
         if (!character.isAlive()) {
-            System.out.println(character.getName() + " ha sido derrotado en combate");
+            StringBuilder defeatMessage = new StringBuilder(character.getName() + " ha sido derrotado en combate");
+            System.out.println(defeatMessage);
+            if (character.getFeedLogger() != null) {
+                character.getFeedLogger().addFeedLine(defeatMessage.toString(), Action.BREAK);
+            }
         }
 
         updateState();

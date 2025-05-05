@@ -1,9 +1,10 @@
 package com.utad.proyectoFinal.characterSystem.characters;
 
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
-import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
-import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
 import com.utad.proyectoFinal.mapa.GenericTile;
+import com.utad.proyectoFinal.ui.combat.CombatInterface;
 
 import java.awt.Image;
 
@@ -27,7 +28,8 @@ public interface CombatCharacter {
     boolean retreat(CombatCharacter opponent);
     void heal();
     void move(GenericTile moveToTile);
-    
+    void gainMana();
+        
     // Equipment management
     void equipWeapon(BaseWeapon weapon);
     void equipHelmet(BaseHelmet helmet);
@@ -53,4 +55,7 @@ public interface CombatCharacter {
     // Paths
     String getBaseImagePath();
     void setBaseImagePath(String baseImagePath);
+
+    // Feed Logger
+    void setFeedLogger(CombatInterface combatInterface);
 }

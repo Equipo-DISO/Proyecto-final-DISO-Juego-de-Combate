@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
-import com.utad.proyectoFinal.characterSystem.tools.RandomItemFactory;
+import com.utad.proyectoFinal.characterSystem.tools.factory.RandomItemFactory;
 import com.utad.proyectoFinal.gameManagement.PushModelObserver;
 
 
@@ -35,7 +35,6 @@ public class NormalTileFactory extends TileFactory
     @Override
     public TileAbstract generateRandomTile(Integer x, Integer y, Integer tileId) 
     {
-        // TODO: hay que meter las factorias
         TileAbstract tile;
     
         Double spawnProbability = (double) super.numberOfSpawns / super.totalNumberOfTiles ;
@@ -54,6 +53,7 @@ public class NormalTileFactory extends TileFactory
             else
             {
                 BaseCharacter bot = super.bots.pop();
+                bot.setCurrentPosition((GenericTile) tile);
                 tile.setOcupiedObject(bot);
                 bot.addObserver(super.obs);
             }

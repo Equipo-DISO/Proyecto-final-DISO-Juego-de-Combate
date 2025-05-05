@@ -1,13 +1,16 @@
-package com.utad.proyectoFinal.characterSystem.tools;
+package com.utad.proyectoFinal.characterSystem.tools.items;
 
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.mapa.MapObject;
+import com.utad.proyectoFinal.mapa.RenderParameters;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class BaseHelmet implements MapObject {
+public class BaseHelmet implements MapObject, Consumable {
 
     private String name;
     private Double defense;
@@ -82,5 +85,17 @@ public class BaseHelmet implements MapObject {
 
     public String getImagePath() {
         return imagePath;
+    }
+
+    @Override
+    public boolean consume(CombatCharacter character) {
+        // Usa el método específico para mejorar la defensa
+        character.equipHelmet(this);
+        return true;
+    }
+
+    @Override
+    public RenderParameters getRenderParameters() {
+        return new RenderParameters(-10, 0, 0.8, 0.8);
     }
 }

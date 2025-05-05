@@ -1,10 +1,17 @@
-package com.utad.proyectoFinal.characterSystem.tools;
+package com.utad.proyectoFinal.characterSystem.tools.items;
 
+import com.utad.proyectoFinal.characterSystem.tools.factory.RandomItemFactory;
 import com.utad.proyectoFinal.mapa.MapObject;
+import com.utad.proyectoFinal.mapa.RenderParameters;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 public class Chest implements MapObject {
 
@@ -32,6 +39,17 @@ public class Chest implements MapObject {
 
     @Override
     public Image getImage() {
-        return null;
+        try {
+            return ImageIO.read(new File("Files/img/Cofre.png"));
+        } catch (IOException e) {
+            System.err.println("Error loading upgrade mana potion image: " + e.getMessage());
+            // Return a small blank image as fallback
+            return new BufferedImage(30, 30, BufferedImage.TYPE_INT_ARGB);
+        }
+    }
+
+    @Override
+    public RenderParameters getRenderParameters() {
+        return new RenderParameters();
     }
 }

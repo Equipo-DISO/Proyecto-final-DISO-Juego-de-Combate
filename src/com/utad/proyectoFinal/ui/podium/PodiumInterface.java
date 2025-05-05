@@ -36,6 +36,7 @@ public class PodiumInterface extends JFrame implements Interface{
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centrar la ventana en la pantalla
+        setResizable(false);
 
         setLayout(new BorderLayout());
 
@@ -216,16 +217,6 @@ public class PodiumInterface extends JFrame implements Interface{
     @Override
     public void hideInterface() {
         setVisible(false);
-    }
-    @Override
-    public void waitTillClose() {
-        while (isVisible()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
     
     @Override

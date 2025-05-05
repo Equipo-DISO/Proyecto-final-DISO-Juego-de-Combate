@@ -4,10 +4,13 @@ import com.utad.proyectoFinal.GameManagement.PushModelObserver;
 import com.utad.proyectoFinal.characterSystem.characters.states.CharacterState;
 import com.utad.proyectoFinal.characterSystem.characters.states.StatesList;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
-import com.utad.proyectoFinal.characterSystem.tools.BaseHelmet;
-import com.utad.proyectoFinal.characterSystem.tools.BaseWeapon;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseHelmet;
+import com.utad.proyectoFinal.characterSystem.tools.items.BaseWeapon;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapObject;
+import com.utad.proyectoFinal.mapa.RenderParameters;
+import com.utad.proyectoFinal.ui.combat.CombatInterface;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,9 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
 
     // Atributos de posicionamiento
     protected GenericTile currentPosition;
+
+    // Atributos de feed
+    protected CombatInterface combatInterface;
 
     // Comportamiento
     protected Boolean esControlado; // Indica si es controlado por IA
@@ -261,6 +267,8 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         return states;
     }
 
+    
+
     // ------- Getters y setters de atributos simples -------
 
     public String getName() {
@@ -323,6 +331,11 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         currentState.handleMove(moveToTile);
     }
 
+    @Override 
+    public void gainMana() {
+        this.currentState.handleGainMana();
+    }
+
     @Override
     public void equipWeapon(BaseWeapon weapon) {
         this.setWeapon(weapon);
@@ -340,6 +353,16 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         } else {
             return "No State";
         }
+    }
+
+    @Override
+    public void setFeedLogger(CombatInterface combatInterface) {
+        this.combatInterface = combatInterface;
+    }   
+
+    // Getter for combatInterface
+    public CombatInterface getFeedLogger() {
+        return this.combatInterface;
     }
 
     // ------- Observer pattern management methods -------
@@ -372,5 +395,11 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
     @Override
     public String getBaseImagePath() {
         return this.visualizer.getBaseImagePath();
+    }
+
+    @Override
+    public RenderParameters getRenderParameters() 
+    {
+        return new RenderParameters(-10, -25, 1.2, 1.2);
     }
 }
