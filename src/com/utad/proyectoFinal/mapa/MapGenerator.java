@@ -7,6 +7,7 @@ import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
 import com.utad.proyectoFinal.characterSystem.tools.items.Consumable;
+import com.utad.proyectoFinal.gameManagement.GameContext;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 import com.utad.proyectoFinal.ui.combat.CombatInterface;
 
@@ -270,6 +271,8 @@ public class MapGenerator extends JPanel
         {
             character.move(objective);
         }
+
+        GameContext.getInstance().botTurn();
     }
 
     /**

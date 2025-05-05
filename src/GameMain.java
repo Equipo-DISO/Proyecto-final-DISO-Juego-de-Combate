@@ -25,7 +25,7 @@ public class GameMain
         player.addObserver(gameContext);
         bots.forEach(b -> { b.addObserver(gameContext); });
 
-        gameContext.setInitialCharacters(bots.size() + 1);
+        gameContext.setInitialCharacters(bots.size() + 1, bots);
 
         MapGenerator instance = MapGenerator.getInstance(1500, 0, 6, bots.size() + 1, bots, player);
         instance.displayMap();    
