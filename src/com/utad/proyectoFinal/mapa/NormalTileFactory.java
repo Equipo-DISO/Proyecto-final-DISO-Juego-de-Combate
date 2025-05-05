@@ -53,6 +53,7 @@ public class NormalTileFactory extends TileFactory
             else
             {
                 BaseCharacter bot = super.bots.pop();
+                bot.setCurrentPosition((GenericTile) tile);
                 tile.setOcupiedObject(bot);
                 bot.addObserver(super.obs);
             }

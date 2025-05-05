@@ -60,6 +60,7 @@ public class MapListener extends MouseAdapter
     public void mouseClicked(MouseEvent e) 
     {
         if (MapController.getDisableMap()) { return; }
+        if (!SwingUtilities.isRightMouseButton(e)) return;
 
         Point p = adjustPoint(e.getPoint());
         for (TileAbstract t : tiles) 
