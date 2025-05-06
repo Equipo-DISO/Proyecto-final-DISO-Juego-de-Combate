@@ -53,8 +53,10 @@ public class GameContext implements PushModelObserver {
     }
 
     public void playerKilled(CombatCharacter character) {
-        podium = new PodiumInterface(personajesIniciales, personajesVivos, character.getName(), personajesMuertos);
-        podium.showInterface();
+        if (podium == null){
+            podium = new PodiumInterface(personajesIniciales, personajesVivos, character.getName(), personajesMuertos);
+            podium.showInterface();
+        }
     }
 
     public void characterKilled(CombatCharacter character) {
