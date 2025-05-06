@@ -21,7 +21,10 @@ public class AttackingState extends BaseState {
     public void handleAttack(BaseCharacter opponent, AttackStrategy attackStrategy) {
         currentStrategy = attackStrategy;
 
-        executeAttack(opponent);
+        if (character.isAlive() && opponent.isAlive())
+        {
+            executeAttack(opponent);
+        }
     }
     
     /**
@@ -29,7 +32,7 @@ public class AttackingState extends BaseState {
      * @param opponent The target character to attack
      */
     private void executeAttack(BaseCharacter opponent) {
-        if (currentStrategy != null) {
+        if (currentStrategy != null && !character.equals(opponent)) {
             currentStrategy.execute(character, opponent);
             updateState();
         }

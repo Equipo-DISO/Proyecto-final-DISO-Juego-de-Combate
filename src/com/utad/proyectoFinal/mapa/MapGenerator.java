@@ -20,7 +20,7 @@ import java.util.LinkedList;
 public class MapGenerator extends JPanel 
 {
     public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.45d;
-    public static final Double DEFAULT_LOOT_PROBABILITY = 0.23d;
+    public static final Double DEFAULT_LOOT_PROBABILITY = 0.28d;
 
 
     private TileFactory factory;
@@ -242,11 +242,8 @@ public class MapGenerator extends JPanel
     */
     public void executeActionOnMove(BaseCharacter character, GenericTile objective)
     {
-        // Check for null current position which can happen after combat
-        if (character.getCurrentPosition() == null) { 
-            return; // Can't move to an occupied tile when position is null (character is dead)
-        }
-        
+        if (!character.isAlive()) { return; }
+        if (character.getCurrentPosition() == null) { return; }
         if (character.getCurrentPosition().equals(objective)) { return; }
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
         
@@ -257,8 +254,13 @@ public class MapGenerator extends JPanel
             // Si Julbez lo tiene que quitar que lo quite,
             // pero en principio evita que se te abra el menu de combate
             // con un muerto y ademas se puede usar para ocultar las tumbas
-            if (!character.isAlive() || !enemyCharacter.isAlive()){
+            if (!character.isAlive() || !enemyCharacter.isAlive())
+            {
                 // hide tomb images
+                System.out.println("calvo " + character.isAlive() + " " + character.getName() + " | " + enemyCharacter.isAlive() + " " + enemyCharacter.getName());
+
+                if (!character.isAlive()) { character.setCurrentPosition(null); }
+                if (!enemyCharacter.isAlive()) { character.setCurrentPosition(null); }
             }
             else if ((!character.getEsControlado() || !enemyCharacter.getEsControlado()) && !MapController.getDisableMap())
             {
