@@ -25,9 +25,6 @@ public class PodiumInterface extends JFrame implements Interface{
 
     JPanel killPanel;
 
-    private Random random = new Random();
-    private int correctButton;
-
     public PodiumInterface(Integer playersLeft, Integer playersTotal, String killer){
         this(playersLeft, playersTotal, killer, new LinkedList<String>());
     }
@@ -103,67 +100,25 @@ public class PodiumInterface extends JFrame implements Interface{
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
         // Exit button
-        JButton exit1 = new JButton("Salir");
-        exit1.setPreferredSize(new Dimension(120, 50));
-        exit1.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        exit1.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
-        exit1.setFocusable(false);
+        JButton exitButton = new JButton("Salir");
+        exitButton.setPreferredSize(new Dimension(150, 50));
+        exitButton.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+        exitButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+        exitButton.setFocusable(false);
 
-        exit1.addMouseListener(new java.awt.event.MouseAdapter() {
+        exitButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                exit1.setBackground(Color.LIGHT_GRAY);
+                exitButton.setBackground(Color.LIGHT_GRAY);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                exit1.setBackground(null);
+                exitButton.setBackground(null);
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                actionButton(0); // Restart game
+                quit(); // Restart game
             }
         });
 
-        bottomPanel.add(exit1);
-
-        // Lobby button
-        JButton exit2 = new JButton("Salir");
-        exit2.setPreferredSize(new Dimension(120, 50));
-        exit2.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        exit2.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
-        exit2.setFocusable(false);
-
-        exit2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                exit2.setBackground(Color.LIGHT_GRAY);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                exit2.setBackground(null);
-            }
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                actionButton(1); // Restart game
-            }
-        });
-
-        bottomPanel.add(exit2);
-
-        // Restart button
-        JButton exit3 = new JButton("Salir");
-        exit3.setPreferredSize(new Dimension(120, 50));
-        exit3.setFont(new Font(Font.DIALOG, Font.BOLD,  16));
-        exit3.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
-        exit3.setFocusable(false);
-
-        exit3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                exit3.setBackground(Color.LIGHT_GRAY);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                exit3.setBackground(null);
-            }
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                actionButton(2); // Restart game
-            }
-        });
-
-        bottomPanel.add(exit3);
+        bottomPanel.add(exitButton);
 
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
         add(mainPanel, BorderLayout.CENTER);
@@ -192,18 +147,11 @@ public class PodiumInterface extends JFrame implements Interface{
         }
 
         add(killPanel, BorderLayout.EAST);
-
-        correctButton = random.nextInt(3);
     }
 
-    public void actionButton(int action) {
-        System.out.println(correctButton);
-
-        if (action == correctButton) { 
-            dispose(); 
-            System.exit(0);
-        }
-        else correctButton = random.nextInt(3); // Cambiar el botón correcto
+    public void quit() {
+        dispose();
+        System.exit(0);
     }
 
     public void updateKillList(LinkedList<String> kills) {
@@ -248,11 +196,10 @@ public class PodiumInterface extends JFrame implements Interface{
     }
 
     
-
     /*
-    
+
     TESTING
-    
+
     public static void main(String[] args) {
         LinkedList<String> killList = new LinkedList<String>();
         String[] names = {"Pepe", "Juan", "Paco", "Luis", "Javier", "AntonioLuisitoLuisitoLuisitoLuisitoLuisito", "Manuel"};
