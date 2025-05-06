@@ -172,9 +172,7 @@ public class CombatInterface extends JFrame implements Interface {
             hideInterface();
             return;
         }
-
-        // Handle bot turn if the battle is still going
-        handleBotTurn();
+        else handleBotTurn(); // fix exception creo
     }
     
     // Bot turn handling
