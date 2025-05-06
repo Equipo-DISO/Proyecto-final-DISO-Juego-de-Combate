@@ -1,12 +1,12 @@
 package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
+import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 
 public class Bot extends BaseCharacter {
 
     private static final String BOTNAME = "B.O.T";
-    private static final Double ATTACK = 10.00;
     private BotActionType botActionType;
     private BotAI botAi;
 
@@ -17,7 +17,7 @@ public class Bot extends BaseCharacter {
     }
 
     public Bot(String name) {
-        this(name, ATTACK);
+        this(name, DefaultAttributes.ATTACK);
     }
 
     public Bot(String name, Double baseAttack) {
