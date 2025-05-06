@@ -251,21 +251,24 @@ public class MapGenerator extends JPanel
         {
             BaseCharacter enemyCharacter = (BaseCharacter) objective.getOcupiedObject();
 
-            // Si Julbez lo tiene que quitar que lo quite,
-            // pero en principio evita que se te abra el menu de combate
-            // con un muerto y ademas se puede usar para ocultar las tumbas
+            // Skip interaction if either character is dead
             if (!character.isAlive() || !enemyCharacter.isAlive())
             {
-                // hide tomb images
-                System.out.println("calvo " + character.isAlive() + " " + character.getName() + " | " + enemyCharacter.isAlive() + " " + enemyCharacter.getName());
-
-                if (!character.isAlive()) { character.getCurrentPosition().setOcupiedObject(null); character.setCurrentPosition(null); }
-                if (!enemyCharacter.isAlive()) { enemyCharacter.getCurrentPosition().setOcupiedObject(null); enemyCharacter.setCurrentPosition(null); }
+                // For safety, ensure dead characters are removed from tiles
+                if (!character.isAlive()) { 
+                    character.getCurrentPosition().setOcupiedObject(null); 
+                    character.setCurrentPosition(null); 
+                }
+                if (!enemyCharacter.isAlive()) { 
+                    enemyCharacter.getCurrentPosition().setOcupiedObject(null); 
+                    enemyCharacter.setCurrentPosition(null); 
+                }
+                return;
             }
             else if ((!character.getEsControlado() || !enemyCharacter.getEsControlado()) && !MapController.getDisableMap())
             {
                 MapController.setDisableMap(true);
-                updateRendering(); // java te puto odio
+                updateRendering(); // Update rendering before opening combat interface
 
                 CombatInterface combatInterface = new CombatInterface(character, enemyCharacter);
                 combatInterface.showInterface();

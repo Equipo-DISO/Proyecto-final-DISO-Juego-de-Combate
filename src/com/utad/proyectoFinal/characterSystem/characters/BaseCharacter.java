@@ -99,6 +99,17 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
 
     public void reduceHealth(Integer damage) {
         this.attributes.reduceHealth(damage);
+        
+        // If health reaches 0, handle death
+        if (!this.attributes.isAlive()) {
+            // Transition to DeadState
+            transitionTo(states.getDeadState());
+            
+            // Clear from current position
+            if (currentPosition != null) {
+                currentPosition.setOcupiedObject(null);
+            }
+        }
     }
 
     public Integer getHealthPoints() {
