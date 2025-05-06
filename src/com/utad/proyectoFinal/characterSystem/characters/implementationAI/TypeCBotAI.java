@@ -4,10 +4,7 @@ import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 import com.utad.proyectoFinal.characterSystem.characters.states.TiredState;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
-import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
-import com.utad.proyectoFinal.mapa.ClosestLootStrategy;
-import com.utad.proyectoFinal.mapa.GenericTile;
-import com.utad.proyectoFinal.mapa.MapGenerator;
+import com.utad.proyectoFinal.mapa.*;
 
 public class TypeCBotAI extends BotAI {
 
@@ -19,81 +16,42 @@ public class TypeCBotAI extends BotAI {
 
     @Override
     public void analyzeSituation(Bot bot) {
-        double healthRatio = bot.getHealthPoints() / (double) bot.getMaxHealthPoints();
+        try {
+            PathFindingStrategy strategy = bot.getHelmet() == null || bot.getWeapon() == null
+                    ? BotActionType.LOOKING_FOR_ITEM.getStrategy()
+                    : bot.getBotActionType().getStrategy();
 
-        if (healthRatio < LOW_HEALTH_THRESHOLD || bot.getHelmet() == null || bot.getWeapon() == null) {
-            // Buscar loot si está débil o sin equipamiento
-            try {
-                this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), new ClosestLootStrategy());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            // Solo si está bien equipado y con vida, busca enemigos
-            try {
-                this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), new ClosestEnemyStrategy());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), strategy);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        if (targets != null && !targets.isEmpty() && bot.getCurrentPosition() != null) {
-            this.currentStepTile = (this.targets.size() <= 1 ? targets.get(0) : targets.get(1)); 
-        }
-
-        if(bot.getCurrentState() instanceof TiredState){
-            bot.setBotActionType(BotActionType.MANAREGEN);
+        if (targets != null && !targets.isEmpty()) {
+            this.currentStepTile = targets.size() <= 1 ? targets.get(0) : targets.get(1);
         }
     }
 
     @Override
     public void decideNextMove(GenericTile tile, Bot bot) {
         if (targets != null && !targets.isEmpty()) {
-            if (currentStepTile.isOcupiedByCharacter()) {
-                CombatCharacter enemy = (CombatCharacter) currentStepTile.getOcupiedObject();
-                // Huir si está débil o mal equipado
-                if (bot.getHealthPoints() < bot.getMaxHealthPoints() * LOW_HEALTH_THRESHOLD || bot.getWeapon() == null || bot.getHelmet() == null) {
-
-                    //Boolean success = bot.retreat(enemy); // acción de huida
-                    //bot.setBotActionType(success ? BotActionType.RETREAT : BotActionType.NONE); //
-
-                } else {
-                    bot.setBotActionType(BotActionType.ATTACK);
-                }
+            if (bot.getHelmet() == null || bot.getWeapon() == null || bot.getHealthPoints() < bot.getMaxHealthPoints() * LOW_HEALTH_THRESHOLD) {
+                bot.setBotActionType(BotActionType.LOOKING_FOR_ITEM);
             } else {
-                bot.setBotActionType(BotActionType.MOVE);
+                bot.setBotActionType(BotActionType.LOOKING_FOR_ENEMY);
             }
-        } else {
-            bot.setBotActionType(BotActionType.NONE);
         }
     }
 
     @Override
     public void performAction(Bot bot) {
-        // switch (bot.getBotActionType()) {
-        //     case MOVE:
-        //         bot.move(currentStepTile);
-        //         break;
-        //     case ATTACK:
-        //         bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
-        //         break;
-        //     case NONE:
-        //         System.out.println("Type C Bot " + bot.getId() + " skipped or retreated.");
-        //         break;
-        //     default:
-        //         System.out.println("Unexpected action type for bot " + bot.getId());
-        // }
-
         try {
-            if (currentStepTile.getOcupiedObject() instanceof Bot) {
-                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new LightAttackStrategy());
-            } else if (bot.getCurrentState() instanceof TiredState) {
+            if (bot.getCurrentState() instanceof TiredState) {
                 bot.gainMana();
             } else {
-                MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+                MapGenerator.getInstance().executeActionOnMove(bot, currentStepTile);
             }
         } catch (Exception e) {
-            System.out.println("no hay mapa aun");
+            System.out.println("Error ejecutando acción de TypeC: " + e.getMessage());
         }
     }
     

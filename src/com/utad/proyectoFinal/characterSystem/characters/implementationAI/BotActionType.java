@@ -12,4 +12,7 @@ public enum BotActionType {
     private BotActionType(PathFindingStrategy strategy) {
         this.strategy = strategy;
     }
+    public PathFindingStrategy getStrategy() {
+        return strategy;
+    }
 }

@@ -7,6 +7,7 @@ import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapGenerator;
 import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
+import com.utad.proyectoFinal.mapa.PathFindingStrategy;
 
 public class TypeBBotAI extends BotAI {
 
@@ -18,8 +19,14 @@ public class TypeBBotAI extends BotAI {
     @Override
     public void analyzeSituation(Bot bot) {
         //same para Type B bot
+        // Si no tiene una acción aún, asignar una por defecto
+        if (bot.getBotActionType() == null) {
+            bot.setBotActionType(BotActionType.LOOKING_FOR_ENEMY); // o LOOKING_FOR_ENEMY si es TypeB
+        }
+
+        PathFindingStrategy strategy = bot.getBotActionType().getStrategy();
         try {
-            this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), new ClosestEnemyStrategy());
+            this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), strategy);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -31,46 +38,15 @@ public class TypeBBotAI extends BotAI {
 
     @Override
     public void decideNextMove(GenericTile tile, Bot bot) {
-
-        //same para Type B bot
-        if(targets != null && !targets.isEmpty()) {
-            if(currentStepTile.isOcupiedByCharacter()){
-                bot.setBotActionType(BotActionType.ATTACK);
-            }else{
-                bot.setBotActionType(BotActionType.MOVE);
-            }
-        }
-
-        if(bot.getCurrentState() instanceof TiredState){
-            bot.setBotActionType(BotActionType.MANAREGEN);
-        }
+        // Siempre va tras enemigos
+        //creo que sobra esta línea si ya le seteamos la stratgy por defecto
+        bot.setBotActionType(BotActionType.LOOKING_FOR_ENEMY);
     }
+
+
 
     @Override
     public void performAction(Bot bot) {
-        //same para Type B bot
-        // switch(bot.getBotActionType()){
-        //     case MOVE:
-        //         try {
-        //             MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
-        //         } catch (Exception e) {
-        //             System.out.println("no hay mapa aun");
-        //         }
-        //         break;
-        //     case ATTACK:
-        //         //bot.attack
-        //         bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
-        //         break;
-        //     case NONE:
-        //         System.out.println("None assigned to bot" + bot.getId());
-        //         break;
-        //     case MANAREGEN:
-        //         bot.gainMana();
-        //         break;
-        //     default:
-        //         System.out.println("No action injected yet");
-        //         break;
-        // }
 
         try {
             if (currentStepTile.getOcupiedObject() instanceof Bot) {
