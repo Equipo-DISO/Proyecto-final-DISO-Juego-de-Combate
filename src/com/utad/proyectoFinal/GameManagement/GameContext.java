@@ -46,7 +46,6 @@ public class GameContext implements PushModelObserver {
         System.out.println("Ha muerto " + character.getName() + ". Vivos: " + personajesVivos);
 
         if(personajesVivos == 1 && character instanceof Bot && podium == null) {
-            System.out.println(personajesMuertos.size());
             podium = new PodiumInterface(personajesVivos, personajesIniciales, null, personajesMuertos);
             podium.showInterface();
         }
