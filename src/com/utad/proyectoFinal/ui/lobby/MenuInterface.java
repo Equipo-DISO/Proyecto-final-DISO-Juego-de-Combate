@@ -5,8 +5,6 @@ import javax.swing.*;
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.RandomBotFactory;
-import com.utad.proyectoFinal.characterSystem.characters.implementationAI.TypeABotAI;
-import com.utad.proyectoFinal.characterSystem.characters.implementationAI.TypeBBotAI;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
@@ -259,6 +257,17 @@ public class MenuInterface extends JFrame implements Interface {
         }
 
         return botList;
+    }
+
+    public LinkedList<String> getBotNames(){
+        LinkedList<String> botNames = new LinkedList<String>();
+
+        for (JPanel bot : this.bots) {
+            String botName = ((JLabel) bot.getComponent(1)).getText();
+            botNames.add(botName);
+        }
+
+        return botNames;
     }
 
     public BaseCharacter getPlayerCharacter() {

@@ -2,7 +2,6 @@ package com.utad.proyectoFinal.characterSystem.characters.states;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.AttackStrategy;
-import com.utad.proyectoFinal.characterSystem.characters.states.strategies.*;
 
 public class AttackingState extends BaseState {
 
@@ -22,10 +21,10 @@ public class AttackingState extends BaseState {
     public void handleAttack(BaseCharacter opponent, AttackStrategy attackStrategy) {
         currentStrategy = attackStrategy;
 
-        // TODO: delete after testing
-        selectStrategy();
-
-        executeAttack(opponent);
+        if (character.isAlive() && opponent.isAlive())
+        {
+            executeAttack(opponent);
+        }
     }
     
     /**
@@ -33,18 +32,9 @@ public class AttackingState extends BaseState {
      * @param opponent The target character to attack
      */
     private void executeAttack(BaseCharacter opponent) {
-        if (currentStrategy != null) {
+        if (currentStrategy != null && !character.equals(opponent)) {
             currentStrategy.execute(character, opponent);
             updateState();
-        }
-    }
-
-    private void selectStrategy() {
-        // Use the common testing mode flag from BaseState
-        if (isTestingMode()) {
-            // Use light attack strategy for testing
-            currentStrategy = new LightAttackStrategy();
-            return;
         }
     }
 

@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.util.List;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
@@ -17,13 +16,12 @@ public class GameMain
         interfaceMain.showInterface();
         interfaceMain.waitTillClose();
 
-
-       
-        LinkedList<Bot> bots = interfaceMain.getBotList();
         BaseCharacter player = interfaceMain.getPlayerCharacter();
+        LinkedList<Bot> bots = interfaceMain.getBotList();
+        LinkedList<String> botNames = interfaceMain.getBotNames();
         
         player.addObserver(gameContext);
-        bots.forEach(b -> { b.addObserver(gameContext); });
+        bots.forEach(b -> { b.setName(botNames.get(bots.indexOf(b))); b.addObserver(gameContext); });
 
         gameContext.setInitialCharacters(bots.size() + 1, bots);
 

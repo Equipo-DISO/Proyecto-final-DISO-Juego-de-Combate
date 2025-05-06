@@ -6,25 +6,25 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.List;
-import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import javax.swing.plaf.SeparatorUI;
 
+import com.utad.proyectoFinal.gameManagement.GameContext;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 import com.utad.proyectoFinal.ui.combat.Action;
 
 public class PodiumInterface extends JFrame implements Interface{
+
+    private Random random = new Random();
+    private int correctButton;
 
     public PodiumInterface(Integer playersLeft, Integer playersTotal, String killer){
         this(playersLeft, playersTotal, killer, new LinkedList<String>());
@@ -39,7 +39,6 @@ public class PodiumInterface extends JFrame implements Interface{
         setResizable(false);
 
         setLayout(new BorderLayout());
-
 
         // Main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -101,67 +100,67 @@ public class PodiumInterface extends JFrame implements Interface{
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
         // Exit button
-        JButton exitButton = new JButton("Salir");
-        exitButton.setPreferredSize(new Dimension(140, 50));
-        exitButton.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        exitButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
-        exitButton.setFocusable(false);
+        JButton exit1 = new JButton("Salir");
+        exit1.setPreferredSize(new Dimension(120, 50));
+        exit1.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+        exit1.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+        exit1.setFocusable(false);
 
-        exitButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        exit1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                exitButton.setBackground(Color.LIGHT_GRAY);
+                exit1.setBackground(Color.LIGHT_GRAY);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                exitButton.setBackground(null);
+                exit1.setBackground(null);
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 actionButton(0); // Restart game
             }
         });
 
-        bottomPanel.add(exitButton);
+        bottomPanel.add(exit1);
 
         // Lobby button
-        JButton lobbyButton = new JButton("Volver al lobby");
-        lobbyButton.setPreferredSize(new Dimension(140, 50));
-        lobbyButton.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-        lobbyButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
-        lobbyButton.setFocusable(false);
+        JButton exit2 = new JButton("Salir");
+        exit2.setPreferredSize(new Dimension(120, 50));
+        exit2.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+        exit2.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+        exit2.setFocusable(false);
 
-        lobbyButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        exit2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lobbyButton.setBackground(Color.LIGHT_GRAY);
+                exit2.setBackground(Color.LIGHT_GRAY);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                lobbyButton.setBackground(null);
+                exit2.setBackground(null);
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 actionButton(1); // Restart game
             }
         });
 
-        bottomPanel.add(lobbyButton);
+        bottomPanel.add(exit2);
 
         // Restart button
-        JButton restartButton = new JButton("Listo");
-        restartButton.setPreferredSize(new Dimension(140, 50));
-        restartButton.setFont(new Font(Font.DIALOG, Font.BOLD,  16));
-        restartButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
-        restartButton.setFocusable(false);
+        JButton exit3 = new JButton("Salir");
+        exit3.setPreferredSize(new Dimension(120, 50));
+        exit3.setFont(new Font(Font.DIALOG, Font.BOLD,  16));
+        exit3.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+        exit3.setFocusable(false);
 
-        restartButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        exit3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                restartButton.setBackground(Color.LIGHT_GRAY);
+                exit3.setBackground(Color.LIGHT_GRAY);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                restartButton.setBackground(null);
+                exit3.setBackground(null);
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 actionButton(2); // Restart game
             }
         });
 
-        bottomPanel.add(restartButton);
+        bottomPanel.add(exit3);
 
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
         add(mainPanel, BorderLayout.CENTER);
@@ -191,24 +190,18 @@ public class PodiumInterface extends JFrame implements Interface{
         }
 
         add(killPanel, BorderLayout.EAST);
+
+        correctButton = random.nextInt(3);
     }
 
     public void actionButton(int action) {
-        switch (action) {
+        System.out.println(correctButton);
 
-            case 0:
-                dispose();
-                break;
-            case 1:
-                System.out.println("Volver al lobby");
-                break;
-            case 2:
-                System.out.println("Reiniciar, mismos valores (opcional)");
-                break;
-            default:
-                System.out.println("Acción no válida");
-                break;
+        if (action == correctButton) { 
+            dispose(); 
+            System.exit(0);
         }
+        else correctButton = random.nextInt(3); // Cambiar el botón correcto
     }
     @Override
     public void showInterface() {
@@ -221,26 +214,16 @@ public class PodiumInterface extends JFrame implements Interface{
     
     @Override
     public Object getData() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getData'");
     }
 
+    
+
     /*
-
+    
     TESTING
-
+    
     public static void main(String[] args) {
-        for (int i = 2; i <= 8; i++){
-            PodiumInterface startScreen = new PodiumInterface(i, 8, "Luisito");
-            startScreen.setVisible(true);
-            startScreen.setResizable(false); // Hacer la ventana no redimensionable
-
-            try { Thread.sleep(1000); }
-            catch (InterruptedException e) { e.printStackTrace(); }
-
-            startScreen.dispose(); // Cerrar la ventana después de 1 segundo
-        }
-
         LinkedList<String> killList = new LinkedList<String>();
         String[] names = {"Pepe", "Juan", "Paco", "Luis", "Javier", "AntonioLuisitoLuisitoLuisitoLuisitoLuisito", "Manuel"};
         for (int i = 0; i < 7; i++){

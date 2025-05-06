@@ -16,7 +16,7 @@ public final class DefaultAttributes {
     public static final Integer MANA_POINTS = 50;
     public static final Integer MAX_MANA_POINTS = 50;
     // Umbral de maná por debajo del cual el personaje está cansado
-    public static final Integer LOW_MANA_THRESHOLD = 10;
+    public static final Integer LOW_MANA_THRESHOLD = 7;
 
     // Private constructor to prevent instantiation
     private DefaultAttributes() {}

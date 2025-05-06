@@ -1,41 +1,124 @@
 package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
-import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
+import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
+import com.utad.proyectoFinal.characterSystem.characters.states.TiredState;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapGenerator;
+import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
 
 public class TypeBBotAI extends BotAI {
+
+    // Threshold values for decision making
+    private static final double LOW_HEALTH_THRESHOLD = 0.25; // They are more willing to risk
+    private static final int HEAVY_ATTACK_MANA_NEEDED = 10;
+    private static final int LIGHT_ATTACK_MANA_NEEDED = DefaultAttributes.LOW_MANA_THRESHOLD;
 
     @Override
     public void analyzeSituation(Bot bot) {
         //same para Type B bot
-        this.targets = MapGenerator.getInstance(0,0, 0, 0, null, null).getPathToObjective(bot.getCurrentPosition(), bot.getBotActionType());
-        this.currentStepTile = (this.targets.size() <= 1 ? targets.get(0) : targets.get(1)); 
+        try {
+            this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), new ClosestEnemyStrategy());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(targets != null && !targets.isEmpty() && bot.getCurrentPosition() != null) {
+            this.currentStepTile = (this.targets.size() <= 1 ? targets.get(0) : targets.get(1)); 
+        }
     }
 
 
     @Override
     public void decideNextMove(GenericTile tile, Bot bot) {
+
+        //same para Type B bot
         if(targets != null && !targets.isEmpty()) {
-            bot.setBotActionType(currentStepTile.isOcupiedByCharacter() ? BotActionType.LOOKING_FOR_ENEMY : BotActionType.LOOKING_FOR_ITEM);
+            if(currentStepTile.isOcupiedByCharacter()){
+                bot.setBotActionType(BotActionType.ATTACK);
+            }else{
+                bot.setBotActionType(BotActionType.MOVE);
+            }
+        }
+
+        if(bot.getCurrentState() instanceof TiredState){
+            bot.setBotActionType(BotActionType.MANAREGEN);
         }
     }
 
     @Override
     public void performAction(Bot bot) {
-        
-        if(!bot.isLowEnergy()){
-            try {
+        //same para Type B bot
+        // switch(bot.getBotActionType()){
+        //     case MOVE:
+        //         try {
+        //             MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
+        //         } catch (Exception e) {
+        //             System.out.println("no hay mapa aun");
+        //         }
+        //         break;
+        //     case ATTACK:
+        //         //bot.attack
+        //         bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
+        //         break;
+        //     case NONE:
+        //         System.out.println("None assigned to bot" + bot.getId());
+        //         break;
+        //     case MANAREGEN:
+        //         bot.gainMana();
+        //         break;
+        //     default:
+        //         System.out.println("No action injected yet");
+        //         break;
+        // }
+
+        try {
+            if (currentStepTile.getOcupiedObject() instanceof Bot) {
+                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
+            } else if (bot.getCurrentState() instanceof TiredState)     {
+                bot.gainMana();
+            } else {
                 MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
-            } catch (Exception e) {
-                System.out.println("no hay mapa aun");
             }
-        } else {
-            bot.gainMana();
-        
+        } catch (Exception e) {
+            System.out.println("no hay mapa aun");
         }
     }
-}
+    
+    /**
+     * Determines combat action for a TypeB bot (combat-focused)
+     * This bot type prioritizes:
+     * 1. Heavy attacks when possible (they prefer power)
+     * 2. Gaining mana to execute heavy attacks
+     * 3. Light attacks as fallback
+     * 4. Healing only when critically low
+     * 5. Almost never retreats
+     * @param bot The bot character
+     *
+     * @return The combat action type to perform
+     */ 
+    @Override
+    public CombatActionType decideCombatAction(Bot bot) {
+        // If critically low on health, consider healing
+        double healthRatio = (double) bot.getHealthPoints() / bot.getMaxHealthPoints();
+        if (healthRatio < LOW_HEALTH_THRESHOLD && bot.getHpPotions() > 0) {
+            return CombatActionType.HEAL;
+        }
+        
+        // If has enough mana for heavy attack, use it (preferred attack)
+        if (bot.getManaPoints() >= HEAVY_ATTACK_MANA_NEEDED) {
+            return CombatActionType.HEAVY_ATTACK;
+        }
+        
+        // If has enough mana for light attack, use it
+        if (bot.getManaPoints() >= LIGHT_ATTACK_MANA_NEEDED) {
+            return CombatActionType.LIGHT_ATTACK;
+        }
+        
+        // Otherwise, regenerate mana
+        return CombatActionType.GAIN_MANA;
+    }
+
     /*public List<GenericTile> filtrarObjetivos(Bot bot, boolean priorizarItems) {
         List<GenericTile> items = new ArrayList<>();
         List<GenericTile> enemigos = new ArrayList<>();
@@ -63,5 +146,6 @@ public class TypeBBotAI extends BotAI {
         return result;
         }
      */
+}
 
 

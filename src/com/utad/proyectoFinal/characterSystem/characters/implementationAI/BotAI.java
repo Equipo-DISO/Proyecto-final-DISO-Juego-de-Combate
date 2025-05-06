@@ -20,5 +20,5 @@ public abstract class BotAI {
     protected abstract void decideNextMove(GenericTile tile, Bot bot);
     protected abstract void performAction(Bot bot);
 
-
+    public abstract CombatActionType decideCombatAction(Bot bot);
 }

@@ -252,12 +252,7 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
         transitionTo(states.getDeadState());
     }
 
-    public void setCurrentState(CharacterState state) {
-        if (state == null) {
-            throw new IllegalArgumentException("El estado no puede ser nulo");
-        }
-        this.currentState = state;
-    }
+
 
     public CharacterState getCurrentState() {
         return currentState;
@@ -273,6 +268,10 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
 
     public String getName() {
         return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Boolean isRetreatSuccessful() {
@@ -379,6 +378,7 @@ public class BaseCharacter implements CombatCharacter, MapObject, PushModelObser
     public void notifyDeathObservers() {
         // Clear the tile's occupied object when character dies
         if (this.currentPosition != null) {
+            System.out.println("he eliminado mi tile mostro " + this.getName() + " y estoy " + this.isAlive());
             this.currentPosition.setOcupiedObject(null);
         }
         

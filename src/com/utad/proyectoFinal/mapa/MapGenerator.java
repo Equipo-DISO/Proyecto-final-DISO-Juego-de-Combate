@@ -4,7 +4,6 @@ package com.utad.proyectoFinal.mapa;
 import javax.swing.*;
 
 import com.utad.proyectoFinal.characterSystem.characters.BaseCharacter;
-import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
 import com.utad.proyectoFinal.characterSystem.tools.items.Consumable;
 import com.utad.proyectoFinal.gameManagement.GameContext;
@@ -21,7 +20,7 @@ import java.util.LinkedList;
 public class MapGenerator extends JPanel 
 {
     public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.45d;
-    public static final Double DEFAULT_LOOT_PROBABILITY = 0.23d;
+    public static final Double DEFAULT_LOOT_PROBABILITY = 0.28d;
 
 
     private TileFactory factory;
@@ -92,7 +91,7 @@ public class MapGenerator extends JPanel
         return MapGenerator.instance;
     }
 
-    public static MapGenerator getInstance() throws Exception
+    public static synchronized MapGenerator getInstance() throws Exception
     {
 
         if (MapGenerator.instance == null)
@@ -243,20 +242,32 @@ public class MapGenerator extends JPanel
     */
     public void executeActionOnMove(BaseCharacter character, GenericTile objective)
     {
+        if (!character.isAlive()) { return; }
+        if (character.getCurrentPosition() == null) { return; }
         if (character.getCurrentPosition().equals(objective)) { return; }
         if (!this.graph.isLegalMove(character.getCurrentPosition(), objective)) { return; }
         
-       
         if (objective.isOcupiedByCharacter())
         {
             BaseCharacter enemyCharacter = (BaseCharacter) objective.getOcupiedObject();
 
-            if (!character.getEsControlado() || !enemyCharacter.getEsControlado())
+            // Si Julbez lo tiene que quitar que lo quite,
+            // pero en principio evita que se te abra el menu de combate
+            // con un muerto y ademas se puede usar para ocultar las tumbas
+            if (!character.isAlive() || !enemyCharacter.isAlive())
+            {
+                // hide tomb images
+                System.out.println("calvo " + character.isAlive() + " " + character.getName() + " | " + enemyCharacter.isAlive() + " " + enemyCharacter.getName());
+
+                if (!character.isAlive()) { character.setCurrentPosition(null); }
+                if (!enemyCharacter.isAlive()) { character.setCurrentPosition(null); }
+            }
+            else if ((!character.getEsControlado() || !enemyCharacter.getEsControlado()) && !MapController.getDisableMap())
             {
                 MapController.setDisableMap(true);
                 updateRendering(); // java te puto odio
 
-                CombatInterface combatInterface = new CombatInterface((CombatCharacter) character, (CombatCharacter) enemyCharacter);
+                CombatInterface combatInterface = new CombatInterface(character, enemyCharacter);
                 combatInterface.showInterface();
             }
         }
@@ -272,6 +283,7 @@ public class MapGenerator extends JPanel
             character.move(objective);
         }
 
+        // Only execute bot turn if no combat occurred
         if (!character.getEsControlado()) { GameContext.getInstance().botTurn(character); }
     }
 
