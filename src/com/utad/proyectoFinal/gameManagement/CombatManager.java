@@ -7,11 +7,12 @@ import com.utad.proyectoFinal.characterSystem.characters.states.strategies.Light
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.CombatActionType;
 import com.utad.proyectoFinal.ui.combat.Action;
-import com.utad.proyectoFinal.ui.combat.CombatFeedLine;
 import com.utad.proyectoFinal.ui.combat.CombatInterface;
+import java.util.Random;
 
 public class CombatManager {
     private static CombatManager instance = null;
+    private final Random random;
     
     public static CombatManager getInstance() {
         if (instance == null) {
@@ -22,6 +23,7 @@ public class CombatManager {
     
     private CombatManager() {
         // Private constructor for singleton
+        this.random = new Random();
     }
     
     /**
@@ -32,38 +34,35 @@ public class CombatManager {
      * @param combatInterface Reference to combat interface for updating UI
      * @return true if the battle is over, false otherwise
      */
-    public boolean handlePlayerAction(CombatCharacter player, CombatCharacter enemy, int actionType, CombatInterface combatInterface) {
-        CombatFeedLine feedLine = new CombatFeedLine("");
+    public boolean handlePlayerAction(CombatCharacter player, CombatCharacter enemy, CombatActionType actionType, CombatInterface combatInterface) {
         boolean isRunning = false;
         
+        combatInterface.addFeedLine("---Comenzando turno del jugador---", Action.NEW_TURN);
+
         // Set feed loggers
         player.setFeedLogger(combatInterface);
         enemy.setFeedLogger(combatInterface);
         
         // Handle player action
         switch (actionType) {
-            case 0:
+            case LIGHT_ATTACK:
                 player.attack(enemy, new LightAttackStrategy());
                 break;
-            case 1:
+            case HEAVY_ATTACK:
                 player.attack(enemy, new HeavyAttackStrategy());
                 break;
-            case 2:
-                feedLine.setNewLine("Curarse (" + player.getHpPotions() + ")", Action.HEAL);
-                combatInterface.addFeedLine(feedLine);
+            case HEAL:
                 player.heal();
                 break;
-            case 3:
+            case GAIN_MANA:
                 player.gainMana();
                 break;
-            case 4:
+            case RETREAT:
                 isRunning = player.retreat(enemy);
-                if (isRunning) {
-                    combatInterface.addFeedLine("Retirado", Action.RUN);
-                }   
                 break;
             default:
-                System.out.println("Error: Invalid action type");
+                // This case should ideally not be reached
+                System.out.println("Error: Invalid action type: " + actionType);
         }
         
         // Handle battle end
@@ -84,24 +83,25 @@ public class CombatManager {
      * @return true if the battle is over, false otherwise
      */
     public boolean handleBotTurn(CombatCharacter player, CombatCharacter enemy, CombatInterface combatInterface) {
+        
+        combatInterface.addFeedLine("---Comenzando turno del enemigo---", Action.NEW_TURN); 
+
         // Set feed loggers
         player.setFeedLogger(combatInterface);
         enemy.setFeedLogger(combatInterface);
         
         // Determine the action based on the bot type
-        int actionType;
+        CombatActionType botActionEnum;
         
-        if (enemy instanceof Bot) {
-            Bot botEnemy = (Bot) enemy;
-            CombatActionType botAction = determineBotAction(botEnemy, player);
-            actionType = botAction.getActionCode();
+        if (enemy instanceof Bot botEnemy) {
+            botActionEnum = determineBotAction(botEnemy, player);
         } else {
             // Fallback to default bot AI if not a Bot instance
-            actionType = getRandomAction(enemy);
+            botActionEnum = getRandomAction(enemy);
         }
         
         // Execute the selected action
-        boolean isRunning = executeAction(enemy, player, actionType, combatInterface);
+        boolean isRunning = executeAction(enemy, player, botActionEnum, combatInterface);
         
         // Handle battle end
         boolean battleEnded = checkBattleEnd(player, enemy, isRunning);
@@ -124,19 +124,39 @@ public class CombatManager {
     }
     
     /**
-     * Gets a random action code for non-Bot enemies
+     * Gets a random action code for non-Bot enemies, used for fallback if the bot is not a Bot instance
      * @param enemy The enemy character
      * @return A random action code
      */
-    private int getRandomAction(CombatCharacter enemy) {
-        int action = (int)(Math.random() * 4); // Random action (0-3)
-        
-        // If action is HEAL but no potions, change to LIGHT_ATTACK
-        if (action == 2 && enemy.getHpPotions() <= 0) {
-            action = 0;
+    private CombatActionType getRandomAction(CombatCharacter enemy) {
+        int randomActionCode = this.random.nextInt(4);
+        CombatActionType selectedAction;
+
+        switch (randomActionCode) {
+            case 0:
+                selectedAction = CombatActionType.LIGHT_ATTACK;
+                break;
+            case 1:
+                selectedAction = CombatActionType.HEAVY_ATTACK;
+                // If not enough mana for heavy, or no heavy attack capability, could add fallback here or in executeAction
+                break;
+            case 2:
+                selectedAction = CombatActionType.HEAL;
+                break;
+            case 3:
+                selectedAction = CombatActionType.GAIN_MANA;
+                break;
+            default: // Should not happen with Math.random()*4
+                selectedAction = CombatActionType.LIGHT_ATTACK; 
+                break;
         }
         
-        return action;
+        // If action is HEAL but no potions, change to LIGHT_ATTACK
+        if (selectedAction == CombatActionType.HEAL && enemy.getHpPotions() <= 0) {
+            selectedAction = CombatActionType.LIGHT_ATTACK;
+        }
+
+        return selectedAction;
     }
     
     /**
@@ -147,53 +167,43 @@ public class CombatManager {
      * @param combatInterface Reference to combat interface for UI updates
      * @return true if retreat was successful, false otherwise
      */
-    private boolean executeAction(CombatCharacter attacker, CombatCharacter defender, int actionType, CombatInterface combatInterface) {
+    private boolean executeAction(CombatCharacter attacker, CombatCharacter defender, CombatActionType actionType, CombatInterface combatInterface) {
+        // If attacker is not alive or is deactivated, don't allow any actions
+        if (!attacker.isAlive()) {
+            return false;
+        }
+        
         boolean isRunning = false;
         
         switch (actionType) {
-            case 0: // Light attack
+            case LIGHT_ATTACK:
                 AttackStrategy lightStrategy = new LightAttackStrategy();
                 attacker.attack(defender, lightStrategy);
                 break;
                 
-            case 1: // Heavy attack
-                // If not enough mana for heavy, fallback to light attack
-                if (attacker.getManaPoints() >= 2) {
-                    AttackStrategy heavyStrategy = new HeavyAttackStrategy();
-                    attacker.attack(defender, heavyStrategy);
-                } else {
-                    AttackStrategy lightFallback = new LightAttackStrategy();
-                    attacker.attack(defender, lightFallback);
-                }
+            case HEAVY_ATTACK:
+                AttackStrategy heavyStrategy = new HeavyAttackStrategy();
+                attacker.attack(defender, heavyStrategy);
                 break;
                 
-            case 2: // Heal
-                if (attacker.getHpPotions() > 0) {
-                    combatInterface.addFeedLine(attacker.getName() + " se cura", Action.HEAL);
-                    attacker.heal();
-                } else {
-                    // Fallback to light attack if no potions
-                    AttackStrategy fallback = new LightAttackStrategy();
-                    attacker.attack(defender, fallback);
-                }
+            case HEAL:
+                attacker.heal();    
                 break;
                 
-            case 3: // Gain mana
+            case GAIN_MANA:
                 attacker.gainMana();
-                combatInterface.addFeedLine(attacker.getName() + " se concentra", Action.CONCENTRATE);
                 break;
                 
-            case 4: // Retreat
+            case RETREAT:
                 isRunning = attacker.retreat(defender);
-                if (isRunning) {
-                    combatInterface.addFeedLine(attacker.getName() + " intenta huir", Action.RUN);
-                }
                 break;
                 
             default:
-                // Default to light attack
-                AttackStrategy defaultStrategy = new LightAttackStrategy();
-                attacker.attack(defender, defaultStrategy);
+                // Default to concentrate if an unknown action type is somehow passed 
+                // This should ideally not be reached
+                System.out.println("Error: Unknown action type in executeAction: " + actionType + ". Defaulting to light attack.");
+                attacker.gainMana();
+                break;
         }
         
         return isRunning;

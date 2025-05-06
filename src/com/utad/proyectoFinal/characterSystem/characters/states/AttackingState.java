@@ -18,6 +18,7 @@ public class AttackingState extends BaseState {
      * @param opponent The target character to attack
      * @param attackStrategy The strategy to use for this attack
      */
+    @Override
     public void handleAttack(BaseCharacter opponent, AttackStrategy attackStrategy) {
         currentStrategy = attackStrategy;
 

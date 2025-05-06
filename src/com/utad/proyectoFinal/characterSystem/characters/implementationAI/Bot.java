@@ -9,7 +9,8 @@ public class Bot extends BaseCharacter {
     private static final String BOTNAME = "B.O.T";
     private BotActionType botActionType;
     private BotAI botAi;
-
+    private Boolean deactivated = false; // Flag to indicate if the bot is deactivated
+    
     private MapGenerator map;
 
     public Bot() {
@@ -25,11 +26,61 @@ public class Bot extends BaseCharacter {
         super.esControlado = true; 
     }
 
+    @Override
+    public boolean isAlive() {
+        return super.attributes.isAlive() && !deactivated;
+    }
+    
+    /**
+     * Check if bot is deactivated
+     * @return true if deactivated, false otherwise
+     */
+    public Boolean isDeactivated() {
+        return deactivated;
+    }
+    
+    /**
+     * Set bot's deactivated status
+     * @param deactivated true to deactivate, false to activate
+     */
+    public void setDeactivated(Boolean deactivated) {
+        this.deactivated = deactivated;
+    }
+    
+    /**
+     * Self-destruct mechanism when a bot dies
+     * Clears from position, transitions to DeadState, and deactivates
+     */
+    public void selfDestruct() {
+        // Transition to dead state
+        transitionTo(states.getDeadState());
+        
+        // Clear from current position
+        if (currentPosition != null) {
+            currentPosition.setOcupiedObject(null);
+        }
+        
+        // Deactivate bot
+        deactivated = true;
+    }
+    
+    @Override
+    public void reduceHealth(Integer damage) {
+        super.attributes.reduceHealth(damage);
+        
+        // Transition to DeadState if health reaches 0
+        if (!super.attributes.isAlive() && !deactivated) {
+            selfDestruct();
+        }
+    }
+
     public void BotMove() {
-        if (botAi != null) {
-            botAi.executeTurn(this);
-        } else {
-            System.out.println("AI no definida para este bot.");
+        if (!deactivated) { 
+            if (botAi != null) {
+                botAi.executeTurn(this);
+            } else {  
+                System.out.println("AI no definida para este bot.");
+            }
         }
     }
 

@@ -43,12 +43,20 @@ public class TypeABotAI extends BotAI {
 
     @Override
     public void performAction(Bot bot) {
+        if (currentStepTile != null && currentStepTile.getOcupiedObject() instanceof Bot enemyBot && enemyBot.equals(bot)) {
+            try {
+                this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), BotActionType.LOOKING_FOR_ENEMY.getStrategy());
+            } catch (Exception e) {
+                System.err.println("TypeA: Atacando a sí mismo");
+                e.printStackTrace();
+            }
+        }
         //actualizar su posicion
         try {
-
             if (bot.getCurrentState() instanceof TiredState) {
                 bot.gainMana();
-            } else if (currentStepTile.getOcupiedObject() instanceof Bot) {
+            } else if (currentStepTile != null && currentStepTile.getOcupiedObject() instanceof Bot enemyBot && !enemyBot.equals(bot)) {
+                // Asegurarse de que no se ataque a sí mismo
                 bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new LightAttackStrategy());
             } else {
                 MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);

@@ -10,6 +10,8 @@ import com.utad.proyectoFinal.mapa.MapController;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
+import com.utad.proyectoFinal.characterSystem.characters.implementationAI.CombatActionType;
+import javax.swing.Timer;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -159,9 +161,33 @@ public class CombatInterface extends JFrame implements Interface {
     private void action(int type) {
 
         if (player.isAlive() && enemy.isAlive()){
+            CombatActionType actionType;
+            switch (type) {
+                case 0:
+                    actionType = CombatActionType.LIGHT_ATTACK;
+                    break;
+                case 1:
+                    actionType = CombatActionType.HEAVY_ATTACK;
+                    break;
+                case 2:
+                    actionType = CombatActionType.HEAL;
+                    break;
+                case 3:
+                    actionType = CombatActionType.GAIN_MANA;
+                    break;
+                case 4:
+                    actionType = CombatActionType.RETREAT;
+                    break;
+                default:
+                    // Handle unexpected type, perhaps log an error or default
+                    System.err.println("Unexpected action type in CombatInterface: " + type);
+                    actionType = CombatActionType.LIGHT_ATTACK; // Defaulting to light attack
+                    break;
+            }
+
             // Use CombatManager to handle player action
             CombatManager combatManager = CombatManager.getInstance();
-            boolean battleEnded = combatManager.handlePlayerAction(this.player, this.enemy, type, this);
+            boolean battleEnded = combatManager.handlePlayerAction(this.player, this.enemy, actionType, this);
             
             // Update UI
             updatePanels();

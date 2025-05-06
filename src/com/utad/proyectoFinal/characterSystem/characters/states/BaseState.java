@@ -38,32 +38,32 @@ public abstract class BaseState implements CharacterState {
     @Override
     public void handleAttack(BaseCharacter opponent, AttackStrategy attackStrategy) {
         // Implementación por defecto (puede ser vacía o lanzar una excepción)
-        throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
+        throw new UnsupportedOperationException("Ataque no soportado en el estado actual. " + this.getClass().getSimpleName()   );
     }
 
     @Override
     public void handleRetreat(BaseCharacter opponent) {
         // Implementación por defecto (puede ser vacía o lanzar una excepción)
-        throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
+        throw new UnsupportedOperationException("Retirada no soportada en el estado actual. " + this.getClass().getSimpleName());
     }
 
 
     @Override
     public void handleMove(GenericTile moveToTile) {
         // Implementación por defecto (puede ser vacía o lanzar una excepción)
-        throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
+        throw new UnsupportedOperationException("Movimiento no soportado en el estado actual. " + this.getClass().getSimpleName());
     }
 
     @Override
     public void handleHeal() {
         // Implementación por defecto (puede ser vacía o lanzar una excepción)
-        throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
+        throw new UnsupportedOperationException("Curación no soportada en el estado actual. " + this.getClass().getSimpleName());
     }
 
     @Override
     public void handleGainMana() {
         // Implementación por defecto (puede ser vacía o lanzar una excepción)
-        throw new UnsupportedOperationException("Acción no soportada en el estado actual.");
+        throw new UnsupportedOperationException("Ganar maná no soportado en el estado actual. " + this.getClass().getSimpleName());
     }
     
     @Override
@@ -90,7 +90,7 @@ public abstract class BaseState implements CharacterState {
     public void handleReceiveAttack(Double damage) {
         double finalDamage = damage;
 
-        // Si el personaje está retirándose y la retirada fue exitosa, evita todo el daño
+        // Si el personaje está retirándose y la retirada fue exitosa, evita el daño
         if (character.getCurrentState() instanceof RetreatingState && character.isRetreatSuccessful()) {
             finalDamage = 0.0;
             StringBuilder message = new StringBuilder(character.getName() + " ha evitado el ataque con éxito");
