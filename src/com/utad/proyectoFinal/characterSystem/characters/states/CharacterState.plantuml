@@ -1,0 +1,106 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+class AttackingState {
+  ~ AttackingState(BaseCharacter): 
+  - currentStrategy: AttackStrategy
+  + handleAttack(BaseCharacter, AttackStrategy): void
+  - executeAttack(BaseCharacter): void
+  + updateState(): void
+   name: String
+   currentStrategy: AttackStrategy
+   strategy: AttackStrategy
+}
+class BaseState {
+  ~ BaseState(BaseCharacter): 
+  + updateState(): void
+  + handleAttack(BaseCharacter, AttackStrategy): void
+  + equals(Object): boolean
+  + handleHeal(): void
+  + handleGainMana(): void
+  + handleRetreat(BaseCharacter): void
+  + handleReceiveAttack(Double): void
+  # checkAndTransitionToTiredIfNeeded(): boolean
+  + handleMove(GenericTile): void
+   testingMode: boolean
+}
+interface CharacterState << interface >> {
+  + handleReceiveAttack(Double): void
+  + handleRetreat(BaseCharacter): void
+  + handleHeal(): void
+  + updateState(): void
+  + handleGainMana(): void
+  + handleMove(GenericTile): void
+  + handleAttack(BaseCharacter, AttackStrategy): void
+   name: String
+}
+class DeadState {
+  + DeadState(BaseCharacter): 
+  + updateState(): void
+   name: String
+}
+class GainManaState {
+  ~ GainManaState(BaseCharacter): 
+  + handleAttack(BaseCharacter, AttackStrategy): void
+  + handleGainMana(): void
+  + handleRetreat(BaseCharacter): void
+  + updateState(): void
+   name: String
+}
+class HealState {
+  ~ HealState(BaseCharacter): 
+  + handleAttack(BaseCharacter, AttackStrategy): void
+  + handleHeal(): void
+  + handleRetreat(BaseCharacter): void
+  + updateState(): void
+   name: String
+}
+class IdleState {
+  ~ IdleState(BaseCharacter): 
+  + handleGainMana(): void
+  + handleRetreat(BaseCharacter): void
+  + handleMove(GenericTile): void
+  + handleReceiveAttack(Double): void
+  + handleAttack(BaseCharacter, AttackStrategy): void
+  + updateState(): void
+  + handleHeal(): void
+   name: String
+}
+class MovingOnMapState {
+  + MovingOnMapState(BaseCharacter): 
+  + updateState(): void
+  + handleAttack(BaseCharacter, AttackStrategy): void
+  + handleRetreat(BaseCharacter): void
+  + handleMove(GenericTile): void
+   name: String
+}
+class RetreatingState {
+  ~ RetreatingState(BaseCharacter): 
+  + updateState(): void
+  + handleRetreat(BaseCharacter): void
+   name: String
+}
+class TiredState {
+  ~ TiredState(BaseCharacter): 
+  + shouldBeTired(BaseCharacter): boolean
+  + handleAttack(BaseCharacter, AttackStrategy): void
+  + handleHeal(): void
+  + handleMove(GenericTile): void
+  + handleGainMana(): void
+  + updateState(): void
+  + handleRetreat(BaseCharacter): void
+   name: String
+}
+
+AttackingState    -[#000082,plain]--^  BaseState
+BaseState         -[#008200,dashed]-^  CharacterState   
+DeadState         -[#000082,plain]-^  BaseState
+GainManaState     -[#000082,plain]-^  BaseState
+HealState         -[#000082,plain]--^  BaseState
+IdleState         -[#000082,plain]--^  BaseState
+MovingOnMapState  -[#000082,plain]-^  BaseState
+RetreatingState   -[#000082,plain]-^  BaseState        
+TiredState        -[#000082,plain]--^  BaseState
+@enduml
