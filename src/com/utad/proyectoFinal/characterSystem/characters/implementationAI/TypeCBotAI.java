@@ -45,9 +45,11 @@ public class TypeCBotAI extends BotAI {
     @Override
     public void performAction(Bot bot) {
 
+        // After list ends ask for a new one
         if (currentStepTile != null && currentStepTile.getOcupiedObject() instanceof Bot enemyBot && enemyBot.equals(bot)) {
             try {
                 this.targets = MapGenerator.getInstance().getPathToObjective(bot.getCurrentPosition(), BotActionType.LOOKING_FOR_ENEMY.getStrategy());
+                this.currentStepTile = targets.size() <= 1 ? targets.get(0) : targets.get(1); 
             } catch (Exception e) {
                 System.err.println("TypeC: Atacando a sí mismo");
                 e.printStackTrace();
