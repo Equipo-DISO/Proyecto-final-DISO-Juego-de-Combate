@@ -22,7 +22,7 @@ Este proyecto consiste en un juego de combate por turnos desarrollado en Java, q
 
 ### Patrones de Diseño Implementados
 
-- **Singleton**: Utilizado en clases como `GameContext`, `CombatManager` y `MapGenerator`.
+- **Singleton**: Utilizado en clases como `Calculator`, `GameContext`, `CombatManager` y `MapGenerator`.
 - **Factory Method / Static Factory**: Varias clases como `SimpleWeaponFactory`, `SimpleHelmetFactory`, `SimplePotionFactory`, y las fábricas de Bots (`TypeABotFactory`, etc.) se utilizan para la creación de objetos específicos.
 - **Abstract Factory**: El patrón `TileFactory` (con `NormalTileFactory` como implementación concreta) se usa para crear familias de objetos `TileAbstract` (como `GenericTile` y `ObstacleTile`).
 - **Strategy**: Aplicado en las estrategias de ataque (`AbstractAttackStrategy` con `LightAttackStrategy`, `HeavyAttackStrategy`) y en las estrategias de búsqueda de caminos para los bots (`PathFindingStrategy` con `ClosestEnemyStrategy`, `ClosestLootStrategy`).
@@ -118,9 +118,10 @@ El subpaquete `characters/states/strategies` implementa un sistema sofisticado p
 2. **AbstractAttackStrategy (Clase Abstracta):**
    - Implementa el patrón Template Method definiendo el flujo del ataque:
      1. Verificar que atacante y objetivo estén vivos
-     2. Validar y consumir el maná requerido
-     3. Calcular si el ataque impacta
-     4. Calcular y aplicar el daño
+     2. Validar si se tiene el maná requerido
+     3. Consumir el maná requerido
+     4. Calcular si el ataque impacta
+     5. Calcular y aplicar el daño
    - Proporciona métodos auxiliares para:
      - Mensajes de golpes críticos
      - Aplicación de daño
