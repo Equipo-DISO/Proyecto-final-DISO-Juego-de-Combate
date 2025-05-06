@@ -47,11 +47,14 @@ public class TypeCBotAI extends BotAI {
         try {
             if (bot.getCurrentState() instanceof TiredState) {
                 bot.gainMana();
-            } else {
+            } else if (currentStepTile.getOcupiedObject() instanceof Bot) {
+                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new LightAttackStrategy());
+            } else {    
                 MapGenerator.getInstance().executeActionOnMove(bot, currentStepTile);
             }
         } catch (Exception e) {
-            System.out.println("Error ejecutando acción de TypeC: " + e.getMessage());
+            System.err.println("Error ejecutando acción de TypeC: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     

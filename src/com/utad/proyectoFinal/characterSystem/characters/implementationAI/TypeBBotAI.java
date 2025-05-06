@@ -49,16 +49,17 @@ public class TypeBBotAI extends BotAI {
     public void performAction(Bot bot) {
 
         try {
-            if (currentStepTile.getOcupiedObject() instanceof Bot) {
-                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
-            } else if (bot.getCurrentState() instanceof TiredState)     {
+            if (bot.getCurrentState() instanceof TiredState) {
                 bot.gainMana();
+            } else if (currentStepTile.getOcupiedObject() instanceof Bot) {
+                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
             } else {
                 MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
             }
         } catch (Exception e) {
-            System.out.println("no hay mapa aun");
-        }
+            System.err.println("Error ejecutando acción de TypeB: " + e.getMessage());
+            e.printStackTrace();
+        }   
     }
     
     /**
