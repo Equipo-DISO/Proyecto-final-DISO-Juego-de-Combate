@@ -157,22 +157,25 @@ public class CombatInterface extends JFrame implements Interface {
 
     // ACTION BUTTONS FUNCTION
     private void action(int type) {
-        // Use CombatManager to handle player action
-        CombatManager combatManager = CombatManager.getInstance();
-        boolean battleEnded = combatManager.handlePlayerAction(this.player, this.enemy, type, this);
-        
-        // Update UI
-        updatePanels();
-        feedPanel.revalidate();
-        feedPanel.repaint();
-        this.feedUpdated = true;
-        
-        // If battle ended, hide combat interface
-        if (battleEnded) {
-            hideInterface();
-            return;
+
+        if (player.isAlive() && enemy.isAlive()){
+            // Use CombatManager to handle player action
+            CombatManager combatManager = CombatManager.getInstance();
+            boolean battleEnded = combatManager.handlePlayerAction(this.player, this.enemy, type, this);
+            
+            // Update UI
+            updatePanels();
+            feedPanel.revalidate();
+            feedPanel.repaint();
+            this.feedUpdated = true;
+            
+            // If battle ended, hide combat interface
+            if (battleEnded) {
+                hideInterface();
+                return;
+            }
+            else handleBotTurn(); // fix exception creo
         }
-        else handleBotTurn(); // fix exception creo
     }
     
     // Bot turn handling

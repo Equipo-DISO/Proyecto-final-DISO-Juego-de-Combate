@@ -10,6 +10,7 @@ import com.utad.proyectoFinal.ui.podium.PodiumInterface;
 public class GameContext implements PushModelObserver {
 
     private static GameContext instance = null;
+    PodiumInterface podium = null;
 
     private Integer personajesIniciales;
     private Integer personajesVivos;
@@ -44,20 +45,21 @@ public class GameContext implements PushModelObserver {
         personajesVivos--;
         System.out.println("Ha muerto " + character.getName() + ". Vivos: " + personajesVivos);
 
-        if(personajesVivos == 1) {
+        if(personajesVivos == 1 && character instanceof Bot && podium == null) {
             System.out.println(personajesMuertos.size());
-            PodiumInterface podium = new PodiumInterface(personajesVivos, personajesIniciales, null, personajesMuertos);
+            podium = new PodiumInterface(personajesVivos, personajesIniciales, null, personajesMuertos);
             podium.showInterface();
         }
     }
 
     public void playerKilled(CombatCharacter character) {
-        PodiumInterface podium = new PodiumInterface(personajesIniciales, personajesVivos, character.getName(), personajesMuertos);
+        podium = new PodiumInterface(personajesIniciales, personajesVivos, character.getName(), personajesMuertos);
         podium.showInterface();
     }
 
     public void characterKilled(CombatCharacter character) {
         personajesMuertos.add(character.getName());
+        if (podium != null) podium.updateKillList(personajesMuertos);
     }
     
     public Integer getPersonajesVivos() {

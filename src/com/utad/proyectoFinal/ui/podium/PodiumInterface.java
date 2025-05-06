@@ -23,6 +23,8 @@ import com.utad.proyectoFinal.ui.combat.Action;
 
 public class PodiumInterface extends JFrame implements Interface{
 
+    JPanel killPanel;
+
     private Random random = new Random();
     private int correctButton;
 
@@ -30,6 +32,7 @@ public class PodiumInterface extends JFrame implements Interface{
         this(playersLeft, playersTotal, killer, new LinkedList<String>());
     }
     public PodiumInterface(Integer playersLeft, Integer playersTotal, String killer, LinkedList<String> kills) {
+        System.out.println(killer);
         setTitle("Juego de Combate");
         setIconImage(new SimplifiedImage("Files/img/Logo.png").generateImage(100, 130));
 
@@ -166,14 +169,13 @@ public class PodiumInterface extends JFrame implements Interface{
         add(mainPanel, BorderLayout.CENTER);
 
         // Side panel
-        JPanel killPanel = new JPanel(new GridLayout(9, 1));
+        killPanel = new JPanel(new GridLayout(9, 1));
         killPanel.setPreferredSize(new Dimension(212, Short.MAX_VALUE));
+        killPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 
         JLabel killsTitle = new JLabel("Has acabado con:", SwingConstants.LEFT);
         killsTitle.setFont(new Font(Font.DIALOG, Font.BOLD, 20));
         killsTitle.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 15));
-
-        killPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
         killPanel.add(killsTitle);
 
         if (kills.size() > 0) for (String kill : kills) {
@@ -203,6 +205,34 @@ public class PodiumInterface extends JFrame implements Interface{
         }
         else correctButton = random.nextInt(3); // Cambiar el botón correcto
     }
+
+    public void updateKillList(LinkedList<String> kills) {
+
+        killPanel.removeAll();
+
+        JLabel killsTitle = new JLabel("Has acabado con:", SwingConstants.LEFT);
+        killsTitle.setFont(new Font(Font.DIALOG, Font.BOLD, 20));
+        killsTitle.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 15));
+        killPanel.add(killsTitle);
+
+        if (kills.size() > 0) for (String kill : kills) {
+            JLabel killLabel = new JLabel("· " + kill, SwingConstants.LEFT);
+            killLabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 16));
+            killLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+            killPanel.add(killLabel);
+        }
+        else{
+            JLabel killLabel = new JLabel("... nadie, ¿en serio?", SwingConstants.LEFT);
+            killLabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 16));
+            killLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+            killPanel.add(killLabel);
+        }
+
+        killPanel.revalidate();
+        killPanel.repaint();
+    }
+
+
     @Override
     public void showInterface() {
         setVisible(true);
