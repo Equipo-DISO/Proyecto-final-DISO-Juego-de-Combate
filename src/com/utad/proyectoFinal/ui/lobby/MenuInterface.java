@@ -259,6 +259,17 @@ public class MenuInterface extends JFrame implements Interface {
         return botList;
     }
 
+    public LinkedList<String> getBotNames(){
+        LinkedList<String> botNames = new LinkedList<String>();
+
+        for (JPanel bot : this.bots) {
+            String botName = ((JLabel) bot.getComponent(1)).getText();
+            botNames.add(botName);
+        }
+
+        return botNames;
+    }
+
     public BaseCharacter getPlayerCharacter() {
 
         String name = nombreLabel.getText();

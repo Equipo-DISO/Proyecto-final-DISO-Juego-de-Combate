@@ -21,10 +21,24 @@ public class IdleState extends BaseState {
             if (character.getFeedLogger() != null) {
                 character.getFeedLogger().addFeedLine(message.toString(), Action.BREAK);
             }
+
         } else {
-            // Cambiar al estado de ataque
-            character.transitionTo(character.getStates().getAttackingState());
-            character.getCurrentState().handleAttack(opponent, attackStrategy);
+            if (opponent != super.character){
+                // Cambiar al estado de ataque
+                character.transitionTo(character.getStates().getAttackingState());
+                character.getCurrentState().handleAttack(opponent, attackStrategy);
+            }
+            else {
+                // Ocurre cuando el personaje intenta atacarse a sí mismo
+                // No deberia pasar, pero lo hace
+                // He estado haciendo pruebas, y ha medio funcionado, pero
+                // las he tenido que descartar xq se me han roto otras cosas peores
+                StringBuilder message = new StringBuilder(String.format("%s no puede atacarse a sí mismo.%n", character.getName()));
+                System.out.printf(message.toString());
+                if (character.getFeedLogger() != null) {
+                    character.getFeedLogger().addFeedLine(message.toString(), Action.BREAK);
+                }
+            }
         }
     }
 

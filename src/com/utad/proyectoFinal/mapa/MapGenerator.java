@@ -254,7 +254,13 @@ public class MapGenerator extends JPanel
         {
             BaseCharacter enemyCharacter = (BaseCharacter) objective.getOcupiedObject();
 
-            if ((!character.getEsControlado() || !enemyCharacter.getEsControlado()) && !MapController.getDisableMap())
+            // Si Julbez lo tiene que quitar que lo quite,
+            // pero en principio evita que se te abra el menu de combate
+            // con un muerto y ademas se puede usar para ocultar las tumbas
+            if (!character.isAlive() || !enemyCharacter.isAlive()){
+                // hide tomb images
+            }
+            else if ((!character.getEsControlado() || !enemyCharacter.getEsControlado()) && !MapController.getDisableMap())
             {
                 MapController.setDisableMap(true);
                 updateRendering(); // java te puto odio

@@ -58,6 +58,4 @@ public class Bot extends BaseCharacter {
     public void setBotActionType(BotActionType botActionType) {
         this.botActionType = botActionType;
     }
-
-
 }
