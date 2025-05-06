@@ -49,8 +49,7 @@ public class CombatPlayerPanel extends JPanel{
         this.hpMax = character.getMaxHealthPoints();
         this.mpMax = character.getMaxManaPoints();
 
-        if (this.alignment == JLabel.LEFT) this.nPotions = character.getHpPotions();
-        else this.nPotions = 0;
+        this.nPotions = character.getHpPotions();
         getInventoryImages();
 
         setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
@@ -147,6 +146,7 @@ public class CombatPlayerPanel extends JPanel{
     public void updateValues(int hp, int mp) {
         this.hp = hp;
         this.mp = mp;
+        this.nPotions = this.character.getHpPotions();
 
         updateSliders();
 
