@@ -53,12 +53,13 @@ public abstract class AbstractAttackStrategy implements AttackStrategy {
     public final void execute(BaseCharacter attacker, BaseCharacter target) {
 
         // 1. Comprobar si los personajes están vivos
-        if (!attacker.isAlive() || !target.isAlive()) {
+        if (areCharactersAlive(attacker, target)) {
             return;
         }
 
         // 2. Comprobar si hay suficiente maná
         int manaCost = calculateManaCost();
+
         if (attacker.getManaPoints() < manaCost) {
             StringBuilder message = new StringBuilder(String.format("%s intenta %s pero no tiene suficiente maná (%d requerido).%n",
                     attacker.getName(), name, manaCost));
@@ -74,6 +75,7 @@ public abstract class AbstractAttackStrategy implements AttackStrategy {
 
         // 4. Comprobar si impacta
         if (!calculateHitSuccess(attacker)) {
+            // 5b. Avisar del fallo
             applyMiss(attacker, target);
             return;
         }
@@ -81,6 +83,10 @@ public abstract class AbstractAttackStrategy implements AttackStrategy {
         // 5. Calcular daño y aplicarlo
         double damage = calculateDamage(attacker);
         applyHit(attacker, target, damage);
+    }
+
+    private boolean areCharactersAlive(BaseCharacter attacker, BaseCharacter target) {
+        return !attacker.isAlive() || !target.isAlive();
     }
 
     /* -------------------------- Métodos utilitarios ------------------------ */

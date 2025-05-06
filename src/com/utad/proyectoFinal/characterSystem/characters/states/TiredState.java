@@ -57,7 +57,7 @@ public class TiredState extends BaseState {
     public void handleGainMana() {
         // Cambiar al estado de ganancia de maná
         character.transitionTo(character.getStates().getGainManaState());
-        ((GainManaState) character.getCurrentState()).gainMana();
+        character.getCurrentState().handleGainMana();
     }
     
     @Override
