@@ -257,6 +257,9 @@ public class CombatInterface extends JFrame implements Interface {
         feedPanel.add(line);
         feedPanel.revalidate();
         feedPanel.repaint();
+        
+        // Desplazar automáticamente al final del contenido
+        slideBottom();
     }
 
     public Boolean getFeedUpdated(){
@@ -264,11 +267,16 @@ public class CombatInterface extends JFrame implements Interface {
     }
 
     public void slideBottom() {
-        scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+        // Asegurar que los componentes estén actualizados antes de desplazarse
         feedPanel.revalidate();
         feedPanel.repaint();
-
-        System.out.println("scroll");
+        
+        // Desplazarse al final del panel (usando SwingUtilities.invokeLater para garantizar que ocurra después de la actualización)
+        SwingUtilities.invokeLater(() -> {
+            JScrollBar vertical = scrollPane.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
+        
         this.feedUpdated = false;
     }
 }

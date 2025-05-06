@@ -37,7 +37,7 @@ public class CombatManager {
     public boolean handlePlayerAction(CombatCharacter player, CombatCharacter enemy, CombatActionType actionType, CombatInterface combatInterface) {
         boolean isRunning = false;
         
-        combatInterface.addFeedLine("---Comenzando turno del jugador---", Action.NEW_TURN);
+        combatInterface.addFeedLine("\n ---Comenzando turno del jugador---", Action.NEW_TURN);
 
         // Set feed loggers
         player.setFeedLogger(combatInterface);
@@ -84,7 +84,7 @@ public class CombatManager {
      */
     public boolean handleBotTurn(CombatCharacter player, CombatCharacter enemy, CombatInterface combatInterface) {
         
-        combatInterface.addFeedLine("---Comenzando turno del enemigo---", Action.NEW_TURN); 
+        combatInterface.addFeedLine("\n---Comenzando turno del enemigo---", Action.NEW_TURN); 
 
         // Set feed loggers
         player.setFeedLogger(combatInterface);
