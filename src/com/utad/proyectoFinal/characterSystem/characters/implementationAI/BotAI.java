@@ -19,4 +19,6 @@ public abstract class BotAI {
     protected abstract void analyzeSituation(Bot bot);
     protected abstract void decideNextMove(GenericTile tile, Bot bot);
     protected abstract void performAction(Bot bot);
+
+
 }

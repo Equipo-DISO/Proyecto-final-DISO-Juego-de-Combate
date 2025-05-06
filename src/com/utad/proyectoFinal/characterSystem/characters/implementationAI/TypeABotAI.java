@@ -1,9 +1,8 @@
 package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 
-import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
-import com.utad.proyectoFinal.characterSystem.characters.states.TiredState;
-import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
-import com.utad.proyectoFinal.mapa.*;
+import com.utad.proyectoFinal.mapa.ClosestLootStrategy;
+import com.utad.proyectoFinal.mapa.GenericTile;
+import com.utad.proyectoFinal.mapa.MapGenerator;
 
 public class TypeABotAI extends BotAI {
 
@@ -22,17 +21,9 @@ public class TypeABotAI extends BotAI {
     @Override
     public void decideNextMove(GenericTile tile, Bot bot) {
         //si nos movemos seteamos actiontype move y si atacamos seteamos actiontype attack
-        if(targets != null && !targets.isEmpty()) {
-            if(currentStepTile.isOcupiedByCharacter()){
-                bot.setBotActionType(BotActionType.ATTACK);
-            }else{
-                bot.setBotActionType(BotActionType.MOVE);
-            }
-        }
+        
 
-        if(bot.getCurrentState() instanceof TiredState){
-            bot.setBotActionType(BotActionType.MANAREGEN);
-        }
+    
     }
 
     @Override
