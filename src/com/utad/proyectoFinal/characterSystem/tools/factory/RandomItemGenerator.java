@@ -18,28 +18,36 @@ public class RandomItemGenerator {
     }
     
     /**
-     * Crea un item aleatorio (poción, arma o casco).
+     * Crea un item aleatorio (poción, arma, casco o cofre).
      * 
      * @return Un item aleatorio
      */
     public static MapObject createRandomItem() {
-        // Generar un número aleatorio para decidir el tipo de item
-        int itemType = (int)(Math.random() * 3); // 0: poción, 1: arma, 2: casco
+        // Probabilidad ajustada para hacer los cofres menos comunes (10%)
+        double randomValue = Math.random();
         
-        switch(itemType) {
-            case 0: // Poción
-                return createRandomPotion();
-                
-            case 1: // Arma
-                return createRandomWeapon();
-                
-            case 2: // Casco
-                return createRandomHelmet();
-                
-            default:
-                // Por defecto, devolver una poción de vida
-                return SimplePotionFactory.createPotion("HEALTH_POTION");
+        if (randomValue < 0.30) {
+            // 30% probabilidad de poción
+            return createRandomPotion();
+        } else if (randomValue < 0.60) {
+            // 30% probabilidad de arma
+            return createRandomWeapon();
+        } else if (randomValue < 0.90) {
+            // 30% probabilidad de casco
+            return createRandomHelmet();
+        } else {
+            // 10% probabilidad de cofre
+            return createChest();
         }
+    }
+    
+    /**
+     * Crea un cofre que contiene items aleatorios.
+     * 
+     * @return Un cofre con items aleatorios
+     */
+    public static Chest createChest() {
+        return new Chest(new RandomItemFactory());
     }
     
     /**

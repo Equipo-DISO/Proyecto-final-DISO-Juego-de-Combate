@@ -1,5 +1,6 @@
 package com.utad.proyectoFinal.characterSystem.tools.items;
 
+import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.tools.factory.RandomItemFactory;
 import com.utad.proyectoFinal.mapa.MapObject;
 import com.utad.proyectoFinal.mapa.RenderParameters;
@@ -13,7 +14,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-public class Chest implements MapObject {
+public class Chest implements MapObject, Consumable {
 
     private final List<MapObject> contenido;
 
@@ -38,11 +39,23 @@ public class Chest implements MapObject {
     }
 
     @Override
+    public boolean consume(CombatCharacter character) {
+        for (MapObject mapObject : contenido) {
+            if (mapObject instanceof Consumable consume){
+                consume.consume(character);
+            }
+
+        }
+
+        return true;
+    }
+
+    @Override
     public Image getImage() {
         try {
             return ImageIO.read(new File("Files/img/Cofre.png"));
         } catch (IOException e) {
-            System.err.println("Error loading upgrade mana potion image: " + e.getMessage());
+            System.err.println("Error loading chest image: " + e.getMessage());
             // Return a small blank image as fallback
             return new BufferedImage(30, 30, BufferedImage.TYPE_INT_ARGB);
         }

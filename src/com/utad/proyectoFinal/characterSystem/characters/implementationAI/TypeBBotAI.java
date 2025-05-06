@@ -6,7 +6,6 @@ import com.utad.proyectoFinal.characterSystem.characters.states.strategies.Heavy
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapGenerator;
-import com.utad.proyectoFinal.mapa.ClosestEnemyStrategy;
 import com.utad.proyectoFinal.mapa.PathFindingStrategy;
 
 public class TypeBBotAI extends BotAI {

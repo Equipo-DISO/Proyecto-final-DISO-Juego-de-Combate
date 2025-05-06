@@ -20,7 +20,7 @@ import java.util.LinkedList;
 public class MapGenerator extends JPanel 
 {
     public static final Double DEFAULT_OBSTACLE_PROBABILITY = 0.45d;
-    public static final Double DEFAULT_LOOT_PROBABILITY = 0.28d;
+    public static final Double DEFAULT_LOOT_PROBABILITY = 0.30d;
 
 
     private TileFactory factory;

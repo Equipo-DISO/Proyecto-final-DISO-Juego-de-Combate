@@ -14,15 +14,17 @@ public abstract class AbstractAttackStrategy implements AttackStrategy {
     protected AbstractAttackStrategy(String name) {
         this.name = name;
     }
-
     /* ------------------------------- Template ------------------------------ */
 
     @Override
     public final void execute(BaseCharacter attacker, BaseCharacter target) {
+
+        // 1. Comprobar si los personajes están vivos
         if (!attacker.isAlive() || !target.isAlive()) {
             return;
         }
 
+        // 2. Comprobar si hay suficiente maná
         int manaCost = calculateManaCost();
         if (attacker.getManaPoints() < manaCost) {
             StringBuilder message = new StringBuilder(String.format("%s intenta %s pero no tiene suficiente maná (%d requerido).%n",
@@ -34,16 +36,16 @@ public abstract class AbstractAttackStrategy implements AttackStrategy {
             return;
         }
 
-        // 1. Consumir maná
+        // 3. Consumir maná
         attacker.decreaseManaPoints(manaCost);
 
-        // 2. Comprobar si impacta
+        // 4. Comprobar si impacta
         if (!calculateHitSuccess(attacker)) {
             applyMiss(attacker, target);
             return;
         }
 
-        // 3. Calcular daño y aplicarlo
+        // 5. Calcular daño y aplicarlo
         double damage = calculateDamage(attacker);
         applyHit(attacker, target, damage);
     }
