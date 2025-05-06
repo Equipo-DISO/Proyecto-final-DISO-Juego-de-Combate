@@ -259,8 +259,8 @@ public class MapGenerator extends JPanel
                 // hide tomb images
                 System.out.println("calvo " + character.isAlive() + " " + character.getName() + " | " + enemyCharacter.isAlive() + " " + enemyCharacter.getName());
 
-                if (!character.isAlive()) { character.setCurrentPosition(null); }
-                if (!enemyCharacter.isAlive()) { character.setCurrentPosition(null); }
+                if (!character.isAlive()) { character.getCurrentPosition().setOcupiedObject(null); character.setCurrentPosition(null); }
+                if (!enemyCharacter.isAlive()) { enemyCharacter.getCurrentPosition().setOcupiedObject(null); enemyCharacter.setCurrentPosition(null); }
             }
             else if ((!character.getEsControlado() || !enemyCharacter.getEsControlado()) && !MapController.getDisableMap())
             {
