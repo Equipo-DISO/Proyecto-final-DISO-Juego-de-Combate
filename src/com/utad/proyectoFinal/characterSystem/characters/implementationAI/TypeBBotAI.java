@@ -3,6 +3,7 @@ package com.utad.proyectoFinal.characterSystem.characters.implementationAI;
 import com.utad.proyectoFinal.characterSystem.characters.DefaultAttributes;
 import com.utad.proyectoFinal.characterSystem.characters.states.TiredState;
 import com.utad.proyectoFinal.characterSystem.characters.states.strategies.HeavyAttackStrategy;
+import com.utad.proyectoFinal.characterSystem.characters.states.strategies.LightAttackStrategy;
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.mapa.GenericTile;
 import com.utad.proyectoFinal.mapa.MapGenerator;
@@ -63,7 +64,11 @@ public class TypeBBotAI extends BotAI {
                 bot.gainMana();
             } else if (currentStepTile != null && currentStepTile.getOcupiedObject() instanceof Bot enemyBot && !enemyBot.equals(bot)) {
                 // Asegurarse de que no se ataque a sí mismo
-                bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
+                if (bot.getManaPoints() >= HEAVY_ATTACK_MANA_NEEDED) {
+                    bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new HeavyAttackStrategy());
+                } else {
+                    bot.attack((CombatCharacter) currentStepTile.getOcupiedObject(), new LightAttackStrategy());
+                }
             } else {
                 MapGenerator.getInstance().executeActionOnMove(bot, this.currentStepTile);
             }
