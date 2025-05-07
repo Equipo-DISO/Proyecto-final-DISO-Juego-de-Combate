@@ -202,6 +202,7 @@ public class CombatInterface extends JFrame implements Interface {
             }
             else handleBotTurn(); // fix exception creo
         }
+        else hideInterface();
     }
     
     // Bot turn handling
