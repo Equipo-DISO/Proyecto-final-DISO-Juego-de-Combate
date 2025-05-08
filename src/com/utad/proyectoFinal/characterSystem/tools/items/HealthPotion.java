@@ -19,13 +19,11 @@ public class HealthPotion extends GenericItem {
     }
     
     @Override
-    public boolean consume(CombatCharacter character) {
+    public void consume(CombatCharacter character) {
         if (canConsume(character)) {
             // Usa el método heal() de CombatCharacter
             character.addHealthPotion();
-            return true;
         }
-        return false;
     }
     
     @Override

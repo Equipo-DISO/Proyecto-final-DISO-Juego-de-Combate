@@ -34,14 +34,12 @@ public class TileGraph
     {
         for (TileAbstract tile : tiles)
         {
-            if (tile instanceof GenericTile)
-            {
-                if (this.isInRange(currentTile, (GenericTile) tile))
+            if (tile instanceof GenericTile genericTile && this.isInRange(currentTile, genericTile))
                 {
                     this.adjacencyMatrix[currentTile.getTileId()][tile.getTileId()] = 1;
                     this.adjacencyMatrix[tile.getTileId()][currentTile.getTileId()] = 1;
                 }
-            }           
+
         }
     }
 
@@ -54,7 +52,7 @@ public class TileGraph
 
         for (List<GenericTile> component : connectedComponents.values()) 
         {
-            connectComponentToNearest(allTiles, component, connectedComponents);
+            connectComponentToNearest(component, connectedComponents);
         }
         
         connectSubGraphs(allTiles);
@@ -100,9 +98,9 @@ public class TileGraph
         // Filtramos solo los GenericTile
         for (TileAbstract tile : allTiles) 
         {
-            if (tile instanceof GenericTile) 
+            if (tile instanceof GenericTile genericTile)
             {
-                genericTiles.add((GenericTile) tile);
+                genericTiles.add(genericTile);
             }
         }
 
@@ -137,7 +135,7 @@ public class TileGraph
         }
     }
 
-    private void connectComponentToNearest(List<TileAbstract> allTiles, List<GenericTile> component, Map<Integer, List<GenericTile>> allComponents) 
+    private void connectComponentToNearest(List<GenericTile> component, Map<Integer, List<GenericTile>> allComponents)
     {
         GenericTile closestFrom = null;
         GenericTile closestTo = null;
@@ -165,7 +163,7 @@ public class TileGraph
         }
 
         
-        if (closestFrom != null && closestTo != null) 
+        if (closestFrom != null)
         {
             adjacencyMatrix[closestFrom.getTileId()][closestTo.getTileId()] = 2;
             adjacencyMatrix[closestTo.getTileId()][closestFrom.getTileId()] = 2;
@@ -185,7 +183,7 @@ public class TileGraph
         while (!queue.isEmpty()) 
         {
             List<GenericTile> currentPath = queue.poll();
-            GenericTile lastTile = currentPath.get(currentPath.size() - 1);
+            GenericTile lastTile = currentPath.getLast();
             
   
             if (lastTile.getTileId().equals(targetTileId)) 

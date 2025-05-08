@@ -57,7 +57,7 @@ public class BaseHelmet implements MapObject, Consumable {
 
     // --- Metodo para obtener el Avatar ---
     public Image getAvatar() {
-        Image avatar = null;
+        Image avatar;
 
         try {
             File file = new File(this.imagePath);
@@ -88,10 +88,9 @@ public class BaseHelmet implements MapObject, Consumable {
     }
 
     @Override
-    public boolean consume(CombatCharacter character) {
+    public void consume(CombatCharacter character) {
         // Usa el método específico para mejorar la defensa
         character.equipHelmet(this);
-        return true;
     }
 
     @Override

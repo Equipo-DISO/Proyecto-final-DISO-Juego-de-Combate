@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.LinkedList;
-import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -16,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import com.utad.proyectoFinal.gameManagement.GameContext;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
 import com.utad.proyectoFinal.ui.combat.Action;
@@ -107,12 +105,17 @@ public class PodiumInterface extends JFrame implements Interface{
         exitButton.setFocusable(false);
 
         exitButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 exitButton.setBackground(Color.LIGHT_GRAY);
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 exitButton.setBackground(null);
             }
+
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 quit(); // Restart game
             }
@@ -133,7 +136,7 @@ public class PodiumInterface extends JFrame implements Interface{
         killsTitle.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 15));
         killPanel.add(killsTitle);
 
-        if (kills.size() > 0) for (String kill : kills) {
+        if (!kills.isEmpty()) for (String kill : kills) {
             JLabel killLabel = new JLabel("· " + kill, SwingConstants.LEFT);
             killLabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 16));
             killLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
@@ -163,7 +166,7 @@ public class PodiumInterface extends JFrame implements Interface{
         killsTitle.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 15));
         killPanel.add(killsTitle);
 
-        if (kills.size() > 0) for (String kill : kills) {
+        if (!kills.isEmpty()) for (String kill : kills) {
             JLabel killLabel = new JLabel("· " + kill, SwingConstants.LEFT);
             killLabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 16));
             killLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
@@ -188,11 +191,6 @@ public class PodiumInterface extends JFrame implements Interface{
     @Override
     public void hideInterface() {
         setVisible(false);
-    }
-    
-    @Override
-    public Object getData() {
-        throw new UnsupportedOperationException("Unimplemented method 'getData'");
     }
 
     

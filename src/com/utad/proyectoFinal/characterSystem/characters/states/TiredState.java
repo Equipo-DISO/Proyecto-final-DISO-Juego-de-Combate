@@ -47,7 +47,7 @@ public class TiredState extends BaseState {
     public void handleHeal() {
         // Cambiar al estado de curación
         character.transitionTo(character.getStates().getHealState());
-        ((HealState) character.getCurrentState()).handleHeal();
+        character.getCurrentState().handleHeal();
     }
 
     /**

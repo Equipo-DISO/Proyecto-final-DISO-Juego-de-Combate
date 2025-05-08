@@ -14,8 +14,8 @@ public class MapListener extends MouseAdapter
    
     private Point dragStart;
     private long clickTime;
-    private Integer dx = 0;
-    private Integer dy = 0;
+    private Integer dx;
+    private Integer dy;
 
 
     public MapListener(MapGenerator m, List<TileAbstract> tiles) 
@@ -28,7 +28,8 @@ public class MapListener extends MouseAdapter
         this.dy = 0;
     }
 
-    public void mousePressed(MouseEvent e) 
+    @Override
+    public void mousePressed(MouseEvent e)
     {
         if (MapController.getDisableMap()) return;
         this.dragStart = e.getPoint();
@@ -75,10 +76,10 @@ public class MapListener extends MouseAdapter
                     Point p2 = adjustPoint(e.getPoint());
                     for (TileAbstract t : tiles)
                     {
-                        if (t.contains(p2.x, p2.y))
-                        if (t == initialTile){
+                        if (t.contains(p2.x, p2.y) && t == initialTile){
                             this.map.executeActionOnMove(this.map.getPlayer(), (GenericTile) t);
                             break;
+
                         }
                     }
                 }
@@ -100,7 +101,8 @@ public class MapListener extends MouseAdapter
             if (t.contains(p.x, p.y)) 
             {
                 this.map.executeActionOnMove(this.map.getPlayer(), (GenericTile) t);
-                //this.map.pathFindingDebug(this.map.getPathToObjective(this.map.getPlayer().getCurrentPosition(), new ClosestLootStrategy()));
+                // Uncomment para ver los tiles del pathfinding
+                // this.map.pathFindingDebug(this.map.getPathToObjective(this.map.getPlayer().getCurrentPosition(), new ClosestLootStrategy()));
                 //System.out.println("Has clicado la tile en: " + t.getTileId());
                 break;
             }
@@ -119,6 +121,7 @@ public class MapListener extends MouseAdapter
             if (now != t.getIsHovered()) 
             {
                 t.setHovered(now);
+                // Uncomment for debugging
                 //System.out.println("hovering " + t.getTileId());
             }
         }

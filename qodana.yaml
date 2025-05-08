@@ -24,4 +24,6 @@ projectJDK: "21" #(Applied in CI/CD pipeline)
 linter: jetbrains/qodana-jvm:2024.3
 include:
   - name: CommentedOutCode
-  - name: ThrowablePrintStackTrace
+  - name: "ThrowablePrintStackTrace\r"
+  - name: FieldCanBeLocal
+  - name: RedundantCast

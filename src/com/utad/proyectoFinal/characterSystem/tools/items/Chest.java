@@ -39,7 +39,7 @@ public class Chest implements MapObject, Consumable {
     }
 
     @Override
-    public boolean consume(CombatCharacter character) {
+    public void consume(CombatCharacter character) {
         for (MapObject mapObject : contenido) {
             if (mapObject instanceof Consumable consume){
                 consume.consume(character);
@@ -47,7 +47,6 @@ public class Chest implements MapObject, Consumable {
 
         }
 
-        return true;
     }
 
     @Override

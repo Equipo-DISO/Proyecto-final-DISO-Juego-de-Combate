@@ -27,7 +27,7 @@ public class TypeCBotAI extends BotAI {
         }
 
         if (targets != null && !targets.isEmpty()) {
-            this.currentStepTile = targets.size() <= 1 ? targets.get(0) : targets.get(1);
+            this.currentStepTile = targets.size() == 1 ? targets.get(0) : targets.get(1);
         }
     }
 
@@ -76,7 +76,7 @@ public class TypeCBotAI extends BotAI {
      * 2. Healing whenever possible if health is low
      * 3. Gaining mana if low
      * 4. Using light attacks to conserve mana
-     * 5. Only using heavy attacks if in good condition
+     * 5. Only using heavy attacks if in good condition.
      * @param bot The bot character
      *
      * @return The combat action type to perform

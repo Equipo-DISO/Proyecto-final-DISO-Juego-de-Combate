@@ -23,10 +23,15 @@ import java.util.Random;
  */
 public class CriticalHitAndDurabilityTest extends JFrame {
 
+    public static final String ATTACK_TYPE = "Light";
+    public static final String USES_LEFT = " uses left";
+    public static final String STATUS_INDICATOR_OK = " (OK)";
+    public static final String WEAPON = "Weapon: ";
+    public static final String HELMET = "Helmet: ";
+    public static final String LOG_DIVIDER = "------------------------------------------";
     private TestCharacter attacker;
     private TestCharacter defender;
     private JTextArea combatLog;
-    private JPanel statPanel;
     private JProgressBar attackerHealthBar;
     private JProgressBar defenderHealthBar;
     private JProgressBar weaponDurabilityBar;
@@ -86,6 +91,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
     }
     
     private void setupUI() {
+        JPanel statPanel;
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -131,17 +137,17 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         weaponDurabilityBar = new JProgressBar(0, attacker.getWeapon().getDurability());
         weaponDurabilityBar.setValue(attacker.getWeapon().getDurability());
         weaponDurabilityBar.setStringPainted(true);
-        weaponDurabilityBar.setString(attacker.getWeapon().getDurability() + " uses left");
+        weaponDurabilityBar.setString(attacker.getWeapon().getDurability() + USES_LEFT);
         
         helmetDurabilityBar = new JProgressBar(0, defender.getHelmet().getDurability());
         helmetDurabilityBar.setValue(defender.getHelmet().getDurability());
         helmetDurabilityBar.setStringPainted(true);
-        helmetDurabilityBar.setString(defender.getHelmet().getDurability() + " uses left");
+        helmetDurabilityBar.setString(defender.getHelmet().getDurability() + USES_LEFT);
         
         // Status labels
         criticalHitLabel = new JLabel("Critical hits: 0/0 (0.00%)");
-        weaponStatusLabel = new JLabel("Weapon: " + attacker.getWeapon().getName() + " (OK)");
-        helmetStatusLabel = new JLabel("Helmet: " + defender.getHelmet().getName() + " (OK)");
+        weaponStatusLabel = new JLabel(WEAPON + attacker.getWeapon().getName() + STATUS_INDICATOR_OK);
+        helmetStatusLabel = new JLabel(HELMET + defender.getHelmet().getName() + STATUS_INDICATOR_OK);
         
         statPanel.add(new JLabel("Attacker Health:"));
         statPanel.add(attackerHealthBar);
@@ -170,7 +176,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         lightAttackBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                performAttack(1.0, "Light");
+                performAttack(ATTACK_TYPE);
             }
         });
         
@@ -178,7 +184,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         heavyAttackBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                performAttack(2.0, "Heavy");
+                performAttack("Heavy");
             }
         });
         
@@ -194,7 +200,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         criticalTestBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                performMultipleAttacks(100);
+                performMultipleAttacks();
             }
         });
         
@@ -210,15 +216,15 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         // Initialize combat log
         logEvent("Test initialized with:");
         logEvent("Attacker: " + attacker.getName() + " - Base Attack: " + attacker.getBaseAttack());
-        logEvent("Weapon: " + attacker.getWeapon().getName() + 
+        logEvent(WEAPON + attacker.getWeapon().getName() +
                  " - Damage: " + attacker.getWeapon().getDamage() + 
                  " - Critical Chance: " + (attacker.getWeapon().getCriticalChance() * 100) + "%" +
                  " - Critical Multiplier: " + attacker.getWeapon().getCriticalDamage() + "x");
         logEvent("Defender: " + defender.getName() + " - Base Defense: 0.0");
-        logEvent("Helmet: " + defender.getHelmet().getName() + 
+        logEvent(HELMET + defender.getHelmet().getName() +
                  " - Defense: " + defender.getHelmet().getDefense() + 
                  " - Durability: " + defender.getHelmet().getDurability());
-        logEvent("------------------------------------------");
+        logEvent(LOG_DIVIDER);
     }
     
     private JPanel createCharacterPanel(TestCharacter character, boolean isAttacker) {
@@ -238,11 +244,9 @@ public class CriticalHitAndDurabilityTest extends JFrame {
                 g2d.fillRect(0, 0, getWidth(), getHeight());
                 
                 // Draw character in center
-                if (character != null) {
-                    int x = (getWidth() - 82) / 2;
-                    int y = (getHeight() - 100) / 2;
-                    character.render(g2d, x, y);
-                }
+                int x = (getWidth() - 82) / 2;
+                int y = (getHeight() - 100) / 2;
+                character.render(g2d, x, y);
             }
         };
         renderPanel.setPreferredSize(new Dimension(120, 150));
@@ -266,10 +270,10 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         JLabel equipLabel;
         
         if (isAttacker) {
-            equipLabel = new JLabel("Weapon: " + (character.getWeapon() != null ? 
+            equipLabel = new JLabel(WEAPON + (character.getWeapon() != null ?
                 character.getWeapon().getName() : "None"));
         } else {
-            equipLabel = new JLabel("Helmet: " + (character.getHelmet() != null ? 
+            equipLabel = new JLabel(HELMET + (character.getHelmet() != null ?
                 character.getHelmet().getName() : "None"));
         }
         
@@ -282,7 +286,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         return panel;
     }
     
-    private void performAttack(double multiplier, String attackType) {
+    private void performAttack(String attackType) {
         if (!attacker.isAlive() || !defender.isAlive()) {
             logEvent("Combat ended! Reset to continue testing.");
             return;
@@ -305,7 +309,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         if (willBeCritical) criticalHits++;
         
         // Execute attack using state system and strategy pattern
-        if (attackType.equals("Light")) {
+        if (attackType.equals(ATTACK_TYPE)) {
             attacker.attack(defender, new LightAttackStrategy());
         } else {
             attacker.attack(defender, new HeavyAttackStrategy());
@@ -373,22 +377,22 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         }
     }
     
-    private void performMultipleAttacks(int count) {
+    private void performMultipleAttacks() {
         // Ensure we're in testing mode to prevent auto-transitions
         TestUtils.setTestingMode(true);
         
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < 100; i++) {
             // Only perform if characters are still alive
             if (attacker.isAlive() && defender.isAlive() && attacker.getWeapon() != null) {
                 // Randomly choose light or heavy attack
                 boolean isLightAttack = random.nextBoolean();
-                String attackType = isLightAttack ? "Light" : "Heavy";
+                String attackType = isLightAttack ? ATTACK_TYPE : "Heavy";
                 
                 // Reset to idle state before each attack to ensure consistent behavior
                 attacker.setIdleState();
                 
                 // Perform attack
-                performAttack(isLightAttack ? 1.0 : 2.0, attackType);
+                performAttack(attackType);
                 
                 // If weapon broke, stop attacks
                 if (attacker.getWeapon() == null) {
@@ -404,13 +408,13 @@ public class CriticalHitAndDurabilityTest extends JFrame {
             }
         }
         
-        logEvent("------------------------------------------");
+        logEvent(LOG_DIVIDER);
         logEvent("Attack sequence completed. Stats:");
         logEvent("Critical hits: " + criticalHits + "/" + totalHits + 
                 " (" + df.format((double)criticalHits/totalHits * 100) + "%)");
         logEvent("Expected critical rate: " + 
                  df.format(WeaponType.SWORD.getCriticalChance() * 100) + "%");
-        logEvent("------------------------------------------");
+        logEvent(LOG_DIVIDER);
     }
     
     private void resetTest() {
@@ -445,15 +449,15 @@ public class CriticalHitAndDurabilityTest extends JFrame {
             updateHelmetDurabilityBar();
             updateCriticalHitStats();
             
-            weaponStatusLabel.setText("Weapon: " + attacker.getWeapon().getName() + " (OK)");
-            helmetStatusLabel.setText("Helmet: " + defender.getHelmet().getName() + " (OK)");
+            weaponStatusLabel.setText(WEAPON + attacker.getWeapon().getName() + STATUS_INDICATOR_OK);
+            helmetStatusLabel.setText(HELMET + defender.getHelmet().getName() + STATUS_INDICATOR_OK);
             
             // Log reset
-            logEvent("------------------------------------------");
+            logEvent(LOG_DIVIDER);
             logEvent("Test reset - characters and equipment restored");
             logEvent("Current states: Attacker: " + attacker.getCurrentStateName() + 
                     ", Defender: " + defender.getCurrentStateName());
-            logEvent("------------------------------------------");
+            logEvent(LOG_DIVIDER);
             
             // Simple UI refresh - just repaint the render panels
             if (attackerRenderPanel != null) {
@@ -493,7 +497,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         if (attacker.getWeapon() != null) {
             weaponDurabilityBar.setMaximum(WeaponType.SWORD.getDurability());
             weaponDurabilityBar.setValue(attacker.getWeapon().getDurability());
-            weaponDurabilityBar.setString(attacker.getWeapon().getDurability() + " uses left");
+            weaponDurabilityBar.setString(attacker.getWeapon().getDurability() + USES_LEFT);
         } else {
             weaponDurabilityBar.setValue(0);
             weaponDurabilityBar.setString("BROKEN");
@@ -504,7 +508,7 @@ public class CriticalHitAndDurabilityTest extends JFrame {
         if (defender.getHelmet() != null) {
             helmetDurabilityBar.setMaximum(HelmetType.DEMON_HELMET.getDurability());
             helmetDurabilityBar.setValue(defender.getHelmet().getDurability());
-            helmetDurabilityBar.setString(defender.getHelmet().getDurability() + " uses left");
+            helmetDurabilityBar.setString(defender.getHelmet().getDurability() + USES_LEFT);
         } else {
             helmetDurabilityBar.setValue(0);
             helmetDurabilityBar.setString("BROKEN");
