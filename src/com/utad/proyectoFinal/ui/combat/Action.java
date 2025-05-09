@@ -7,7 +7,7 @@ public enum Action {
     RUN("🏃", -1),
     PROTECTED("🛡️", 0),
     BREAK("❌", 0),
-    NEW_TURN("🔄", 0);
+    NEW_TURN("🔄", -1);
     ;
 
     private String actionIcon;
