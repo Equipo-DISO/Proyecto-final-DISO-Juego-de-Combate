@@ -64,7 +64,7 @@ public class BaseWeapon implements MapObject, Consumable {
 
     // --- Metodo para fumar ---
     public Image getAvatar() {
-        Image avatar = null;
+        Image avatar;
 
         try {
 
@@ -96,10 +96,9 @@ public class BaseWeapon implements MapObject, Consumable {
     }
 
     @Override
-    public boolean consume(CombatCharacter character) {
+    public void consume(CombatCharacter character) {
         // Usa el método equip() de CombatCharacter
         character.equipWeapon(this);
-        return true;
     }
 
     @Override

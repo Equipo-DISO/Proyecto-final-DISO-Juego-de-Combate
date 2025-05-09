@@ -15,11 +15,11 @@ public abstract class TileFactory
 
     protected PushModelObserver obs;
 
-    public TileFactory(Integer tiles, Integer spawns, LinkedList<Bot> bots, BaseCharacter player, PushModelObserver obs)
+    protected TileFactory(Integer tiles, Integer spawns, LinkedList<Bot> bots, BaseCharacter player, PushModelObserver obs)
     {
         this.totalNumberOfTiles = tiles;
         this.numberOfSpawns = spawns;
-        this.bots = new LinkedList<Bot>(bots);;
+        this.bots = new LinkedList<Bot>(bots);
         
         this.player = player;
 

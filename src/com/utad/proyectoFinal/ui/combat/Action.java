@@ -8,7 +8,6 @@ public enum Action {
     PROTECTED("🛡️", 0),
     BREAK("❌", 0),
     NEW_TURN("🔄", -1);
-    ;
 
     private String actionIcon;
     private Action (String action, int trim) {

@@ -114,6 +114,8 @@ public class TypeBBotAI extends BotAI {
         return CombatActionType.GAIN_MANA;
     }
 
+
+    // DEPRECATED
     /*public List<GenericTile> filtrarObjetivos(Bot bot, boolean priorizarItems) {
         List<GenericTile> items = new ArrayList<>();
         List<GenericTile> enemigos = new ArrayList<>();

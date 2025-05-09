@@ -1,27 +1,26 @@
 package com.utad.proyectoFinal.ui.combat;
 
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-
 import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 import com.utad.proyectoFinal.characterSystem.characters.implementationAI.Bot;
+import com.utad.proyectoFinal.characterSystem.characters.implementationAI.CombatActionType;
 import com.utad.proyectoFinal.gameManagement.CombatManager;
 import com.utad.proyectoFinal.mapa.MapController;
 import com.utad.proyectoFinal.ui.Interface;
 import com.utad.proyectoFinal.ui.InterfacePath;
 import com.utad.proyectoFinal.ui.SimplifiedImage;
-import com.utad.proyectoFinal.characterSystem.characters.implementationAI.CombatActionType;
-import javax.swing.Timer;
 
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 
 public class CombatInterface extends JFrame implements Interface {
     private JLabel nombreLabel;
 
-    private ArrayList<JPanel> bots = new ArrayList<>();
     private String playerImagePath = InterfacePath.PLAYER.getPath(InterfacePath.ColorEnum.GREEN);
     
     JPanel feedPanel = new JPanel();
@@ -142,20 +141,6 @@ public class CombatInterface extends JFrame implements Interface {
         // Release resources
         MapController.setDisableMap(false);
     }
-    
-    public List<String> getData() {
-        List<String> dataList = new ArrayList<>();
-        dataList.add(playerImagePath);
-        dataList.add(nombreLabel.getText());
-
-        for (JPanel bot : this.bots) {
-            JLabel botNameLabel = (JLabel) bot.getComponent(1);
-            String botName = botNameLabel.getText();
-            dataList.add(botName);
-        }
-
-        return dataList;
-    }
 
     // ACTION BUTTONS FUNCTION
     private void action(int type) {
@@ -198,7 +183,6 @@ public class CombatInterface extends JFrame implements Interface {
             // If battle ended, hide combat interface
             if (battleEnded) {
                 hideInterface();
-                return;
             }
             else handleBotTurn(); // fix exception creo
         }
@@ -279,6 +263,22 @@ public class CombatInterface extends JFrame implements Interface {
         });
         
         this.feedUpdated = false;
+    }
+
+    public String getPlayerImagePath() {
+        return playerImagePath;
+    }
+
+    public void setPlayerImagePath(String playerImagePath) {
+        this.playerImagePath = playerImagePath;
+    }
+
+    public JLabel getNombreLabel() {
+        return nombreLabel;
+    }
+
+    public void setNombreLabel(JLabel nombreLabel) {
+        this.nombreLabel = nombreLabel;
     }
 }
 

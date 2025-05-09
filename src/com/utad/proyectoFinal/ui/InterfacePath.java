@@ -27,10 +27,10 @@ public enum InterfacePath {
         BLACK("Black"),
         WHITE("White");
 
-        protected String label;
+        private String label;
         private ColorEnum(String color){
             this.label = color;
-        };
+        }
     }
 
     public String getPath(ColorEnum color) {

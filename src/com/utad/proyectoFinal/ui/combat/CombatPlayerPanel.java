@@ -20,7 +20,7 @@ import com.utad.proyectoFinal.characterSystem.characters.CombatCharacter;
 public class CombatPlayerPanel extends JPanel{
     private static final Integer ITEMSIZE = 35;
     
-    private int alignment = JLabel.LEFT;
+    private int alignment;
     private CombatCharacter character;
     private String name;
     private SimplifiedImage simplifiedImage;
@@ -178,7 +178,7 @@ public class CombatPlayerPanel extends JPanel{
         if (this.nPotions > 0) potionPath = "Files/img/pocion.png";
         
         this.inventory = new ArrayList<>();
-        String inventoryImages[] = {helmetPath, weaponPath, potionPath};
+        String[] inventoryImages = {helmetPath, weaponPath, potionPath};
         for (String imagePath : inventoryImages) {
             if (imagePath != null && !imagePath.isEmpty()) {
                 if (imagePath.contains("Weapon")) imagePath = imagePath.replace("Weapon", "Chibi");
@@ -191,8 +191,8 @@ public class CombatPlayerPanel extends JPanel{
     
     protected void setInventory() {
         inventoryPanel.removeAll();
-        
-        for (int i = 0; i < this.inventory.size(); i++) {
+
+        for (int i = this.inventory.size() - 1; i >= 0; i--) {
             if (this.inventory.get(i) == null) this.inventory.remove(i);
         }
 

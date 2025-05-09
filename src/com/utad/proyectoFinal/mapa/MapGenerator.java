@@ -138,9 +138,9 @@ public class MapGenerator extends JPanel
                 TileAbstract tile = this.factory.generateRandomTile(tileX, tileY, newTileId);
                 generatedMap.add(tile);
 
-                if (tile instanceof GenericTile)
+                if (tile instanceof GenericTile genericTile)
                 {
-                    this.graph.connectNeighbors(generatedMap, (GenericTile) tile);
+                    this.graph.connectNeighbors(generatedMap, genericTile);
                 }
             }
         }
@@ -328,8 +328,8 @@ public class MapGenerator extends JPanel
             tile.setDebugColor(Color.YELLOW);  
         }
         
-        path.get(0).setDebugColor(Color.GREEN); 
-        path.get(path.size() - 1).setDebugColor(Color.RED);      
+        path.getFirst().setDebugColor(Color.GREEN);
+        path.getLast().setDebugColor(Color.RED);
         
         updateRendering();
     }
@@ -338,9 +338,8 @@ public class MapGenerator extends JPanel
     {
         for (TileAbstract tile : this.tiles) 
         {
-            if (tile instanceof GenericTile)
+            if (tile instanceof GenericTile t)
             {
-                GenericTile t = (GenericTile) tile;
                 t.setDebugColor(GenericTile.DEFAULT_COLOR); 
             }
              
@@ -388,30 +387,3 @@ public class MapGenerator extends JPanel
 //             }
 //         }
 //     }
-
-
-// DEPRECATED
-
-
-    // public void drawFogOfWar(Graphics2D g2d)
-    // {
-    //     Composite oldComp = g2d.getComposite();
-    //     Color oldColor   = g2d.getColor();
-    //     Font  oldFont    = g2d.getFont();
-
-    //     Composite original = g2d.getComposite();
-
-    //     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.85f));
-    //     g2d.setColor(new Color(30, 30, 30)); // Fog color
-    //     g2d.fillRect(0, 0, getWidth(), getHeight());
-
-
-    //     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.20f));
-    //     g2d.setColor(new Color(30, 30, 30, 10));
-    //     g2d.fillOval(this.screenX / 2, 0, TileAbstract.HEXAGON_RADIOUS  * 3, TileAbstract.HEXAGON_RADIOUS * 3);
-
-    //     g2d.setComposite(oldComp);
-    //     g2d.setColor(oldColor);
-    //     g2d.setFont(oldFont);
-    //     g2d.setComposite(original);
-    // }

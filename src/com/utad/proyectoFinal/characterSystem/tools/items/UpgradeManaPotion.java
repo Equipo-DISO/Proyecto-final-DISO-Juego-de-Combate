@@ -19,13 +19,11 @@ public class UpgradeManaPotion extends GenericItem {
     }
     
     @Override
-    public boolean consume(CombatCharacter character) {
+    public void consume(CombatCharacter character) {
         if (canConsume(character)) {
             // Usa el método específico para mejorar el maná
             character.addManaUpgrade();
-            return true;
         }
-        return false;
     }
     
     @Override

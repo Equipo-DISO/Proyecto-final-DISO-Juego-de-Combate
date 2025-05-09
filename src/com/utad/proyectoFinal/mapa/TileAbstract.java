@@ -33,7 +33,7 @@ public abstract class TileAbstract
 	protected Image specialImage;
 
 
-    public TileAbstract(Integer x, Integer y, Integer id)
+    protected TileAbstract(Integer x, Integer y, Integer id)
     {
         this.posX = x;
         this.posY = y;
@@ -54,10 +54,10 @@ public abstract class TileAbstract
 
         for (Integer vertix = 0; vertix < 6; vertix++)
         {
-            Double vertixAngle = Math.toRadians((vertix * 60) + 40);
+            Double vertixAngle = Math.toRadians((vertix * 60) + 40.0);
             
             Integer vertixPosX = (int) (this.posX + this.radious * Math.cos(vertixAngle));
-            Integer vertixPosY = (int) (this.posY + (this.radious / 2) * Math.sin(vertixAngle));
+            Integer vertixPosY = (int) (this.posY + (this.radious / 2.0f) * Math.sin(vertixAngle));
                     
                         
             this.hexagon.addPoint(vertixPosX, vertixPosY);
@@ -109,20 +109,18 @@ public abstract class TileAbstract
     public boolean isOcupied() { return this.ocupiedObject != null; }
 
     public boolean isOcupiedByCharacter() { return isOcupied() && this.ocupiedObject instanceof BaseCharacter; }
-    public boolean isOcupiedByLoot() { return isOcupied() && this.ocupiedObject instanceof MapObject && !isOcupiedByCharacter(); }
+    public boolean isOcupiedByLoot() { return isOcupied() && this.ocupiedObject != null && !isOcupiedByCharacter(); }
     
     public void setHovered(boolean isHovered) { this.isHovered = isHovered; }
     public void setOcupiedObject(MapObject ocupiedObject) 
     { 
         this.ocupiedObject = ocupiedObject; 
 
-        if (ocupiedObject instanceof MapObject)
+        if (ocupiedObject != null)
         {
-            MapObject o = (MapObject) ocupiedObject;
-            setSpecialImage(o.getImage());
+            setSpecialImage(ocupiedObject.getImage());
         }
-        else if (ocupiedObject == null)
-        {
+        else {
             setSpecialImage(null);
         }
     }

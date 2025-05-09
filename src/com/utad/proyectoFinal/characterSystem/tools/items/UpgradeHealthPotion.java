@@ -19,13 +19,11 @@ public class UpgradeHealthPotion extends GenericItem {
     }
     
     @Override
-    public boolean consume(CombatCharacter character) {
+    public void consume(CombatCharacter character) {
         if (canConsume(character)) {
             // Usa el método específico para mejorar la salud
             character.addHealthUpgrade();
-            return true;
         }
-        return false;
     }
     
     @Override

@@ -44,7 +44,7 @@ public class NormalTileFactory extends TileFactory
             tile = this.createTile(x, y, tileId);
 
             
-            if (super.bots.size() < 1)
+            if (super.bots.isEmpty())
             {
                 tile.setOcupiedObject(super.player);
                 super.player.setCurrentPosition((GenericTile) tile);

@@ -16,8 +16,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MenuInterface extends JFrame implements Interface {
-    public static Integer MAXBOTS = 7;
-    
+    public static final Integer MAXBOTS = 7;
+    public static final String FILES_IMG_PLAY_BUTTON_PNG = "Files/img/PlayButton.png";
+
     private JLabel nombreLabel;
 
     private SimplifiedImage playerSimplifiedImage = new SimplifiedImage(InterfacePath.PLAYER.getPath(InterfacePath.ColorEnum.GREEN), 92, 110);
@@ -55,15 +56,20 @@ public class MenuInterface extends JFrame implements Interface {
         nombreLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
         nombreLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         nombreLabel.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 String nuevoNombre = JOptionPane.showInputDialog("Introduce un nuevo nombre:");
                 if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
                     nombreLabel.setText(nuevoNombre);
                 }
             }
+
+            @Override
             public void mouseEntered(MouseEvent e) {
                 nombreLabel.setFont(nombreLabel.getFont().deriveFont(Font.ITALIC | Font.BOLD));
             }
+
+            @Override
             public void mouseExited(MouseEvent e) {
                 nombreLabel.setFont(nombreLabel.getFont().deriveFont(Font.BOLD));
             }
@@ -77,14 +83,19 @@ public class MenuInterface extends JFrame implements Interface {
             String colorPath = InterfacePath.COLOR.getPath(InterfacePath.colorsList[i]);
             JLabel botton = new SimplifiedImage(colorPath, 100, 50).generateJLabel(80, 40);
             botton.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseClicked(MouseEvent e) {
                     playerImagePath = playerPath;
                     playerSimplifiedImage.setPath(playerPath);
                     playerImage.setIcon(playerSimplifiedImage.generateImageIcon(InterfacePath.PLAYER.getDefWidth(), InterfacePath.PLAYER.getDefHeight()));
                 }
+
+                @Override
                 public void mouseEntered(MouseEvent e) {
                     botton.setIcon(new SimplifiedImage(colorPath, 100, 50).generateImageIcon(92, 46));
                 }
+
+                @Override
                 public void mouseExited(MouseEvent e) {
                     botton.setIcon(new SimplifiedImage(colorPath, 100, 50).generateImageIcon(80, 40));
                 }
@@ -109,6 +120,7 @@ public class MenuInterface extends JFrame implements Interface {
         addBotPanel.add(addBot, BorderLayout.WEST);
 
         addBotPanel.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 createNewBot();
             }
@@ -120,16 +132,21 @@ public class MenuInterface extends JFrame implements Interface {
         // Panel de Jugar
         JPanel panelBotones = new JPanel();
         panelBotones.setPreferredSize(new Dimension(110, 60));
-        JLabel playButton = new JLabel(new SimplifiedImage("Files/img/PlayButton.png", 100, 50).generateImageIcon(90, 45), SwingConstants.CENTER);
+        JLabel playButton = new JLabel(new SimplifiedImage(FILES_IMG_PLAY_BUTTON_PNG, 100, 50).generateImageIcon(90, 45), SwingConstants.CENTER);
         playButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 hideInterface();                
             }
+
+            @Override
             public void mouseEntered(MouseEvent e) {
-                playButton.setIcon(new SimplifiedImage("Files/img/PlayButton.png", 100, 50).generateImageIcon(100, 50));
+                playButton.setIcon(new SimplifiedImage(FILES_IMG_PLAY_BUTTON_PNG, 100, 50).generateImageIcon(100, 50));
             }
+
+            @Override
             public void mouseExited(MouseEvent e) {
-                playButton.setIcon(new SimplifiedImage("Files/img/PlayButton.png", 100, 50).generateImageIcon(90, 45));
+                playButton.setIcon(new SimplifiedImage(FILES_IMG_PLAY_BUTTON_PNG, 100, 50).generateImageIcon(90, 45));
             }
         });
 
@@ -151,11 +168,12 @@ public class MenuInterface extends JFrame implements Interface {
         JLabel removeButton = new JLabel("❌", SwingConstants.CENTER);
         removeButton.setPreferredSize(new Dimension(30, 30));
         removeButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 listaBotsPanel.remove(nuevoBotPanel);
                 bots.remove(nuevoBotPanel);
                 if (bots.size() < MAXBOTS) addBotPanel.setVisible(true);
-                if (bots.size() <= 0) createNewBot();
+                if (bots.isEmpty()) createNewBot();
 
                 listaBotsPanel.revalidate();
                 listaBotsPanel.repaint();
@@ -163,6 +181,7 @@ public class MenuInterface extends JFrame implements Interface {
         });
 
         botName.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 String nuevoNombre = JOptionPane.showInputDialog("Introduce un nuevo nombre:");
                 if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
@@ -170,6 +189,7 @@ public class MenuInterface extends JFrame implements Interface {
                 }
             }
 
+            @Override
             public void mouseEntered(MouseEvent e) {
                 botName.setFont(botName.getFont().deriveFont(Font.ITALIC));
                 if (bots.size() > 1) nuevoBotPanel.add(removeButton, BorderLayout.EAST);
@@ -177,6 +197,7 @@ public class MenuInterface extends JFrame implements Interface {
         });
 
         nuevoBotPanel.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseExited(MouseEvent e) {
                 botName.setFont(botName.getFont().deriveFont(Font.PLAIN));
                 nuevoBotPanel.remove(removeButton);
@@ -184,6 +205,7 @@ public class MenuInterface extends JFrame implements Interface {
         });
 
         listaBotsPanel.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseExited(MouseEvent e) {
                 botName.setFont(botName.getFont().deriveFont(Font.PLAIN));
                 nuevoBotPanel.remove(removeButton);
@@ -242,7 +264,7 @@ public class MenuInterface extends JFrame implements Interface {
 
         for (int i = 0; i < bots.size(); i++){
             String path = InterfacePath.PLAYER.getPath(InterfacePath.colorsList[j++]);
-            if (path.equals(playerImagePath)) 
+            if (path.equals(playerImagePath))
             {
                 path = InterfacePath.PLAYER.getPath(InterfacePath.colorsList[j++]);
             }
@@ -250,7 +272,7 @@ public class MenuInterface extends JFrame implements Interface {
             String botName = ((JLabel) bots.get(i).getComponent(1)).getText();
             if (botName.toLowerCase().contains("nig")) path = path.replace(".png", "Dark.png");
 
-            Bot bot = RandomBotFactory.createBot(); 
+            Bot bot = RandomBotFactory.createBot();
             bot.setImage(path);
             bot.setBaseImagePath(path);
             botList.add(bot);
