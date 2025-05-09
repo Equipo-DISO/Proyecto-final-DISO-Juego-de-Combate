@@ -1,0 +1,100 @@
+@startuml ItemStaticFactoryPattern
+
+left to right direction
+hide empty members
+
+' Static Factories
+class SimpleWeaponFactory <<static>> {
+  + {static} createWeapon(String): BaseWeapon
+  + {static} createWeapon(WeaponType): BaseWeapon
+}
+
+class SimplePotionFactory <<static>> {
+  + {static} createPotion(String): GenericItem
+}
+
+class SimpleHelmetFactory <<static>> {
+  + {static} createHelmet(String): BaseHelmet
+  + {static} createHelmet(HelmetType): BaseHelmet
+}
+
+class RandomItemGenerator <<static>> {
+  + {static} createRandomItem(): MapObject
+  + {static} createRandomPotion(): GenericItem
+  + {static} createRandomWeapon(): BaseWeapon
+  + {static} createRandomHelmet(): BaseHelmet
+  + {static} createChest(): Chest
+}
+
+' Interfaces
+interface Consumable << interface >> {
+  + consume(CombatCharacter): void
+}
+
+interface MapObject << interface >> {
+   image: Image
+   renderParameters: RenderParameters
+}
+
+' Products
+class BaseWeapon {
+  }
+
+abstract class GenericItem {
+  }
+
+class HealthPotion {
+  }
+
+class UpgradeHealthPotion {
+  }
+
+class UpgradeManaPotion {
+  }
+
+class BaseHelmet {
+  }
+
+class Chest {
+  }
+
+' Factory user
+class RandomItemFactory {
+}
+
+interface RandomItemProducer {
+  + giveRandomObject(): MapObject
+}
+
+' Relationships using original format
+HealthPotion         -[#000082,plain]-^  GenericItem
+UpgradeHealthPotion  -[#000082,plain]-^  GenericItem
+UpgradeManaPotion    -[#000082,plain]-^  GenericItem
+RandomItemFactory    -[#008200,dashed]-^  RandomItemProducer
+
+' Consumable implementation relationships
+BaseHelmet           -[#008200,dashed]-^  Consumable          
+BaseWeapon           -[#008200,dashed]-^  Consumable          
+Chest                -[#008200,dashed]-^  Consumable          
+GenericItem          -[#008200,dashed]-^  Consumable          
+
+' MapObject implementation relationships
+BaseHelmet           -[#008200,dashed]--^  MapObject           
+BaseWeapon           -[#008200,dashed]--^  MapObject           
+Chest                -[#008200,dashed]--^  MapObject           
+GenericItem          -[#008200,dashed]--^  MapObject           
+
+' Factory relationships with original format
+SimpleWeaponFactory  -[#595959,dashed]->  BaseWeapon: <<crea>>
+SimplePotionFactory  -[#595959,dashed]->  GenericItem: <<crea>>
+SimplePotionFactory  -[#595959,dashed]->  HealthPotion: <<crea>>
+SimplePotionFactory  -[#595959,dashed]->  UpgradeHealthPotion: <<crea>>
+SimplePotionFactory  -[#595959,dashed]->  UpgradeManaPotion: <<crea>>
+SimpleHelmetFactory  -[#595959,dashed]->  BaseHelmet: <<crea>>
+RandomItemGenerator  -[#595959,dashed]->  BaseWeapon: <<crea>>
+RandomItemGenerator  -[#595959,dashed]->  GenericItem: <<crea>>
+RandomItemGenerator  -[#595959,dashed]->  BaseHelmet: <<crea>>
+RandomItemGenerator  -[#595959,dashed]->  Chest: <<crea>>
+RandomItemFactory    -[#595959,dashed]->  RandomItemGenerator: <<usa>>
+
+@enduml

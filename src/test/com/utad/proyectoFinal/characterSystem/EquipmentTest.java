@@ -37,7 +37,7 @@ public class EquipmentTest {
         characterPanel.setBackground(Color.WHITE);
         
         // Load character image
-        Image characterImage = loadImage("Files/img/GreenGuy.png");
+        Image characterImage = loadImage("Files/img/OrangeGuy.png");
         if (characterImage == null) {
             System.out.println("Failed to load character image. Creating blank image.");
             characterImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
@@ -94,8 +94,8 @@ public class EquipmentTest {
         controlPanel.setLayout(new GridLayout(2, 2, 10, 10));
         controlPanel.setBorder(BorderFactory.createTitledBorder("Equipment Controls"));
         
-        final BaseWeapon sword = new BaseWeapon(WeaponType.SWORD);
-        final BaseHelmet helmet = new BaseHelmet(HelmetType.DEMON_HELMET);
+        final BaseWeapon sword = new BaseWeapon(WeaponType.SPEAR);
+        final BaseHelmet helmet = new BaseHelmet(HelmetType.SIMPLE_HELMET);
         
         JButton addWeaponBtn = new JButton("Add Weapon");
         addWeaponBtn.addActionListener(e -> {

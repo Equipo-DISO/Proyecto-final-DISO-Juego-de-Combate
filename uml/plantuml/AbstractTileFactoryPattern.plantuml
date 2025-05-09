@@ -1,0 +1,76 @@
+@startuml
+
+
+top to bottom direction
+
+
+package "Productos" {
+    class TileAbstract {
+      # TileAbstract(Integer, Integer, Integer):
+      # tileId: Integer
+      + getTileId(): Integer
+      + drawTile(Graphics2D): void
+      + contains(Integer, Integer): boolean
+    }
+
+    package "Productos concretos" {
+        class ObstacleTile {
+          + ObstacleTile(Integer, Integer, Integer):
+          + drawTile(Graphics2D): void
+          + contains(Integer, Integer): boolean
+        }
+        class GenericTile {
+          + GenericTile(Integer, Integer, Integer):
+          + DEFAULT_COLOR: Color
+          + color: Color
+          + DEFAULT_FACE_DEPTH: Integer
+          + contains(Integer, Integer): boolean
+          + drawTile(Graphics2D): void
+        }
+    }
+}
+
+package "Cliente" {
+    class MapGenerator << (S,#FF7700) Singleton >> {
+      - MapGenerator(Integer, Integer, Integer, Integer, LinkedList<Bot>, BaseCharacter):
+      - instance: MapGenerator
+      - tiles: List<TileAbstract>
+      - factory: TileFactory
+      + getInstance(): MapGenerator
+      + getInstance(Integer, Integer, Integer, Integer, LinkedList<Bot>, BaseCharacter): MapGenerator
+      + calculateTotalTiles(): Integer
+      + setFactory(TileFactory): void
+    }
+}
+
+
+package "Factorías abstractas y concretas" {
+    class TileFactory {
+      # TileFactory(Integer, Integer, LinkedList<Bot>, BaseCharacter, PushModelObserver):
+      # bots: LinkedList<Bot>
+      # totalNumberOfTiles: Integer
+      # numberOfSpawns: Integer
+      # player: BaseCharacter
+      # obs: PushModelObserver
+      + generateRandomTile(Integer, Integer, Integer): TileAbstract
+      + creatileObstacle(Integer, Integer, Integer): ObstacleTile
+      + createTile(Integer, Integer, Integer): GenericTile
+    }
+
+    class NormalTileFactory {
+      + NormalTileFactory(Integer, Integer, LinkedList<Bot>, BaseCharacter, PushModelObserver):
+      - itemFactory: RandomItemFactory
+      + creatileObstacle(Integer, Integer, Integer): ObstacleTile
+      + createTile(Integer, Integer, Integer): GenericTile
+      + generateRandomTile(Integer, Integer, Integer): TileAbstract
+    }
+}
+
+GenericTile        -[#000082,plain]-^  TileAbstract
+MapGenerator      "1" *-[#595959,plain]-> "tiles\n*" TileAbstract
+MapGenerator      "1" *-[#595959,plain]-> "factory\n1" TileFactory
+NormalTileFactory  -[#595959,dashed]->  GenericTile
+NormalTileFactory  -[#595959,dashed]->  ObstacleTile
+NormalTileFactory  -[#000082,plain]-^  TileFactory
+ObstacleTile       -[#000082,plain]-^  TileAbstract
+@enduml

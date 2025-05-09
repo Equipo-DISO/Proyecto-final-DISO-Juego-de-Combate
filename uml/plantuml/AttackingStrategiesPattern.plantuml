@@ -1,4 +1,4 @@
-@startuml
+@startuml AttackingStrategiesPattern
 
 top to bottom direction
 skinparam linetype ortho

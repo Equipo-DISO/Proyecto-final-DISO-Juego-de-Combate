@@ -1,0 +1,71 @@
+@startuml
+
+top to bottom direction
+
+package "Singletons del proyecto" {
+
+    class Calculator {
+      - Calculator():
+      - INSTANCE: Calculator
+      + isCriticalHit(BaseCharacter): boolean
+      + applyWeaponCriticalDamage(BaseCharacter, double): double
+      + calculateAttackDamage(BaseCharacter, double, Boolean): double
+      + calculateRetreatProbability(BaseCharacter, BaseCharacter): double
+      + calculateHitProbability(double): boolean
+      + calculateHelmetReduction(BaseCharacter, double): double
+      + calculateWeaponDurabilityCost(int): int
+      + calculateBaseDamage(BaseCharacter): double
+       INSTANCE: Calculator
+    }
+    class CombatManager {
+      - CombatManager():
+      - instance: CombatManager
+      - getRandomAction(CombatCharacter): CombatActionType
+      + handleBotTurn(CombatCharacter, CombatCharacter, CombatInterface): boolean
+      + handlePlayerAction(CombatCharacter, CombatCharacter, CombatActionType, CombatInterface): boolean
+      - executeAction(CombatCharacter, CombatCharacter, CombatActionType, CombatInterface): boolean
+      - checkBattleEnd(CombatCharacter, CombatCharacter, boolean): boolean
+      - determineBotAction(Bot, CombatCharacter): CombatActionType
+       instance: CombatManager
+    }
+    class GameContext {
+      + GameContext():
+      - instance: GameContext
+      - personajesVivos: Integer
+      + setInitialCharacters(Integer, LinkedList<Bot>): void
+      + playerKilled(CombatCharacter): void
+      + botTurn(BaseCharacter): void
+      + characterHasDied(BaseCharacter): void
+      + characterKilled(CombatCharacter): void
+       instance: GameContext
+       personajesVivos: Integer
+    }
+    class MapGenerator {
+      - MapGenerator(Integer, Integer, Integer, Integer, LinkedList<Bot>, BaseCharacter):
+      - instance: MapGenerator
+      - graph: TileGraph
+      - player: BaseCharacter
+      - factory: TileFactory
+      + displayMap(): void
+      + paintComponent(Graphics): void
+      - renderBridges(Graphics2D): void
+      + removePathFindingDebug(): void
+      + updateRendering(): void
+      + pathFindingDebug(List<GenericTile>): void
+      + getPathToObjective(GenericTile, PathFindingStrategy): List<GenericTile>
+      + executeActionOnMove(BaseCharacter, GenericTile): void
+      + createHexGrid(): List<TileAbstract>
+      + calculateTotalTiles(): Integer
+      - drawLine(Graphics2D, TileAbstract, TileAbstract): void
+      + moveViewport(Integer, Integer): void
+      + getInstance(Integer, Integer, Integer, Integer, LinkedList<Bot>, BaseCharacter): MapGenerator
+       player: BaseCharacter
+       instance: MapGenerator
+       viewX: Integer
+       viewY: Integer
+       factory: TileFactory
+       graph: TileGraph
+    }
+
+}
+@enduml

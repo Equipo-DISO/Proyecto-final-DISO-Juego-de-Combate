@@ -1,0 +1,94 @@
+@startuml GameControllerFacadePattern
+
+top to bottom direction
+skinparam padding 2
+skinparam roundcorner 8
+
+
+package "Cliente" {
+    class Main {
+      + main(String[]): void
+    }
+}
+
+package "Facade" {
+    class GameControllerFacade {
+      + startGame(): void
+    }
+}
+
+package "Subsistemas" {
+    class BaseCharacter {
+      # name: String
+      # currentState: CharacterState
+      # observers: List<PushModelObserver>
+      + addObserver(PushModelObserver): void
+      + setCurrentPosition(GenericTile): void
+      + attack(CombatCharacter, AttackStrategy): void
+      + heal(): void
+      + retreat(CombatCharacter): boolean
+      + isAlive(): boolean
+    }
+
+    class Bot {
+      - botAi: BotAI
+      - botActionType: BotActionType
+      + BotMove(): void
+      + setMap(MapGenerator): void
+      + setBotAI(BotAI): void
+    }
+
+    class GameContext {
+      - instance: GameContext
+      - personajesVivos: Integer
+      - bots: LinkedList<Bot>
+      + getInstance(): GameContext
+      + setInitialCharacters(Integer, LinkedList<Bot>): void
+      + characterHasDied(BaseCharacter): void
+    }
+
+    class MapGenerator {
+      - instance: MapGenerator
+      - player: BaseCharacter
+      + getInstance(Integer, Integer, Integer, Integer, LinkedList<Bot>, BaseCharacter): MapGenerator
+      + displayMap(): void
+      + getPathToObjective(GenericTile, PathFindingStrategy): List<GenericTile>
+    }
+
+    class MenuInterface {
+      + showInterface(): void
+      + waitTillClose(): void
+      + getPlayerCharacter(): BaseCharacter
+      + getBotList(): LinkedList<Bot>
+      + getBotNames(): LinkedList<String>
+    }
+}
+
+Bot                   -[#000082,plain]-^  BaseCharacter
+Bot                  "1" *-[#595959,plain]-> "map\n1" MapGenerator
+GameContext           -[#595959,dashed]->  BaseCharacter
+GameContext          "1" *-[#595959,plain]-> "bots\n*" Bot
+GameControllerFacade  -[#595959,bold]-->  BaseCharacter : interactúa con >
+GameControllerFacade  -[#595959,bold]-->  Bot : configura >
+GameControllerFacade  -[#595959,bold]-->  GameContext : inicializa >
+GameControllerFacade  -[#595959,bold]-->  MapGenerator : crea >
+GameControllerFacade  -[#595959,bold]-->  MenuInterface : maneja >
+Main                  -[#595959,plain]--> GameControllerFacade : usa >
+MapGenerator         "1" *-[#595959,plain]-> "player\n1" BaseCharacter
+MapGenerator          -[#595959,dashed]->  Bot
+MenuInterface         -[#595959,dashed]->  BaseCharacter
+MenuInterface         -[#595959,dashed]->  Bot
+
+note right of GameControllerFacade
+  La Fachada simplifica la interacción con
+  todos los subsistemas a traves de
+  un único punto de acceso que oculta
+  la complejidad de los mismos.
+end note
+
+note bottom of Main
+  El código del cliente interactúa con la fachada
+  y no tiene que preocuparse por los detalles
+end note
+
+@enduml

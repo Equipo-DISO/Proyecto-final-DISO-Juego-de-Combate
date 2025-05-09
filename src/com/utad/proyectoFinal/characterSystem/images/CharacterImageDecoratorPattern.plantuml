@@ -1,0 +1,56 @@
+@startuml CharacterImageDecoratorPattern
+
+top to bottom direction
+skinparam linetype ortho
+
+class BaseCharacterImage << Componente concreto >> {
+  + BaseCharacterImage(String): 
+  + BaseCharacterImage(Image): 
+   completeImage: Image
+}
+interface CharacterImage << interface, Componente >> {
+   completeImage: Image
+}
+class EquipmentDecorator  << Decorador >> {
+  # EquipmentDecorator(CharacterImage): 
+  + createFor(CharacterImage, Object): CharacterImage
+   originalImage: Image
+   baseImage: CharacterImage
+   completeImage: Image
+}
+class HelmetDecorator  << Decorador concreto >> {
+  + HelmetDecorator(CharacterImage, Image): 
+   completeImage: Image → Comportamiento añadido: imagen de casco
+}
+class WeaponDecorator << Decorador concreto >> {
+  + WeaponDecorator(CharacterImage, Image): 
+   completeImage: Image → Comportamiento añadido: arma en la mano
+}
+
+class CharacterVisualizer {
+  + CharacterVisualizer(CharacterEquipment, Image):
+  + CharacterVisualizer(CharacterEquipment):
+  - baseImagePath: String
+  - loadDefaultAvatar(): Image
+  + updateCharacterImage(): void
+   image: Image
+   baseImagePath: String
+   completeImage: Image
+}
+
+note bottom of CharacterVisualizer
+    Clase que usa el patrón Decorador para
+    crear la imagen del personaje y se encarga de
+    cargar y decorar el componente base
+end note
+
+BaseCharacterImage  -[#008200,dashed]-^  CharacterImage     
+EquipmentDecorator  -[#008200,dashed]-^  CharacterImage     
+EquipmentDecorator "1" *-[#595959,plain]-> "decoratedImage\n1" CharacterImage     
+HelmetDecorator     -[#000082,plain]-^  EquipmentDecorator 
+WeaponDecorator     -[#000082,plain]-^  EquipmentDecorator
+CharacterVisualizer "1" *-[#595959,plain]-> "characterImage\n1" CharacterImage
+
+@enduml
+
+

@@ -35,7 +35,6 @@ public class GameControllerFacade {
             instance.displayMap();
         } else {
             System.out.println("Error: Game initialization failed. Player or bot data is missing.");
-            // Optionally, handle this error more gracefully, e.g., by showing a message in the UI
         }
     }
 } 

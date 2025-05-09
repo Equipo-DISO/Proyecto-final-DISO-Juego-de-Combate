@@ -1,4 +1,4 @@
-@startuml
+@startuml DiagramaDeEstadosPattern
 
 left to right direction
 
@@ -25,7 +25,7 @@ state Attack {
   HeavyAttack --> Idle : Termina ataque
 }
 
-state Moverse_en_el_mapa  {
+state MovingOnMapState  {
   [*] --> Idle : Atacar casilla enemigo
 
 }
@@ -43,7 +43,7 @@ GainMana --> Idle : energía ganada
 
 Retreat  --> Idle : Fracaso
 
-Retreat --> Moverse_en_el_mapa : Exito
+Retreat --> MovingOnMapState : Exito
 
 Dead --> [*]
 @enduml

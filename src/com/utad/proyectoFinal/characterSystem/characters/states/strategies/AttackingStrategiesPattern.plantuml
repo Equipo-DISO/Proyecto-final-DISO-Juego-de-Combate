@@ -1,0 +1,80 @@
+@startuml AttackingStrategiesPattern
+
+top to bottom direction
+skinparam linetype ortho
+
+
+package "Patrón Strategy" {
+    package "Patrón template" {
+        class AbstractAttackStrategy {
+          # AbstractAttackStrategy(String):
+          # name: String
+          # applyHit(BaseCharacter, BaseCharacter, double): void
+          # applyMiss(BaseCharacter, BaseCharacter): void
+          - handleWeaponBreak(BaseCharacter): void
+          # handleCriticalHitMessage(BaseCharacter): void
+          + execute(BaseCharacter, BaseCharacter): void
+           name: String
+        }
+
+        note right of AbstractAttackStrategy
+              Clase que define la plantilla / algoritmo a seguir
+              para las estrategias de ataque con el método execute:
+
+                   1. Verificar que atacante y objetivo estén vivos
+                   2. Validar si se tiene el maná requerido
+                   3. Consumir el maná requerido
+                   4. Calcular si el ataque impacta
+                   5. Calcular y aplicar el daño
+        end note
+
+        class HeavyAttackStrategy {
+          + HeavyAttackStrategy():
+          + calculateDurabilityCost(): int
+          + calculateHitSuccess(BaseCharacter): boolean
+          + calculateManaCost(): int
+          + calculateDamage(BaseCharacter): double
+        }
+        class LightAttackStrategy {
+          + LightAttackStrategy():
+          + calculateManaCost(): int
+          + calculateHitSuccess(BaseCharacter): boolean
+          + calculateDamage(BaseCharacter): double
+          + calculateDurabilityCost(): int
+        }
+    }
+
+
+    interface AttackStrategy << interface >> {
+      + execute(BaseCharacter, BaseCharacter): void
+      + calculateDamage(BaseCharacter): double
+      + calculateManaCost(): int
+      + calculateHitSuccess(BaseCharacter): boolean
+      + calculateDurabilityCost(): int
+       name: String
+    }
+
+    class AttackingState {
+      ~ AttackingState(BaseCharacter):
+      - currentStrategy: AttackStrategy
+      + handleAttack(BaseCharacter, AttackStrategy): void
+      - executeAttack(BaseCharacter): void
+      + updateState(): void
+       name: String
+       currentStrategy: AttackStrategy
+       strategy: AttackStrategy
+    }
+    note top of AttackingState
+      Contexto del patron Strategy,
+      contiene una referencia a la
+      estrategia de ataque actual
+    end note
+
+}
+
+
+AbstractAttackStrategy  -[#008200,dashed]-^  AttackStrategy         
+AttackingState         "1" *-[#595959,plain]-> "currentStrategy\n1" AttackStrategy         
+HeavyAttackStrategy     -[#000082,plain]-^  AbstractAttackStrategy
+LightAttackStrategy     -[#000082,plain]-^  AbstractAttackStrategy 
+@enduml

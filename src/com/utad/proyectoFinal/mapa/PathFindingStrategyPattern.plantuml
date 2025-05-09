@@ -1,0 +1,49 @@
+@startuml
+
+top to bottom direction
+skinparam linetype ortho
+
+class Bot {
+  + Bot(String): 
+  + Bot(String, Double): 
+  + Bot(): 
+  - BOTNAME: String
+  - botActionType: BotActionType
+  + getBotActionType(): BotActionType
+  + setBotActionType(BotActionType): void
+}
+enum BotActionType << enumeration >> {
+  - BotActionType(PathFindingStrategy): 
+  + LOOKING_FOR_ENEMY: 
+  - strategy: PathFindingStrategy
+  + LOOKING_FOR_ITEM: 
+  + getStrategy(): PathFindingStrategy
+  + valueOf(String): BotActionType
+  + values(): BotActionType[]
+}
+
+package "Estrategias concretas" {
+    class ClosestEnemyStrategy {
+      + ClosestEnemyStrategy():
+      + getTargetTileId(GenericTile, List<TileAbstract>): Integer
+    }
+    class ClosestLootStrategy {
+      + ClosestLootStrategy():
+      + getTargetTileId(GenericTile, List<TileAbstract>): Integer
+    }
+}
+interface PathFindingStrategy << interface >> {
+  + getTargetTileId(GenericTile, List<TileAbstract>): Integer
+}
+
+
+note "Contexto del patron Strategy,\ncontiene una referencia a la estrategia \nde ataque actual" as Context
+
+BotActionType .. Context
+Bot .. Context
+
+Bot                  "1" *-[#595959,plain]-> "botActionType\n1" BotActionType        
+BotActionType        "1" *-[#595959,plain]-> "strategy\n1" PathFindingStrategy  
+ClosestEnemyStrategy  -[#008200,dashed]--^  PathFindingStrategy
+ClosestLootStrategy   -[#008200,dashed]--^  PathFindingStrategy
+@enduml

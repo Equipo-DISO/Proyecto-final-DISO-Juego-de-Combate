@@ -1,0 +1,49 @@
+@startuml DiagramaDeEstadosPattern
+
+left to right direction
+
+
+Idle --> Tired     : energía baja
+Idle --> Attack    : atacar enemigo
+Idle --> Heal      : elegir curarse
+
+Idle --> Retreat   : Intentar escapar
+Idle --> GainMana  : ganar energía
+Idle --> Dead      : muere
+
+' Estado compuesto para Attack con elección de tipo de ataque
+state Attack {
+  [*] --> ChooseAttack
+
+  state ChooseAttack <<choice>>
+
+  ChooseAttack --> LightAttack : Ligero
+  ChooseAttack --> HeavyAttack : Fuerte
+
+  LightAttack --> Idle : Termina ataque
+
+  HeavyAttack --> Idle : Termina ataque
+}
+
+state MovingOnMapState  {
+  [*] --> Idle : Atacar casilla enemigo
+
+}
+
+' Estado Tired no permite atacar
+Tired --> Heal     : curarse
+Tired --> GainMana : ganar energía
+Tired --> Retreat  : Intentar escapar
+Tired --> Dead     : muere
+
+' Transiciones comunes de regreso o fin
+Heal     --> Idle : curación completa
+
+GainMana --> Idle : energía ganada
+
+Retreat  --> Idle : Fracaso
+
+Retreat --> MovingOnMapState : Exito
+
+Dead --> [*]
+@enduml

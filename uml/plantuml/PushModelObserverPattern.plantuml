@@ -1,0 +1,32 @@
+@startuml PushModelObserverPattern
+
+
+skinparam linetype ortho
+
+class BaseCharacter << concrete subject >>{
+  + BaseCharacter(String): 
+  + BaseCharacter(String, Double): 
+  + BaseCharacter(String, Double, Image):
+  + notifyDeathObservers() : void
+}
+class GameContext << concrete observer >>{
+  + GameContext():
+  + characterHasDied(BaseCharacter character) : void
+}
+class MapController << concrete observer >>{
+  + MapController(Integer, Integer, Integer, Integer, Integer):
+  + characterHasDied(BaseCharacter character) : void
+}
+interface PushModelObservable << interface, subject >> {
+    + notifyDeathObservers() : void
+}
+
+interface PushModelObserver << interface, observer >> {
+    + characterHasDied(BaseCharacter character) : void
+}
+
+BaseCharacter        -[#008200,dashed]--^  PushModelObservable
+BaseCharacter       "1" *-[#595959,plain]--> "observers\n*" PushModelObserver
+GameContext          -[#008200,dashed]--^  PushModelObserver
+MapController        -[#008200,dashed]--^  PushModelObserver
+@enduml

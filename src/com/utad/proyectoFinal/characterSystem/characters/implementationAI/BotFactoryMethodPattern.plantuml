@@ -1,0 +1,69 @@
+@startuml BotFactoryMethodPattern
+
+
+skinparam linetype polyline
+hide empty members
+
+class Bot {
+  - botAi: BotAI
+  + setAI(BotAI): void
+  + getBotAI(): BotAI
+}
+
+abstract class BotAI {
+  + executeTurn(Bot): void
+  # analyzeSituation(Bot): void
+  # decideNextMove(GenericTile, Bot): void
+  # performAction(Bot): void
+}
+
+class BotFactory {
+  + createTypeABot(): Bot
+  + createTypeBBot(): Bot
+  + createTypeCBot(): Bot
+  + createRandomBot(): Bot
+}
+
+class RandomBotFactory {
+  + createBot(): Bot
+}
+
+class TypeABotFactory {
+  + createBot(): Bot
+}
+
+class TypeBBotFactory {
+  + createBot(): Bot
+}
+
+class TypeCBotFactory {
+  + createBot(): Bot
+}
+
+class TypeABotAI {
+}
+
+class TypeBBotAI {
+}
+
+class TypeCBotAI {
+}
+
+Bot              "1" *-[#595959,plain]--> "botAi\n1" BotAI            
+BotFactory        -[#595959,dashed]-->  RandomBotFactory 
+BotFactory        -[#595959,dashed]-->  TypeABotFactory  
+BotFactory        -[#595959,dashed]-->  TypeBBotFactory  
+BotFactory        -[#595959,dashed]-->  TypeCBotFactory  
+RandomBotFactory  -[#595959,dashed]-->  TypeABotFactory  
+RandomBotFactory  -[#595959,dashed]-->  TypeBBotFactory  
+RandomBotFactory  -[#595959,dashed]-->  TypeCBotFactory  
+TypeABotAI        -[#000082,plain]--^  BotAI            
+TypeABotFactory   -[#595959,dashed]-->  Bot              
+TypeABotFactory   -[#595959,dashed]-->  TypeABotAI       
+TypeBBotAI        -[#000082,plain]--^  BotAI            
+TypeBBotFactory   -[#595959,dashed]-->  Bot              
+TypeBBotFactory   -[#595959,dashed]-->  TypeBBotAI       
+TypeCBotAI        -[#000082,plain]--^  BotAI            
+TypeCBotFactory   -[#595959,dashed]-->  Bot              
+TypeCBotFactory   -[#595959,dashed]-->  TypeCBotAI       
+@enduml
